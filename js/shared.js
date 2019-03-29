@@ -14,3 +14,9 @@ function createCORSRequest(method, url) {
   }
   return xhr;
 }
+
+
+function matchUrlRegex(pattern, string){
+  var match = pattern.exec(string);
+  return match[0];
+}

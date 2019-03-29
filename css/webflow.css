@@ -95,6 +95,19 @@ html.w-mod-touch * {
   cursor: pointer;
   border-radius: 0;
 }
+
+.w-button-taken {
+  display: inline-block;
+  padding: 9px 15px;
+  background-color: #3898EC;
+  color: white;
+  border: 0;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: not-allowed;
+  border-radius: 0;
+}
+
 input.w-button {
   -webkit-appearance: button;
 }

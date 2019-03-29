@@ -1,10 +1,10 @@
 function getProduct() {
   var url = 'http://localhost:8080/getIndividualItemByID';
-  //get id out of url
+  //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
-  var idMatch = /id=.*/g;
-  var match = idMatch.exec(urlParams.toString());
-  var id = match[0].replace("id=", "");
+  var id = matchUrlRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
+
+  // format json to get product
   var jsondata = JSON.stringify({
     id: id.toString()
   });
@@ -25,28 +25,106 @@ function getProduct() {
   xhr.onerror = function() {
     alert('Woops, there was an error making the request.');
   };
-  console.log(jsondata);
-  if (id){
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(jsondata);
-  }
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(jsondata);
 }
 
 function displayProduct(productResponse){
+  getBidsForItem(productResponse);
   displayImages(productResponse);
   displayProductName(productResponse['name']);
   displayInformation(productResponse);
 }
 
+function getBidsForItem(productResponse){
+  var url = 'http://localhost:8080/getBidNumbers';
+  var xhr = createCORSRequest('POST', url);
+  // format json to get product
+  var bidsJson = JSON.stringify({
+    item_name: productResponse['name']
+  });
+
+
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var bids = xhr.response;
+    console.log(bids);
+    displayBids(productResponse, bids);
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(bidsJson);
+
+}
+
+function displayBids(productResponse, bids){
+  // REMEMBER TO CHECK BIDS BEFORE ACCEPTING PAYMENT AS LOCAL STORAGE CAN BE EDITED
+
+  // store bidsChosen locally
+  var bidsChosen = [];
+  localStorage.setItem('bidsChosen',JSON.stringify(bidsChosen));
+
+  // store taken bids
+  var bidsTaken;
+  if (bids['Size'] > 0){
+    bidsTaken = bids['bidNumbers'].split(",");
+  }
+
+  // do api call to get bids for item and grey out already bought ones
+  for (var i=1; i <= productResponse['numberAllowedBids']; i++){
+    var bidNumber;
+    if (i.toString().length < 2){
+      //prepend zero
+      bidNumber = 0+ ""+i;
+    } else {
+      bidNumber = i;
+    }
+    // store current html to avoid double lookup
+    var ihtml = document.getElementById("raffle-buttons").innerHTML;
+    if (bidsTaken.includes(i.toString())){
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number-taken w-button-taken">`+bidNumber+`</a>
+      `
+    } else {
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+bidNumber+`')">`+bidNumber+`</a>
+      `
+    }
+  }
+}
+
+function buttonSelected(bidNumber){
+  var button = document.getElementById("raffle-button-"+bidNumber);
+
+  //change css class
+  var bidChosenArr = JSON.parse(localStorage.getItem("bidsChosen"));
+  console.log(bidChosenArr);
+  button.classList.toggle('raffle-number-chosen');
+  if (button.classList.contains('raffle-number-chosen')){
+    bidChosenArr.push(bidNumber);
+  } else {
+    bidChosenArr = bidChosenArr.filter(function(e) { return e !== bidNumber })
+  }
+  console.log(bidChosenArr);
+  localStorage.setItem('bidsChosen',JSON.stringify(bidChosenArr));
+}
+
 function displayInformation(productResponse){
-  console.log(typeof productResponse['price']);
   document.getElementById("information").innerHTML =`
   <div class="product-price">Ticket Price: £`+(productResponse['price']/productResponse['numberAllowedBids'])+`</div>
   <div class="product-worth">Worth: £`+productResponse['price']+`</div>
   <div class="product-description-long">`+productResponse['description']+`<br></div>
   `
-
-
 }
 
 function displayProductName(name){
