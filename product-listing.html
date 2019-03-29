@@ -7,7 +7,9 @@
 <body onload="getProduct()">
 <head>
   <meta charset="utf-8">
-  <title>Product Listing</title>
+  <div id="title">
+  <!-- <title>Product Listing</title> -->
+  </div>
   <meta content="Product Listing" property="og:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
@@ -24,21 +26,40 @@
   <div class="home-section product">
     <div class="h2 listing-title">
       <div class="h2">PLAY NOW TO WIN</div>
-      <div class="h1">Dior BELT</div>
+      <div id="product-name">
+      <!-- <div class="h1">Dior BELT</div> -->
+      </div>
     </div>
   </div>
   <div class="section-3">
     <div class="columns-10 w-row">
+    <div class="column-18 w-col w-col-6 w-col-stack">
+      <a href="#" class="lightbox-link hero w-inline-block w-lightbox">
       <div id="main-image">
-      <!-- <div class="column-18 w-col w-col-6 w-col-stack"><a href="#" class="lightbox-link hero w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a> -->
-      </div>
-      <div id="second-image">
-        <div class="div-block-13"><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb1"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb2"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb3"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a></div>
-      </div>
+      <!-- <img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"> -->
+      </div></a>
+      <div class="div-block-13">
+          <a href="#" class="lightbox-link w-inline-block w-lightbox">
+          <div id="second-image">
+          <!-- <img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb1"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"> -->
+          </div></a>
+          <a href="#" class="lightbox-link w-inline-block w-lightbox">
+          <div id="third-image">
+          <!-- <img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb2"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"> -->
+          </div></a>
+          <a href="#" class="lightbox-link w-inline-block w-lightbox">
+          <div id="fourth-image">
+          <!-- <img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb3"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a> -->
+        </div>
+        </a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a><a href="#" class="lightbox-link w-inline-block w-lightbox">
+        </a>
+      </div></div>
       <div class="column-19 w-col w-col-6 w-col-stack">
-        <div class="product-price">Ticket Price: £5</div>
+        <div id="information">
+        <!-- <div class="product-price">Ticket Price: £5</div>
         <div class="product-worth">Worth: £2000</div>
-        <div class="product-description-long">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br></div>
+        <div class="product-description-long">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br></div> -->
+      </div>
       </div>
     </div>
   </div>
