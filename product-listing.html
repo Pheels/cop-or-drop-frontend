@@ -2,6 +2,9 @@
 <!--  This site was created in Webflow. http://www.webflow.com  -->
 <!--  Last Published: Sat Mar 23 2019 14:54:01 GMT+0000 (UTC)  -->
 <html data-wf-page="5c9103e25ef96f6464b723d2" data-wf-site="5c1a4627e3b12b65c3e7a48c">
+<script type="text/javascript" src="js/shared.js"></script>
+<script type="text/javascript" src="js/product_listing.js"></script>
+<body onload="getProduct()">
 <head>
   <meta charset="utf-8">
   <title>Product Listing</title>
@@ -26,7 +29,10 @@
   </div>
   <div class="section-3">
     <div class="columns-10 w-row">
-      <div class="column-18 w-col w-col-6 w-col-stack"><a href="#" class="lightbox-link hero w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
+      <div id="main-image">
+      <!-- <div class="column-18 w-col w-col-6 w-col-stack"><a href="#" class="lightbox-link hero w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a> -->
+      </div>
+      <div id="second-image">
         <div class="div-block-13"><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb1"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb2"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"><img src="images/Screen-Shot-2019-03-19-at-14.43.46.png" srcset="images/Screen-Shot-2019-03-19-at-14.43.46-p-500.png 500w, images/Screen-Shot-2019-03-19-at-14.43.46-p-800.png 800w, images/Screen-Shot-2019-03-19-at-14.43.46-p-1080.png 1080w, images/Screen-Shot-2019-03-19-at-14.43.46.png 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb3"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a><a href="#" class="lightbox-link w-inline-block w-lightbox"></a></div>
       </div>
       <div class="column-19 w-col w-col-6 w-col-stack">
