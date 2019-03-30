@@ -16,7 +16,7 @@ function createCORSRequest(method, url) {
 }
 
 
-function matchUrlRegex(pattern, string){
+function matchFirstRegex(pattern, string){
   var match = pattern.exec(string);
   return match[0];
 }

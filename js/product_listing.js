@@ -2,7 +2,7 @@ function getProduct() {
   var url = 'http://localhost:8080/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
-  var id = matchUrlRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
+  var id = matchFirstRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
 
   // format json to get product
   var jsondata = JSON.stringify({
@@ -19,6 +19,7 @@ function getProduct() {
   xhr.onload = function() {
     var response = xhr.response;
     console.log(response[0].items);
+    localStorage.setItem('productInfo',JSON.stringify(response[0].items));
     displayProduct(response[0].items);
   };
 
@@ -35,6 +36,18 @@ function displayProduct(productResponse){
   displayImages(productResponse);
   displayProductName(productResponse['name']);
   displayInformation(productResponse);
+}
+
+function purhaseButtonSelected(){
+  // calculate price
+  var product = JSON.parse(localStorage.getItem('productInfo'));
+  var bids = JSON.parse(localStorage.getItem('bidsChosen'));
+  var price = bids.length * (Number(product['price']) / Number(product['numberAllowedBids']));
+
+  //check size of local storage array to get price
+  //take payment
+  //send api request to add bid
+  //need to check that bids available just before payment
 }
 
 function getBidsForItem(productResponse){
@@ -136,24 +149,37 @@ function displayProductName(name){
   `
 }
 
+function swapImage(imagePath, thumb, id){
+  console.log(imagePath + " " + thumb + " " + id);
+  // get the main image and the current image path
+  var mainImage = document.getElementById("image1");
+  var mainImagePath = matchFirstRegex(/src=.*" srcset/g, mainImage.innerHTML).replace("src=\"", "").replace(" srcset", "").replace("\"", "");
+
+  // get the small image and rewrite main image html
+  var smallImage = document.getElementById(id);
+  mainImage.innerHTML = `
+  <img src="`+imagePath+`" srcset="`+imagePath+` 500w, `+imagePath+` 800w, `+imagePath+` 1080w, `+imagePath+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
+  `
+  // rewrite small image html
+  smallImage.innerHTML = `
+  <img onclick=swapImage("`+mainImagePath+`","`+thumb+`","`+id+`") src="`+mainImagePath +`" srcset="`+mainImagePath +` 500w, `+mainImagePath +` 800w, `+mainImagePath +` 1080w, `+mainImagePath+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+thumb+`">
+
+  `
+}
+
 function displayImages(productResponse){
-  var image = productResponse['s3Location'] + '/image1.jpg'
-  var image2 = productResponse['s3Location'] + '/image2.jpg'
-  var image3 = productResponse['s3Location'] + '/image3.jpg'
-  var image4 = productResponse['s3Location'] + '/image4.jpg'
+  var image1 = productResponse['s3Location'] + '/image1.jpg'
 
-  document.getElementById("main-image").innerHTML = `
-  <img src="`+image+`" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
+  // set main image
+  document.getElementById("image1").innerHTML = `
+  <img src="`+image1+`" srcset="`+image1+` 500w, `+image1+` 800w, `+image1+` 1080w, `+image1+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
   `
 
-  document.getElementById("second-image").innerHTML = `
-  <img src="`+image2+`" srcset="`+image2+` 500w, `+image2+` 800w, `+image2+` 1080w, `+image2+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb1">
-  `
-
-  document.getElementById("third-image").innerHTML = `
-  <img src="`+image3+`" srcset="`+image3+` 500w, `+image3+` 800w, `+image3+` 1080w, `+image3+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb2">
-  `
-  document.getElementById("fourth-image").innerHTML = `
-  <img src="`+image4+`" srcset="`+image4+` 500w, `+image4+` 800w, `+image4+` 1080w, `+image4+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb3">
-  `
+  // set smaller images
+  for (var i=2; i <5; i++){
+    var image = productResponse['s3Location'] + '/image'+i+'.jpg'
+    document.getElementById("image"+i).innerHTML = `
+    <img onclick=swapImage("`+image+`","thumb`+i+`","image`+i+`") src="`+image+`" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+i+`">
+    `
+  }
 }
