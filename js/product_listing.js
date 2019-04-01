@@ -183,3 +183,7 @@ function displayImages(productResponse){
     `
   }
 }
+
+function displayQuestions(productResponse){
+  
+}

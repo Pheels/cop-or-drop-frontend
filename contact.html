@@ -4,6 +4,8 @@
 <html data-wf-page="5c91136812597aef81862f1d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
 <head>
   <meta charset="utf-8">
+  <script type="text/javascript" src="js/shared.js"></script>
+  <script type="text/javascript" src="js/contact.js"></script>
   <title>contact</title>
   <meta content="contact" property="og:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -25,17 +27,23 @@
     </div>
   </div>
   <div class="section-5">
-    <div class="form-block w-form">
+    <div id="emailFormBox" class="form-block w-form">
       <form id="email-form" name="email-form" data-name="Email Form" class="form">
         <div class="w-row">
-          <div class="column-20 w-col w-col-6"><label for="name" class="field-label-2">Name</label><input type="text" id="name" name="name" data-name="Name" maxlength="256" class="text-field w-input"></div>
-          <div class="column-21 w-col w-col-6"><label for="email" class="field-label-3">Email Address</label><input type="email" class="text-field-2 w-input" maxlength="256" name="email" data-name="Email" id="email" required=""></div>
-        </div><label for="email-2" class="field-label">Message</label><textarea id="Message" name="Message" data-name="Message" maxlength="5000" class="textarea w-input"></textarea><input type="submit" value="send message &gt;" data-wait="Please wait..." class="submit w-button"></form>
-      <div class="w-form-done">
-        <div>Thank you! Your submission has been received!</div>
-      </div>
-      <div class="w-form-fail">
-        <div>Oops! Something went wrong while submitting the form.</div>
+          <div class="column-20 w-col w-col-6"><label for="name" class="field-label-2">Name</label>
+          <input type="text" id="name" name="name" data-name="Name" maxlength="256" class="text-field w-input"></div>
+          <div class="column-21 w-col w-col-6"><label for="email" class="field-label-3">Email Address</label>
+          <input type="email" class="text-field-2 w-input" maxlength="256" name="email" data-name="Email" id="email" required=""></div>
+        </div><label for="email-2" class="field-label">Message</label>
+        <textarea id="message" name="Message" data-name="Message" maxlength="5000" class="textarea w-input"></textarea>
+        <input onclick="submitEmail()"; type="submit" value="send message &gt;" data-wait="Please wait..." class="submit w-button"></form>
+        <div id="afterSubmit">
+          <!-- <div id="submitButtonSuccess" class="w-form-done">
+            <div>Thank you! Your submission has been received!</div>
+          </div> -->
+          <!-- <div id="submitButtonFail"  class="w-form-fail">
+            <div>Oops! Something went wrong while submitting the form.</div>
+          </div> -->
       </div>
     </div>
     <div class="container-6 w-container">
