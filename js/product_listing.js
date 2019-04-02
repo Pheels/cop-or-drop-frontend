@@ -1,5 +1,5 @@
 function getProduct() {
-  var url = 'http://localhost:8080/getIndividualItemByID';
+  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
   var id = matchFirstRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
@@ -93,26 +93,27 @@ function displayBids(productResponse, bids){
     bidsTaken = bids['bidNumbers'].split(",");
   }
 
-  // do api call to get bids for item and grey out already bought ones
-  for (var i=1; i <= productResponse['numberAllowedBids']; i++){
-    var bidNumber;
-    if (i.toString().length < 2){
-      //prepend zero
-      bidNumber = 0+ ""+i;
-    } else {
-      bidNumber = i;
-    }
-    // store current html to avoid double lookup
-    var ihtml = document.getElementById("raffle-buttons").innerHTML;
-    if (bidsTaken.includes(i.toString())){
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number-taken w-button-taken">`+bidNumber+`</a>
-      `
-    } else {
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+bidNumber+`')">`+bidNumber+`</a>
-      `
-    }
+    // do api call to get bids for item and grey out already bought ones
+    for (var i=1; i <= productResponse['numberAllowedBids']; i++){
+      var bidNumber;
+      if (i.toString().length < 2){
+        //prepend zero
+        bidNumber = 0+ ""+i;
+      } else {
+        bidNumber = i;
+      }
+      // store current html to avoid double lookup
+      var ihtml = document.getElementById("raffle-buttons").innerHTML;
+
+      if (bidsTaken && bidsTaken.includes(i.toString())){
+        document.getElementById("raffle-buttons").innerHTML = ihtml + `
+        <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number-taken w-button-taken">`+bidNumber+`</a>
+        `
+      } else {
+        document.getElementById("raffle-buttons").innerHTML = ihtml + `
+        <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+bidNumber+`')">`+bidNumber+`</a>
+        `
+      }
   }
 }
 
@@ -185,5 +186,5 @@ function displayImages(productResponse){
 }
 
 function displayQuestions(productResponse){
-  
+
 }
