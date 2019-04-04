@@ -1,4 +1,6 @@
 function getProduct() {
+  sessionStorage.removeItem("questionSelected");
+  sessionStorage.removeItem('ticketsChosen');
   var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
@@ -19,7 +21,7 @@ function getProduct() {
   xhr.onload = function() {
     var response = xhr.response;
     console.log(response[0].items);
-    localStorage.setItem('productInfo',JSON.stringify(response[0].items));
+    sessionStorage.setItem('productInfo',JSON.stringify(response[0].items));
     displayProduct(response[0].items);
   };
 
@@ -36,6 +38,7 @@ function displayProduct(productResponse){
   displayImages(productResponse);
   displayProductName(productResponse['name']);
   displayInformation(productResponse);
+  displayQuestions(productResponse);
 }
 
 function getTicketsForItem(productResponse){
@@ -74,7 +77,7 @@ function displayTickets(productResponse, tickets){
 
   // store ticketsChosen locally
   var ticketsChosen = [];
-  localStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+  sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
 
   // store taken tickets
   var ticketsTaken;
@@ -110,7 +113,7 @@ function buttonSelected(ticketNumber){
   var button = document.getElementById("raffle-button-"+ticketNumber);
 
   //change css class
-  var ticketChosenArr = JSON.parse(localStorage.getItem("ticketsChosen"));
+  var ticketChosenArr = JSON.parse(sessionStorage.getItem("ticketsChosen"));
   button.classList.toggle('raffle-number-chosen');
   if (button.classList.contains('raffle-number-chosen')){
     ticketChosenArr.push(ticketNumber);
@@ -118,7 +121,7 @@ function buttonSelected(ticketNumber){
     ticketChosenArr = ticketChosenArr.filter(function(e) { return e !== ticketNumber })
   }
   console.log(ticketChosenArr);
-  localStorage.setItem('ticketsChosen',JSON.stringify(ticketChosenArr));
+  sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketChosenArr));
 }
 
 function displayInformation(productResponse){
@@ -174,60 +177,107 @@ function displayImages(productResponse){
 }
 
 function displayQuestions(productResponse){
+  console.log(productResponse);
+  if (!(productResponse['question'].includes("?"))){
+    productResponse['question'] = productResponse['question'] +"?"
+  }
+
+  //set question
+  document.getElementById("question").innerHTML = `
+  <label for="name" class="competitiong-question">`+productResponse['question']+`</label>
+  `
+  document.getElementById("answer1").innerHTML = `
+  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-1" name="checkbox-1" data-name="Checkbox" class="checkbox w-checkbox-input">
+  <label for="checkbox" class="p w-form-label">`+productResponse['answer1']+`</label></div>
+  `
+  document.getElementById("answer2").innerHTML = `
+  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" class="checkbox w-checkbox-input">
+  <label for="checkbox" class="p w-form-label">`+productResponse['answer2']+`</label></div>
+  `
+  document.getElementById("answer3").innerHTML = `
+  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-3" name="checkbox-3" data-name="Checkbox 3" class="checkbox w-checkbox-input">
+  <label for="checkbox" class="p w-form-label">`+productResponse['answer3']+`</label></div>
+  `
+  document.getElementById("answer4").innerHTML = `
+  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-4" name="checkbox-4" data-name="Checkbox 4" class="checkbox w-checkbox-input">
+  <label for="checkbox" class="p w-form-label">`+productResponse['answer4']+`</label></div>
+  `
 
 }
 
-function purhaseButtonSelected(){
-  // calculate price
-  var product = JSON.parse(localStorage.getItem('productInfo'));
-  var tickets = JSON.parse(localStorage.getItem('ticketsChosen'));
-  var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedtickets']));
-  var idString = name+"_id";
-  var timestamp = new Date().toLocaleString();
-  var ticketsString = tickets.join(",");
-
-  //send api request to add ticket
-  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/postNewTickets';
-
-  var jdata = {
-    "name": product['name'],
-    "userName": "Oliver",
-    "timestamp": timestamp,
-    "paymentId": "w4141d",
-    "paymentMethod": "Stripe",
-    "ticketNumbers": ticketsString
-  };
-  jdata[product['name']+"_id"] = product['id'];
-  // format json to get product
-  var jsondata = JSON.stringify(jdata);
-
-  console.log(jsondata);
-
-  var xhr = createCORSRequest('POST', url);
-  if (!xhr) {
-    alert('CORS not supported');
-    return;
-  }
-
-  // Response handlers.
-  xhr.onload = function() {
-    var response = xhr.response;
-    console.log(response);
-    if (response.response == "Ticket(s) inserted successfully"){
-      document.getElementById("raffle-buttons").innerHTML = `
-      <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
-      `
-      document.getElementById("submitButton").innerHTML = `
-      `
+function selectOnlyThis(id) {
+    if (document.getElementById(id).checked){
+      for (var i = 1;i <= 4; i++){
+          document.getElementById("checkbox-"+i).checked = false;
+      }
+      document.getElementById(id).checked = true;
+      sessionStorage.setItem('questionSelected', "answer"+id.charAt(id.length-1));
     } else {
-      alert(response.response);
+      document.getElementById(id).checked = false;
+      sessionStorage.removeItem("questionSelected");
     }
-  };
+}
 
-  xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
-  };
+function purhaseButtonSelected(){
+  if (!sessionStorage.getItem('questionSelected')){
+    var elmnt = document.getElementById("questions");
+    elmnt.scrollIntoView();
+    alert("You must answer the question before you can enter the competition");
+  } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 0)) {
 
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(jsondata);
+    // calculate price
+    var product = JSON.parse(sessionStorage.getItem('productInfo'));
+    var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+    var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedtickets']));
+    var idString = name+"_id";
+    var timestamp = new Date().toLocaleString();
+    var ticketsString = tickets.join(",");
+
+    //send api request to add ticket
+    var url = 'http://localhost:8080/postNewTickets';
+
+    var jdata = {
+      "name": product['name'],
+      "userName": "Oliver",
+      "timestamp": timestamp,
+      "paymentId": "w4141d",
+      "paymentMethod": "Stripe",
+      "ticketNumbers": ticketsString
+    };
+    jdata[product['name']+"_id"] = product['id'];
+    // format json to get product
+    var jsondata = JSON.stringify(jdata);
+
+    console.log(jsondata);
+
+    var xhr = createCORSRequest('POST', url);
+    if (!xhr) {
+      alert('CORS not supported');
+      return;
+    }
+
+    // Response handlers.
+    xhr.onload = function() {
+      var response = xhr.response;
+      console.log(response);
+      if (response.response == "Ticket(s) inserted successfully"){
+        document.getElementById("raffle-buttons").innerHTML = `
+        <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
+        `
+        document.getElementById("submitButton").innerHTML = `
+        `
+      } else {
+        alert(response.response);
+      }
+    };
+
+    xhr.onerror = function() {
+      alert('Woops, there was an error making the request.');
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(jsondata);
+  } else {
+    alert("Please chose at least one valid bid number before continuing");
+  }
 }
