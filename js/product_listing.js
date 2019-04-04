@@ -32,29 +32,17 @@ function getProduct() {
 }
 
 function displayProduct(productResponse){
-  getBidsForItem(productResponse);
+  getTicketsForItem(productResponse);
   displayImages(productResponse);
   displayProductName(productResponse['name']);
   displayInformation(productResponse);
 }
 
-function purhaseButtonSelected(){
-  // calculate price
-  var product = JSON.parse(localStorage.getItem('productInfo'));
-  var bids = JSON.parse(localStorage.getItem('bidsChosen'));
-  var price = bids.length * (Number(product['price']) / Number(product['numberAllowedBids']));
-
-  //check size of local storage array to get price
-  //take payment
-  //send api request to add bid
-  //need to check that bids available just before payment
-}
-
-function getBidsForItem(productResponse){
-  var url = 'http://localhost:8080/getBidNumbers';
+function getTicketsForItem(productResponse){
+  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getTicketNumbers';
   var xhr = createCORSRequest('POST', url);
   // format json to get product
-  var bidsJson = JSON.stringify({
+  var ticketsJson = JSON.stringify({
     item_name: productResponse['name']
   });
 
@@ -66,9 +54,9 @@ function getBidsForItem(productResponse){
 
   // Response handlers.
   xhr.onload = function() {
-    var bids = xhr.response;
-    console.log(bids);
-    displayBids(productResponse, bids);
+    var tickets = xhr.response;
+    console.log(tickets);
+    displayTickets(productResponse, tickets);
   };
 
   xhr.onerror = function() {
@@ -76,66 +64,66 @@ function getBidsForItem(productResponse){
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(bidsJson);
+  xhr.send(ticketsJson);
 
 }
 
-function displayBids(productResponse, bids){
-  // REMEMBER TO CHECK BIDS BEFORE ACCEPTING PAYMENT AS LOCAL STORAGE CAN BE EDITED
+function displayTickets(productResponse, tickets){
 
-  // store bidsChosen locally
-  var bidsChosen = [];
-  localStorage.setItem('bidsChosen',JSON.stringify(bidsChosen));
+  // REMEMBER TO CHECK ticketS BEFORE ACCEPTING PAYMENT AS LOCAL STORAGE CAN BE EDITED
 
-  // store taken bids
-  var bidsTaken;
-  if (bids['Size'] > 0){
-    bidsTaken = bids['bidNumbers'].split(",");
+  // store ticketsChosen locally
+  var ticketsChosen = [];
+  localStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+
+  // store taken tickets
+  var ticketsTaken;
+  if (tickets['Size'] > 0){
+    ticketsTaken = tickets['ticketNumbers'].split(",");
   }
 
-    // do api call to get bids for item and grey out already bought ones
-    for (var i=1; i <= productResponse['numberAllowedBids']; i++){
-      var bidNumber;
+    // do api call to get tickets for item and grey out already bought ones
+    for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
+      var ticketNumber;
       if (i.toString().length < 2){
         //prepend zero
-        bidNumber = 0+ ""+i;
+        ticketNumber = 0+ ""+i;
       } else {
-        bidNumber = i;
+        ticketNumber = i;
       }
       // store current html to avoid double lookup
       var ihtml = document.getElementById("raffle-buttons").innerHTML;
 
-      if (bidsTaken && bidsTaken.includes(i.toString())){
+      if (ticketsTaken && ticketsTaken.includes(i.toString())){
         document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number-taken w-button-taken">`+bidNumber+`</a>
+        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
         `
       } else {
         document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+bidNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+bidNumber+`')">`+bidNumber+`</a>
+        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
         `
       }
   }
 }
 
-function buttonSelected(bidNumber){
-  var button = document.getElementById("raffle-button-"+bidNumber);
+function buttonSelected(ticketNumber){
+  var button = document.getElementById("raffle-button-"+ticketNumber);
 
   //change css class
-  var bidChosenArr = JSON.parse(localStorage.getItem("bidsChosen"));
-  console.log(bidChosenArr);
+  var ticketChosenArr = JSON.parse(localStorage.getItem("ticketsChosen"));
   button.classList.toggle('raffle-number-chosen');
   if (button.classList.contains('raffle-number-chosen')){
-    bidChosenArr.push(bidNumber);
+    ticketChosenArr.push(ticketNumber);
   } else {
-    bidChosenArr = bidChosenArr.filter(function(e) { return e !== bidNumber })
+    ticketChosenArr = ticketChosenArr.filter(function(e) { return e !== ticketNumber })
   }
-  console.log(bidChosenArr);
-  localStorage.setItem('bidsChosen',JSON.stringify(bidChosenArr));
+  console.log(ticketChosenArr);
+  localStorage.setItem('ticketsChosen',JSON.stringify(ticketChosenArr));
 }
 
 function displayInformation(productResponse){
   document.getElementById("information").innerHTML =`
-  <div class="product-price">Ticket Price: £`+(productResponse['price']/productResponse['numberAllowedBids'])+`</div>
+  <div class="product-price">Ticket Price: £`+(productResponse['price']/productResponse['numberAllowedTickets'])+`</div>
   <div class="product-worth">Worth: £`+productResponse['price']+`</div>
   <div class="product-description-long">`+productResponse['description']+`<br></div>
   `
@@ -187,4 +175,59 @@ function displayImages(productResponse){
 
 function displayQuestions(productResponse){
 
+}
+
+function purhaseButtonSelected(){
+  // calculate price
+  var product = JSON.parse(localStorage.getItem('productInfo'));
+  var tickets = JSON.parse(localStorage.getItem('ticketsChosen'));
+  var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedtickets']));
+  var idString = name+"_id";
+  var timestamp = new Date().toLocaleString();
+  var ticketsString = tickets.join(",");
+
+  //send api request to add ticket
+  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/postNewTickets';
+
+  var jdata = {
+    "name": product['name'],
+    "userName": "Oliver",
+    "timestamp": timestamp,
+    "paymentId": "w4141d",
+    "paymentMethod": "Stripe",
+    "ticketNumbers": ticketsString
+  };
+  jdata[product['name']+"_id"] = product['id'];
+  // format json to get product
+  var jsondata = JSON.stringify(jdata);
+
+  console.log(jsondata);
+
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    console.log(response);
+    if (response.response == "Ticket(s) inserted successfully"){
+      document.getElementById("raffle-buttons").innerHTML = `
+      <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
+      `
+      document.getElementById("submitButton").innerHTML = `
+      `
+    } else {
+      alert(response.response);
+    }
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(jsondata);
 }
