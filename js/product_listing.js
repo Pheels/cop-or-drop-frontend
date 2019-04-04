@@ -1,6 +1,7 @@
 function getProduct() {
   sessionStorage.removeItem("questionSelected");
   sessionStorage.removeItem('ticketsChosen');
+  sessionStorage.removeItem('answer');
   var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
@@ -218,7 +219,36 @@ function selectOnlyThis(id) {
     }
 }
 
+function checkCorrectAnswer(id, answer, callback){
+  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/checkCorrectAnswer';
+  var jdata = {
+    "id": id,
+    "answer": answer
+  };
+  var jsondata = JSON.stringify(jdata);
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    sessionStorage.setItem('answer', response['answer']);
+    callback();
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(jsondata);
+}
+
 function purhaseButtonSelected(){
+  // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
     var elmnt = document.getElementById("questions");
     elmnt.scrollIntoView();
@@ -229,54 +259,68 @@ function purhaseButtonSelected(){
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
     var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
     var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedtickets']));
-    var idString = name+"_id";
     var timestamp = new Date().toLocaleString();
     var ticketsString = tickets.join(",");
 
-    //send api request to add ticket
-    var url = 'http://localhost:8080/postNewTickets';
+    // check if answer correct, if not then 0,0,0 the ticketNumbers
 
-    var jdata = {
-      "name": product['name'],
-      "userName": "Oliver",
-      "timestamp": timestamp,
-      "paymentId": "w4141d",
-      "paymentMethod": "Stripe",
-      "ticketNumbers": ticketsString
-    };
-    jdata[product['name']+"_id"] = product['id'];
-    // format json to get product
-    var jsondata = JSON.stringify(jdata);
-
-    console.log(jsondata);
-
-    var xhr = createCORSRequest('POST', url);
-    if (!xhr) {
-      alert('CORS not supported');
-      return;
-    }
-
-    // Response handlers.
-    xhr.onload = function() {
-      var response = xhr.response;
-      console.log(response);
-      if (response.response == "Ticket(s) inserted successfully"){
-        document.getElementById("raffle-buttons").innerHTML = `
-        <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
-        `
-        document.getElementById("submitButton").remove();
-        document.getElementById("questions").remove();
-      } else {
-        alert(response.response);
+    checkCorrectAnswer(product['id'], sessionStorage.getItem('questionSelected'), function(answerResponse){
+      //send api request to add ticket
+      var ticketsString = tickets.join(",");
+      var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/postNewTickets';
+      if (sessionStorage.getItem('answer') == 'false'){
+        ticketsString = "";
+        for (var l=0; l < tickets.length; l++){
+          ticketsString += "0,"
+        }
+        ticketsString= ticketsString.substring(0, ticketsString.length - 1);
       }
-    };
+      console.log(ticketsString);
 
-    xhr.onerror = function() {
-      alert('Woops, there was an error making the request.');
-    };
 
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(jsondata);
+      var jdata = {
+        "name": product['name'],
+        "userName": "Oliver",
+        "timestamp": timestamp,
+        "paymentId": "w4141d",
+        "paymentMethod": "Stripe",
+        "ticketNumbers": ticketsString
+      };
+
+      console.log(jdata);
+      // format json to get product
+      var jsondata = JSON.stringify(jdata);
+
+      var xhr = createCORSRequest('POST', url);
+      if (!xhr) {
+        alert('CORS not supported');
+        return;
+      }
+
+      // Response handlers.
+      xhr.onload = function() {
+        var response = xhr.response;
+        console.log(response);
+        if (response.response == "Ticket(s) inserted successfully"){
+          document.getElementById("raffle-buttons").innerHTML = `
+          <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
+          `
+          document.getElementById("submitButton").remove();
+          document.getElementById("questions").remove();
+        } else {
+          alert(response.response);
+        }
+      };
+
+      xhr.onerror = function() {
+        alert('Woops, there was an error making the request.');
+      };
+
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(jsondata);
+  });
+
+  // no bids selected
   } else {
     alert("PLEASE NOTE: You must chose at least one valid bid number before continuing.");
   }
