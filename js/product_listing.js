@@ -222,8 +222,8 @@ function purhaseButtonSelected(){
   if (!sessionStorage.getItem('questionSelected')){
     var elmnt = document.getElementById("questions");
     elmnt.scrollIntoView();
-    alert("You must answer the question before you can enter the competition");
-  } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 0)) {
+    alert("PLEASE NOTE: You must answer the question before you can enter the competition.");
+  } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
 
     // calculate price
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
@@ -264,8 +264,8 @@ function purhaseButtonSelected(){
         document.getElementById("raffle-buttons").innerHTML = `
         <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
         `
-        document.getElementById("submitButton").innerHTML = `
-        `
+        document.getElementById("submitButton").remove();
+        document.getElementById("questions").remove();
       } else {
         alert(response.response);
       }
@@ -278,6 +278,6 @@ function purhaseButtonSelected(){
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(jsondata);
   } else {
-    alert("Please chose at least one valid bid number before continuing");
+    alert("PLEASE NOTE: You must chose at least one valid bid number before continuing.");
   }
 }
