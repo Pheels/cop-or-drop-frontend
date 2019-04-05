@@ -2,7 +2,7 @@ function getProduct() {
   sessionStorage.removeItem("questionSelected");
   sessionStorage.removeItem('ticketsChosen');
   sessionStorage.removeItem('answer');
-  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getIndividualItemByID';
+  var url = 'http://localhost:8080/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
   var id = matchFirstRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
@@ -203,6 +203,10 @@ function displayQuestions(productResponse){
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-4" name="checkbox-4" data-name="Checkbox 4" class="checkbox w-checkbox-input">
   <label for="checkbox" class="p w-form-label">`+productResponse['answer4']+`</label></div>
   `
+  var questionImage = productResponse['s3Location'] + '/question.jpg'
+  document.getElementById("question-image").innerHTML = `
+  <img src="`+questionImage+`" srcset="`+questionImage+` 500w, `+questionImage+` 800w, `+questionImage+` 1080w, `+questionImage+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero">
+  `
 
 }
 
@@ -220,7 +224,7 @@ function selectOnlyThis(id) {
 }
 
 function checkCorrectAnswer(id, answer, callback){
-  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/checkCorrectAnswer';
+  var url = 'http://localhost:8080/checkCorrectAnswer';
   var jdata = {
     "id": id,
     "answer": answer
@@ -250,9 +254,19 @@ function checkCorrectAnswer(id, answer, callback){
 function purhaseButtonSelected(){
   // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
-    var elmnt = document.getElementById("questions");
-    elmnt.scrollIntoView();
-    alert("PLEASE NOTE: You must answer the question before you can enter the competition.");
+    $.alert({
+      title: 'Please Note:',
+      content: 'You must answer the question before you can enter the competition.',
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 60,
+      onDestroy: function () {
+        // before the modal is hidden.
+        var elmnt = document.getElementById("questions");
+        elmnt.scrollIntoView();
+        event.preventDefault();
+      }
+    });
   } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
 
     // calculate price
@@ -267,7 +281,7 @@ function purhaseButtonSelected(){
     checkCorrectAnswer(product['id'], sessionStorage.getItem('questionSelected'), function(answerResponse){
       //send api request to add ticket
       var ticketsString = tickets.join(",");
-      var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/postNewTickets';
+      var url = 'http://localhost:8080/postNewTickets';
       if (sessionStorage.getItem('answer') == 'false'){
         ticketsString = "";
         for (var l=0; l < tickets.length; l++){
@@ -287,7 +301,6 @@ function purhaseButtonSelected(){
         "ticketNumbers": ticketsString
       };
 
-      console.log(jdata);
       // format json to get product
       var jsondata = JSON.stringify(jdata);
 
@@ -322,6 +335,18 @@ function purhaseButtonSelected(){
 
   // no bids selected
   } else {
-    alert("PLEASE NOTE: You must chose at least one valid bid number before continuing.");
+    $.alert({
+      title: 'Please Note:',
+      content: 'You must chose at least one valid bid number before continuing.',
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 60,
+      onDestroy: function () {
+        // before the modal is hidden.
+        var elmnt = document.getElementById("raffle-title");
+        elmnt.scrollIntoView();
+        event.preventDefault();
+      }
+    });
   }
 }

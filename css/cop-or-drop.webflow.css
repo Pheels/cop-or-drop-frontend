@@ -41,6 +41,19 @@ img {
   text-transform: uppercase;
 }
 
+.h3 {
+  position: static;
+  z-index: 99;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-family: 'Druk wide', sans-serif;
+  font-size: 2em;
+  line-height: 2em;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+
 .p {
   font-size: 19px;
   line-height: 28px;
@@ -346,7 +359,7 @@ img {
 }
 
 .charity-logo-image {
-  width: 300px;
+  width: 270px;
 }
 
 .h4 {
@@ -400,6 +413,7 @@ img {
   -ms-flex-align: center;
   align-items: center;
   background-color: #000;
+  flex-direction: column;
 }
 
 .column-14 {
@@ -418,7 +432,7 @@ img {
 
 .columns-7 {
   position: relative;
-  left: 158px;
+  left: 18px;
   overflow: hidden;
   width: 95%;
   height: 333px;
@@ -975,7 +989,7 @@ img {
 }
 
 .competitiong-question {
-  margin-top: 30px;
+  margin-top: 1px;
   margin-bottom: 0px;
   padding-bottom: 30px;
   border: 1px none #000;
