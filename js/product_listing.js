@@ -43,7 +43,7 @@ function displayProduct(productResponse){
 }
 
 function getTicketsForItem(productResponse){
-  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getTicketNumbers';
+  var url = 'https://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getTicketNumbers';
   var xhr = createCORSRequest('POST', url);
   // format json to get product
   var ticketsJson = JSON.stringify({

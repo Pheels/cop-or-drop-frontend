@@ -1,5 +1,5 @@
 function getProducts() {
-  var url = 'http://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getItems';
+  var url = 'https://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getItems';
   var xhr = createCORSRequest('GET', url);
   if (!xhr) {
     alert('CORS not supported');

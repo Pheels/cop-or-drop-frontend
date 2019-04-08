@@ -432,7 +432,7 @@ img {
 
 .columns-7 {
   position: relative;
-  left: 18px;
+  /* left: 1px; */
   overflow: hidden;
   width: 95%;
   height: 333px;
