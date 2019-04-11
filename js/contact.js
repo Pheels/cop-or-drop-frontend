@@ -4,7 +4,7 @@ function submitEmail(){
   var message = document.getElementById("message").value;
 
   if ((name && typeof name !== 'undefined') && (email && typeof email !== 'undefined') && (message && typeof message !== 'undefined')) {
-    var url = 'https://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/sendEmail';
+    var url = 'http://localhost:8080/sendEmail';
     var xhr = createCORSRequest('POST', url);
     // format json to get product
     var emailJson = JSON.stringify({

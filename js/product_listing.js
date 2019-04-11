@@ -27,7 +27,7 @@ function getProduct() {
   };
 
   xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
+    alert('Error: An errror occured whilst loading the page.');
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -43,7 +43,7 @@ function displayProduct(productResponse){
 }
 
 function getTicketsForItem(productResponse){
-  var url = 'https://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getTicketNumbers';
+  var url = 'http://localhost:8080/getTicketNumbers';
   var xhr = createCORSRequest('POST', url);
   // format json to get product
   var ticketsJson = JSON.stringify({
@@ -59,12 +59,11 @@ function getTicketsForItem(productResponse){
   // Response handlers.
   xhr.onload = function() {
     var tickets = xhr.response;
-    console.log(tickets);
     displayTickets(productResponse, tickets);
   };
 
   xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
+    alert('Error: An errror occured whilst loading the page.');
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -189,19 +188,19 @@ function displayQuestions(productResponse){
   `
   document.getElementById("answer1").innerHTML = `
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-1" name="checkbox-1" data-name="Checkbox" class="checkbox w-checkbox-input">
-  <label for="checkbox" class="p w-form-label">`+productResponse['answer1']+`</label></div>
+  <label for="checkbox-1" class="p w-form-label">`+productResponse['answer1']+`</label></div>
   `
   document.getElementById("answer2").innerHTML = `
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" class="checkbox w-checkbox-input">
-  <label for="checkbox" class="p w-form-label">`+productResponse['answer2']+`</label></div>
+  <label for="checkbox-2" class="p w-form-label">`+productResponse['answer2']+`</label></div>
   `
   document.getElementById("answer3").innerHTML = `
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-3" name="checkbox-3" data-name="Checkbox 3" class="checkbox w-checkbox-input">
-  <label for="checkbox" class="p w-form-label">`+productResponse['answer3']+`</label></div>
+  <label for="checkbox-3" class="p w-form-label">`+productResponse['answer3']+`</label></div>
   `
   document.getElementById("answer4").innerHTML = `
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-4" name="checkbox-4" data-name="Checkbox 4" class="checkbox w-checkbox-input">
-  <label for="checkbox" class="p w-form-label">`+productResponse['answer4']+`</label></div>
+  <label for="checkbox-4" class="p w-form-label">`+productResponse['answer4']+`</label></div>
   `
   var questionImage = productResponse['s3Location'] + '/question.jpg'
   document.getElementById("question-image").innerHTML = `
@@ -244,7 +243,7 @@ function checkCorrectAnswer(id, answer, callback){
   };
 
   xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
+    alert('Error: An errror occured whilst loading the page.');
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -264,20 +263,22 @@ function purhaseButtonSelected(){
         // before the modal is hidden.
         var elmnt = document.getElementById("questions");
         elmnt.scrollIntoView();
-        event.preventDefault();
       }
     });
   } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
+    // add class loading
+    document.getElementById("submitButton").innerHTML = `
+    <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
+    `;
 
     // calculate price
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
     var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
-    var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedtickets']));
+    var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
     var timestamp = new Date().toLocaleString();
     var ticketsString = tickets.join(",");
 
     // check if answer correct, if not then 0,0,0 the ticketNumbers
-
     checkCorrectAnswer(product['id'], sessionStorage.getItem('questionSelected'), function(answerResponse){
       //send api request to add ticket
       var ticketsString = tickets.join(",");
@@ -290,19 +291,6 @@ function purhaseButtonSelected(){
         ticketsString= ticketsString.substring(0, ticketsString.length - 1);
       }
       console.log(ticketsString);
-
-
-      var jdata = {
-        "name": product['name'],
-        "userName": "Oliver",
-        "timestamp": timestamp,
-        "paymentId": "w4141d",
-        "paymentMethod": "Stripe",
-        "ticketNumbers": ticketsString
-      };
-
-      // format json to get product
-      var jsondata = JSON.stringify(jdata);
 
       var xhr = createCORSRequest('POST', url);
       if (!xhr) {
@@ -326,11 +314,55 @@ function purhaseButtonSelected(){
       };
 
       xhr.onerror = function() {
-        alert('Woops, there was an error making the request.');
+        alert('Error: An errror occured whilst loading the page.');
       };
 
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.send(jsondata);
+      // configure stripe handler
+      var handler = StripeCheckout.configure({
+        key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
+        image: '',
+        locale: 'auto',
+        token: function(token) {
+            $.ajax({
+              url: 'http://localhost:8080/postNewPayment',
+              type: 'POST',
+              data: {
+                stripeToken: token.id,
+                stripePrice: price*100,
+                item: product['name']
+              }
+            }).done(function(stripeCustomer) {
+              var jdata = {
+                "name": product['name'],
+                "userName": "Oliver",
+                "timestamp": timestamp,
+                "paymentMethod": "Stripe",
+                "paymentId": stripeCustomer.id,
+                "ticketNumbers": ticketsString
+              };
+              var jsondata = JSON.stringify(jdata);
+              console.log(jsondata);
+              xhr.setRequestHeader("Content-Type", "application/json");
+              xhr.send(jsondata);
+            }).fail(function(e) {
+              alert('There was an error processing the payment. Please try again.')
+            });
+            }
+        });
+
+        // open stripe handler
+        event.preventDefault()
+        handler.open({
+          name: 'CopOrDrop',
+          description: '',
+          currency: 'gbp',
+          amount: price*100,
+          closed: function () {
+            document.getElementById("submitButton").innerHTML = `
+            <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE THIS RAFFLE &gt;</a></div>
+            `;
+          }
+        });
   });
 
   // no bids selected
@@ -345,7 +377,6 @@ function purhaseButtonSelected(){
         // before the modal is hidden.
         var elmnt = document.getElementById("raffle-title");
         elmnt.scrollIntoView();
-        event.preventDefault();
       }
     });
   }

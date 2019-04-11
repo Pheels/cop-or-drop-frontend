@@ -1,5 +1,5 @@
 function getProducts() {
-  var url = 'https://cop-or-drop-env.smp7ifmpcm.eu-west-2.elasticbeanstalk.com/getItems';
+  var url = 'http://localhost:8080/getItems';
   var xhr = createCORSRequest('GET', url);
   if (!xhr) {
     alert('CORS not supported');
@@ -14,7 +14,7 @@ function getProducts() {
   };
 
   xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
+    alert('Error: An errror occured whilst loading the page.');
   };
 
   xhr.send();
