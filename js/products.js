@@ -1,5 +1,5 @@
 function getProducts() {
-  var url = 'http://localhost:8080/getItems';
+  var url = 'https://api.copordrop.co.uk/getItems';
   var xhr = createCORSRequest('GET', url);
   if (!xhr) {
     alert('CORS not supported');

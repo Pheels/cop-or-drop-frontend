@@ -4,7 +4,7 @@ function submitEmail(){
   var message = document.getElementById("message").value;
 
   if ((name && typeof name !== 'undefined') && (email && typeof email !== 'undefined') && (message && typeof message !== 'undefined')) {
-    var url = 'http://localhost:8080/sendEmail';
+    var url = 'https://api.copordrop.co.uk/sendEmail';
     var xhr = createCORSRequest('POST', url);
     // format json to get product
     var emailJson = JSON.stringify({

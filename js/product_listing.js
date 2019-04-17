@@ -2,7 +2,7 @@ function getProduct() {
   sessionStorage.removeItem("questionSelected");
   sessionStorage.removeItem('ticketsChosen');
   sessionStorage.removeItem('answer');
-  var url = 'http://localhost:8080/getIndividualItemByID';
+  var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
   var id = matchFirstRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
@@ -43,7 +43,7 @@ function displayProduct(productResponse){
 }
 
 function getTicketsForItem(productResponse){
-  var url = 'http://localhost:8080/getTicketNumbers';
+  var url = 'https://api.copordrop.co.uk/getTicketNumbers';
   var xhr = createCORSRequest('POST', url);
   // format json to get product
   var ticketsJson = JSON.stringify({
@@ -223,7 +223,7 @@ function selectOnlyThis(id) {
 }
 
 function checkCorrectAnswer(id, answer, callback){
-  var url = 'http://localhost:8080/checkCorrectAnswer';
+  var url = 'https://api.copordrop.co.uk/checkCorrectAnswer';
   var jdata = {
     "id": id,
     "answer": answer
@@ -282,7 +282,7 @@ function purhaseButtonSelected(){
     checkCorrectAnswer(product['id'], sessionStorage.getItem('questionSelected'), function(answerResponse){
       //send api request to add ticket
       var ticketsString = tickets.join(",");
-      var url = 'http://localhost:8080/postNewTickets';
+      var url = 'https://api.copordrop.co.uk/postNewTickets';
       if (sessionStorage.getItem('answer') == 'false'){
         ticketsString = "";
         for (var l=0; l < tickets.length; l++){
@@ -324,7 +324,7 @@ function purhaseButtonSelected(){
         locale: 'auto',
         token: function(token) {
             $.ajax({
-              url: 'http://localhost:8080/postNewPayment',
+              url: 'https://api.copordrop.co.uk/postNewPayment',
               type: 'POST',
               data: {
                 stripeToken: token.id,
