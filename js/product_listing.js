@@ -329,7 +329,9 @@ function purhaseButtonSelected(){
               data: {
                 stripeToken: token.id,
                 stripePrice: price*100,
-                item: product['name']
+                item: product['name'],
+                shippingAddress: true,
+                billingAddress: true
               }
             }).done(function(stripeCustomer) {
               var jdata = {
