@@ -4,12 +4,18 @@
 <html data-wf-page="5c9103e25ef96f6464b723d2" data-wf-site="5c1a4627e3b12b65c3e7a48c">
 <script src="https://d1tdp7z6w94jbb.cloudfront.net/js/jquery-3.3.1.min.js" type="text/javascript" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="./js/product_listing.js"></script>
-<script type="text/javascript" src="./js/auth.js"></script>
-<script type="text/javascript" src="./js/shared.js"></script>
+<script type="text/javascript" src="/js/auth.js"></script>
+<script type="text/javascript" src="/js/shared.js"></script>
+<script type="text/javascript">
+  function loadPage(){
+    handleLoginButton()
+    getProduct()
+  }
+</script>
+<body onload="loadPage()">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://checkout.stripe.com/checkout.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<body onload="getProduct()">
 <head>
   <meta charset="utf-8">
   <div id="title">
@@ -30,7 +36,7 @@
 <body>
   <div class="home-section product">
     <div class="h2 listing-title">
-      <div class="h2">PLAY NOW TO WIN</div>
+      <div class="h2">PLAY NOW TO WIN</div>
       <div id="product-name">
       <!-- <div class="h1">Dior BELT</div> -->
       </div>
@@ -69,7 +75,7 @@
     </div>
   </div>
   <div class="section-6" id="questions">
-    <div class="h6 centre">ANSWER TO ENTER</div>
+    <div class="h6 centre">ANSWER TO ENTER</div>
     <div class="form-block-2 w-form">
       <form id="email-form" name="email-form" data-name="Email Form" class="form-2">
         <div id="question">
@@ -105,7 +111,7 @@
     </div>
   </div>
   <div class="section-4">
-    <div id="raffle-title" class="h5">SELECT YOUR <br>RAFFLE</div>
+    <div id="raffle-title" class="h5">SELECT YOUR <br>RAFFLE</div>
     <div class="div-block-15">
       <div id="raffle-buttons">
       <!-- <a href="#" class="raffle-number w-button">01</a> -->
@@ -118,7 +124,7 @@
   </div>
   <div data-collapse="small" data-animation="default" data-duration="400" class="navbar w-nav">
     <div class="container-5 w-container"><a href="#" class="brand w-nav-link">LOGO</a>
-      <nav role="navigation" class="w-nav-menu"><a href="index.html" class="nav-link w-nav-link">ABOUT US</a><a href="products.html" class="nav-link w-nav-link">RAFFLES</a><a href="contact.html" class="nav-link w-nav-link">CONTACT</a><a href="https://copordrop.auth.eu-west-2.amazoncognito.com/login?response_type=token&client_id=3q6652q7hjscqf249o8fkjr9ic&redirect_uri=https://www.copordrop.co.uk" class="nav-link w-nav-link">LOGIN</a></nav>
+      <nav role="navigation" class="w-nav-menu"><a href="index.html" class="nav-link w-nav-link">ABOUT US</a><a href="products.html" class="nav-link w-nav-link">RAFFLES</a><a href="contact.html" class="nav-link w-nav-link">CONTACT</a><a id="login-button" onclick="handleLoginButton()" href="https://cop-or-drop.auth.eu-west-2.amazoncognito.com/login?response_type=code&client_id=1qp9mcr1it0amvi42atlq6egco&redirect_uri=https://copordrop.co.uk" class="nav-link w-nav-link">LOGIN</a></nav>
       <div class="w-nav-button">
         <div class="w-icon-nav-menu"></div>
       </div>

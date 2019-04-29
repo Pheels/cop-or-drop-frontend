@@ -126,10 +126,10 @@ function buttonSelected(ticketNumber){
 
 function displayInformation(productResponse){
   document.getElementById("information").innerHTML =`
-  <div class="product-price">Ticket Price: £`+(productResponse['price']/productResponse['numberAllowedTickets'])+`</div>
-  <div class="product-worth">Worth: £`+productResponse['price']+`</div>
+  <div class="product-price">Ticket Price: &pound;`+(productResponse['price']/productResponse['numberAllowedTickets'])+`</div>
+  <div class="product-worth">Item Value: &pound;`+productResponse['price']+`</div>
   <div class="product-description-long">`+productResponse['description']+`<br></div>
-  `
+  `;
 }
 
 function displayProductName(name){
@@ -316,12 +316,24 @@ function purhaseButtonSelected(){
       xhr.onerror = function() {
         alert('Error: An errror occured whilst loading the page.');
       };
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var name = cookies[i].split('=')[0].toLowerCase();
+        var value = cookies[i].split('=')[1].toLowerCase();
+        if (name === 'email'){
+          console.log(value);
+        }
+
+      }
 
       // configure stripe handler
       var handler = StripeCheckout.configure({
         key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
         image: '',
         locale: 'auto',
+        shippingAddress: true,
+        billingAddress: true,
+        email: getCookieValue("email"),
         token: function(token) {
             $.ajax({
               url: 'https://api.copordrop.co.uk/postNewPayment',
@@ -329,9 +341,7 @@ function purhaseButtonSelected(){
               data: {
                 stripeToken: token.id,
                 stripePrice: price*100,
-                item: product['name'],
-                shippingAddress: true,
-                billingAddress: true
+                item: product['name']
               }
             }).done(function(stripeCustomer) {
               var jdata = {
@@ -382,4 +392,20 @@ function purhaseButtonSelected(){
       }
     });
   }
+}
+
+function getCookieValue(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }

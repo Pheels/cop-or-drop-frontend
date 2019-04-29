@@ -45,8 +45,13 @@ function writeCookie(data){
   var time = now.getTime();
   time += 3600 * 1000;
   now.setTime(time);
-  document.cookie = "name="+data['name']+";email="+data['email']+";phonenumber="+data['phone_number']+";address="+data['address']+";expires="+ now.toUTCString()+";path=/";
+  document.cookie = "name="+data['name']+";"
+  document.cookie = "email="+data['email']+";"
+  document.cookie = "phonenumber="+data['phone_number']+";"
+  document.cookie = "expires="+ now.toUTCString()+";"
+  document.cookie = "path=/";
   console.log(document.cookie);
+  console.log(getCookieValue('email'));
 }
 
 function getCookieValue(cname) {
@@ -64,14 +69,12 @@ function getCookieValue(cname) {
   }
   return "";
 }
-
 function handleLoginButton(){
-  console.log("handle login called");
   if (getCookieValue("name") == "") {
     handleAuth();
   } else {
     var loginButton = document.getElementById('login-button');
     loginButton.textContent = "LOGOUT";
-    loginButton.href = "https://copordrop.auth.eu-west-2.amazoncognito.com/logout?client_id=3q6652q7hjscqf249o8fkjr9ic&logout_uri=https://www.copordrop.co.uk/logout.html";
+    loginButton.href = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/logout?client_id=1qp9mcr1it0amvi42atlq6egco&logout_uri=https://www.copordrop.co.uk/logout.html";
   }
 }
