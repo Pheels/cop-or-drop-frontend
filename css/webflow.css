@@ -391,12 +391,14 @@ textarea.w-select {
 .w-select[multiple] {
   height: auto;
 }
+
 .w-form-label {
   display: inline-block;
   cursor: pointer;
   font-weight: normal;
   margin-bottom: 0px;
 }
+
 .w-checkbox,
 .w-radio {
   display: block;

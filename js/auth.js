@@ -1,6 +1,5 @@
 function handleAuth(){
   var url = 'https://api.copordrop.co.uk/confirmValidJWT'
-  console.log(window.location.href);
   try {
     var token = matchFirstRegex(/id_token=.*/g, window.location.href);
     console.log(token);
@@ -75,6 +74,6 @@ function handleLoginButton(){
   } else {
     var loginButton = document.getElementById('login-button');
     loginButton.textContent = "LOGOUT";
-    loginButton.href = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/logout?client_id=1qp9mcr1it0amvi42atlq6egco&logout_uri=https://www.copordrop.co.uk/logout.html";
+    loginButton.href = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/logout?client_id=1qp9mcr1it0amvi42atlq6egco&logout_uri=https://copordrop.co.uk/logout.html";
   }
 }

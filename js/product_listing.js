@@ -251,6 +251,7 @@ function checkCorrectAnswer(id, answer, callback){
 }
 
 function purhaseButtonSelected(){
+  console.log(getCookieValue("name"));
   // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
     $.alert({
@@ -265,7 +266,36 @@ function purhaseButtonSelected(){
         elmnt.scrollIntoView();
       }
     });
+  } else if (document.getElementById("termscheckbox").checked == false){
+    $.alert({
+      title: 'Please Note:',
+      content: 'You must agree to the terms and conditions in order to participate.',
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 70,
+      onDestroy: function () {
+        // before the modal is hidden.
+        var elmnt = document.getElementById("termscheckbox");
+        elmnt.scrollIntoView();
+      }
+    });
+  } else if (getCookieValue("name") == ""){
+      $.alert({
+        title: 'Please Note:',
+        content: 'You must be signed in to participate.',
+        boxWidth: '50%',
+        useBootstrap: false,
+        offsetBottom: 70,
+        onDestroy: function () {
+          // // before the modal is hidden.
+          // var elmnt = document.getElementById("termscheckbox");
+          // elmnt.scrollIntoView();
+        }
+      });
   } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
+    // length greater than 2 as otherwise just empty brackets.
+
+
     // add class loading
     document.getElementById("submitButton").innerHTML = `
     <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
@@ -371,7 +401,7 @@ function purhaseButtonSelected(){
           amount: price*100,
           closed: function () {
             document.getElementById("submitButton").innerHTML = `
-            <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE THIS RAFFLE &gt;</a></div>
+            <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
             `;
           }
         });

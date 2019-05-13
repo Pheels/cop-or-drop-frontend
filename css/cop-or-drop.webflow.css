@@ -34,7 +34,7 @@ img {
   margin-top: 30px;
   margin-bottom: 30px;
   font-family: 'Druk wide', sans-serif;
-  font-size: 3.8em;
+  font-size: 3.5em;
   line-height: 1em;
   font-weight: 900;
   letter-spacing: 3px;
@@ -53,9 +53,12 @@ img {
   letter-spacing: 2px;
 }
 
+.termsbox {
+  display: inline-block;
+}
 
 .p {
-  font-size: 19px;
+  font-size: 25px;
   line-height: 28px;
 }
 
@@ -228,6 +231,26 @@ img {
   align-items: center;
   background-color: #fff;
   text-align: left;
+}
+
+.section.terms-conditions {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #fff;
+  text-align: left;
+  flex-wrap: wrap;
+  padding: 50px;
 }
 
 .section.how-we-work {
@@ -478,9 +501,14 @@ img {
   -ms-flex-align: center;
   align-items: center;
 }
+.slide-1 {
+  background-image: url('../images/Shoe---Mobile2x.png');
+  background-position: 0px 0px;
+  background-size: cover;
+}
 
 .slide-2 {
-  background-image: url('../images/Shoe---Mobile2x.png');
+  background-image: url('../images/feature-image-2.png');
   background-position: 0px 0px;
   background-size: cover;
 }
@@ -595,8 +623,8 @@ img {
 }
 
 .div-block-11 {
-  margin-top: 113px;
-  margin-bottom: 113px;
+  margin-top: 63px;
+  margin-bottom: 33px;
 }
 
 .product-wrapper {
@@ -659,9 +687,6 @@ img {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  border-style: solid;
-  border-width: 2px;
-  border-color: #c4c4c4;
 }
 
 .image-17 {
