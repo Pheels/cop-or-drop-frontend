@@ -58,7 +58,7 @@ img {
 }
 
 .p {
-  font-size: 25px;
+  font-size: 19px;
   line-height: 28px;
 }
 
@@ -207,8 +207,10 @@ img {
 }
 
 .brand {
-  overflow: visible;
-  width: 150px;
+  left: 50px;
+  /* overflow: visible; */
+  /* width: 100px; */
+  /* float: left; */
 }
 
 .section {
@@ -620,11 +622,41 @@ img {
   width: 250px;
   margin-right: auto;
   margin-left: auto;
+  margin-top: 10px;
 }
 
 .div-block-11 {
   margin-top: 63px;
   margin-bottom: 33px;
+}
+
+.badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  vertical-align: middle;
+  font-family: 'Druk', sans-serif;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #e67070;
+}
+#lblCartCount {
+    font-size: 12px;
+    background: #e67070;
+    color: #fff;
+    padding: 0 5px;
+    vertical-align: bottom;
+    margin-left: -5px;
+    margin-bottom: 11px;
+}
+
+.div-block-111 {
+  margin-top: 113px;
+  margin-bottom: 113px;
 }
 
 .product-wrapper {
@@ -1323,7 +1355,7 @@ img {
     width: 95%;
   }
   .container-5 {
-    padding-left: 20px;
+    /* padding-left: 20px; */
   }
   .div-block-11 {
     margin-bottom: 50px;
@@ -1467,7 +1499,7 @@ img {
     width: 100%;
   }
   .container-5 {
-    padding-left: 10px;
+    /* padding-left: 10px; */
   }
   .button {
     display: block;

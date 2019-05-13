@@ -1635,7 +1635,7 @@ textarea.w-select {
 .w-nav-link {
   position: relative;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: middle;
   text-decoration: none;
   color: #222222;
   padding: 20px;

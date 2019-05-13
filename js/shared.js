@@ -20,3 +20,14 @@ function matchFirstRegex(pattern, string){
   var match = pattern.exec(string);
   return match[0];
 }
+
+function loadCart(){
+  var items = sessionStorage.getItem("cartItems");
+  console.log(JSON.parse(items).length);
+  if (items){
+    document.getElementById("checkoutButton").innerHTML = `
+    <i class="fa nav-link w-nav-link" style="font-size:23px">&#xf07a;</i>
+    <span class='badge badge-warning nav-link w-nav-link' id='lblCartCount'>`+JSON.parse(items).length+`</span>
+    `
+  }
+}
