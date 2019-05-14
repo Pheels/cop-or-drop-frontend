@@ -107,6 +107,8 @@ function displayTickets(productResponse, tickets){
         `
       }
   }
+  blockTickets();
+  loadCart();
 }
 
 function buttonSelected(ticketNumber){
@@ -285,14 +287,15 @@ function purhaseButtonSelected(){
     var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
     var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
     var timestamp = new Date().toLocaleString();
-    var ticketsString = tickets.join(",");
-
     var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+    var ticketsString = tickets.join(",");
 
     var itemInCart = false;
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
+        // split ticketsString
+        console.log(ticketString);
         cartJson[i]['ticketNumbers'] += "," + ticketsString;
       }
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
@@ -303,7 +306,7 @@ function purhaseButtonSelected(){
         "name": product['name'],
         "userName": "Oliver",
         "timestamp": timestamp,
-        "ticketNumbers": ticketsString,
+        "ticketNumbers": tickets.join(","),
         "id": product['id']
       };
       cartJson.push(jdata);

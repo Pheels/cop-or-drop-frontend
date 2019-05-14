@@ -58,7 +58,7 @@ body {
 .buttons {
   position: relative;
   padding-top: 30px;
-  margin-right: 60px;
+  margin-right: 50px;
 }
 
 .delete-btn {
@@ -94,13 +94,17 @@ body {
 }
 
 /* Product Image */
-.image {
+.product-image {
   margin-right: 50px;
+  display: block;
+  margin-left: auto;
+  /* margin-right: auto; */
+  /* width: 50%; */
 }
 
 /* Product Description */
 .description {
-  padding-top: 10px;
+  padding-top: 17px;
   margin-right: 20px;
   width: 155px;
 }

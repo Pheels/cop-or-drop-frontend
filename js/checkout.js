@@ -1,3 +1,88 @@
+function getCartItems(){
+  var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+  if (cartJson){
+    //set cart title
+    document.getElementById("shopping-cart").innerHTML = `
+    <!-- Title -->
+    <div class="title-cart">
+      Shopping Cart
+    </div>
+    `;
+
+    for (var i = 0; i < Object.keys(cartJson).length; i ++){
+      getProduct(cartJson[i]['id'], cartJson[i]);
+    }
+  } else {
+    //nothing in cart
+  }
+}
+
+function getProduct(id, cartJson) {
+  var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
+
+  // format json to get product
+  var jsondata = JSON.stringify({
+    id: id.toString()
+  });
+
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    displayProduct(response[0].items, cartJson);
+  };
+
+  xhr.onerror = function() {
+    alert('Error: An errror occured whilst loading the page.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(jsondata);
+}
+
+function displayProduct(item, cartJson){
+  var image = item['s3Location'] + '/image1.jpg'
+  var description = item['description']
+  var name = item['name'].replace("_", " ");
+  var tickets = cartJson['ticketNumbers'].replace(",", ", ");
+  var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
+
+  document.getElementById("shopping-cart").innerHTML += `
+   <div class="item">
+    <div class="buttons">
+      <span class="delete-btn"></span>
+    </div>
+
+    <div class="product-image" id="`+name+`-image" >
+      <img src="`+image+`" alt="" Style="width:120px;height:80px;"/>
+    </div>
+
+    <div class="description">
+      <span>`+name+`</span>
+      <span></span>
+    </div>
+
+    <div class="tickets">
+      <span>Tickets:<br></span>
+      <font color="#86939E">`+tickets+`</font>
+    </div>
+
+    <div class="item-price">
+      <span>Price:<br></span>
+        <font color="#86939E">£`+totalPrice+`</font></div>
+    <div class="buttons">
+      <span class="edit-btn"></span>
+    </div>
+  </div>
+`
+  console.log(item);
+  console.log(cartJson);
+}
 
 
 function purhaseButtonSelected(){

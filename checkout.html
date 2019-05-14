@@ -4,17 +4,18 @@
 <html data-wf-page="5c91136812597aef81862f1d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript" src="./js/contact.js"></script>
+  <script type="text/javascript" src="./js/checkout.js"></script>
   <script type="text/javascript" src="./js/auth.js"></script>
   <script type="text/javascript" src="./js/shared.js"></script>
   <script type="text/javascript">
     function loadPage(){
       handleLoginButton();
+      getCartItems();
       loadCart();
     }
   </script>
   <body onload="loadPage()">
-  <title>Error</title>
+  <title>Checkout</title>
   <meta content="contact" property="og:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
@@ -46,20 +47,16 @@
           <div class="div-block-11">
             <div class="h1">CHECKOUT</div>
         </div>
-        <div class="shopping-cart">
-          <!-- Title -->
-          <div class="title-cart">
-            Shopping Cart
-          </div>
+        <div class="shopping-cart" id="shopping-cart">
 
           <!-- Product #1 -->
-          <div class="item">
+          <!-- <div class="item">
             <div class="buttons">
               <span class="delete-btn"></span>
             </div>
 
-            <div class="image">
-              <img src="images/item-1.png" alt="" />
+            <div class="image" id="image1">
+              <img src="images/item-2.png" alt="" />
             </div>
 
             <div class="description">
@@ -79,65 +76,8 @@
             <div class="buttons">
               <span class="edit-btn"></span>
             </div>
-          </div>
-
-          <!-- Product #2 -->
-          <div class="item">
-            <div class="buttons">
-              <span class="delete-btn"></span>
-            </div>
-
-            <div class="image">
-              <img src="images/item-2.png" alt=""/>
-            </div>
-
-            <div class="description">
-              <span>Maison Margiela</span>
-              <span>Future Sneakers</span>
-              <span>White</span>
-            </div>
-
-            <div class="tickets">
-              <span>Tickets:<br></span>
-              <font color="#86939E">1,2,3,4,5,6</font>
-            </div>
-
-            <div class="item-price">
-              <span>Price:<br></span>
-                <font color="#86939E">$549</font></div>
-            <div class="buttons">
-              <span class="edit-btn"></span>
-            </div>
-          </div>
-
-          <!-- Product #3 -->
-          <div class="item">
-            <div class="buttons">
-              <span class="delete-btn"></span>
-            </div>
-
-            <div class="image">
-              <img src="images/item-3.png" alt="" />
-            </div>
-
-            <div class="description">
-              <span>Our Legacy</span>
-              <span>Brushed Scarf</span>
-              <span>Brown</span>
-            </div>
-
-            <div class="tickets">
-              <span>Tickets:<br></span>
-              <font color="#86939E">1,2,3,4,5,6</font>
-            </div>
-
-            <div class="item-price">
-              <span>Price:<br></span>
-                <font color="#86939E">$549</font></div>
-            <div class="buttons">
-              <span class="edit-btn"></span>
-            </div>
-          </div>
+          </div> -->
+          <!-- </div> -->
           <div class="total-price-box">
             <div class="total-price">Total Price: £150.50</div>
           </div>
