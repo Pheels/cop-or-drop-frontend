@@ -12,6 +12,12 @@ function getCartItems(){
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       getProduct(cartJson[i]['id'], cartJson[i]);
     }
+    document.getElementById("shopping-cart").appendChild() += `
+    <div class="total-price-box">
+      <div class="total-price">Total Price: £150.50</div>
+    </div>
+    `;
+
   } else {
     //nothing in cart
   }
@@ -35,6 +41,7 @@ function getProduct(id, cartJson) {
   xhr.onload = function() {
     var response = xhr.response;
     displayProduct(response[0].items, cartJson);
+
   };
 
   xhr.onerror = function() {
@@ -53,26 +60,26 @@ function displayProduct(item, cartJson){
   var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
 
   document.getElementById("shopping-cart").innerHTML += `
-   <div class="item">
+   <div class="item" id="`+name+`-item">
     <div class="buttons">
-      <span class="delete-btn"></span>
+      <span class="delete-btn" onclick="removeItem('`+name+`')"></span>
     </div>
 
     <div class="product-image" id="`+name+`-image" >
       <img src="`+image+`" alt="" Style="width:120px;height:80px;"/>
     </div>
 
-    <div class="description">
+    <div class="description" id="`+name+`-description">
       <span>`+name+`</span>
       <span></span>
     </div>
 
-    <div class="tickets">
+    <div class="tickets" id="`+name+`-tickets">
       <span>Tickets:<br></span>
       <font color="#86939E">`+tickets+`</font>
     </div>
 
-    <div class="item-price">
+    <div class="item-price" id="`+name+`-price">
       <span>Price:<br></span>
         <font color="#86939E">£`+totalPrice+`</font></div>
     <div class="buttons">
@@ -84,6 +91,21 @@ function displayProduct(item, cartJson){
   console.log(cartJson);
 }
 
+function removeItem(name){
+  document.getElementById(name+"-item").outerHTML = "";
+  var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+  var newCartJson = [];
+  for (var i = 0; i < Object.keys(cartJson).length; i ++){
+    console.log(cartJson[i]['name']);
+    if (cartJson[i]['name'].replace("_", " ") == name){
+      // do nothing
+    } else {
+      newCartJson.push(cartJson[i]);
+    }
+  }
+  sessionStorage.setItem('cartItems', JSON.stringify(newCartJson));
+  loadCart();
+}
 
 function purhaseButtonSelected(){
   console.log(getCookieValue("name"));
