@@ -1,8 +1,9 @@
 function getCartItems(){
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+
   if (cartJson){
     //set cart title
-    document.getElementById("shopping-cart").innerHTML = `
+    document.getElementById("shopping-cart").innerHTML += `
     <!-- Title -->
     <div class="title-cart">
       Shopping Cart
@@ -10,20 +11,19 @@ function getCartItems(){
     `;
 
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
-      getProduct(cartJson[i]['id'], cartJson[i]);
+      // last item
+      if (i == Object.keys(cartJson).length -1){
+        getProduct(cartJson[i]['id'], cartJson[i], true);
+      } else {
+        getProduct(cartJson[i]['id'], cartJson[i], false);
+      }
     }
-    document.getElementById("shopping-cart").appendChild() += `
-    <div class="total-price-box">
-      <div class="total-price">Total Price: £150.50</div>
-    </div>
-    `;
-
   } else {
     //nothing in cart
   }
 }
 
-function getProduct(id, cartJson) {
+function getProduct(id, cartJson, lastItem) {
   var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
 
   // format json to get product
@@ -41,7 +41,12 @@ function getProduct(id, cartJson) {
   xhr.onload = function() {
     var response = xhr.response;
     displayProduct(response[0].items, cartJson);
-
+    if (lastItem){
+      document.getElementById("shopping-cart").innerHTML += `
+        <div class="total-price-box">
+          <div class="total-price">Total Price: £150.50</div>
+        </div>`;
+    }
   };
 
   xhr.onerror = function() {
@@ -170,6 +175,8 @@ function purhaseButtonSelected(){
       //send api request to add ticket
       var ticketsString = tickets.join(",");
       var url = 'https://api.copordrop.co.uk/postNewTickets';
+
+      // should this not be answerResponse and not session storage?
       if (sessionStorage.getItem('answer') == 'false'){
         ticketsString = "";
         for (var l=0; l < tickets.length; l++){
@@ -177,7 +184,6 @@ function purhaseButtonSelected(){
         }
         ticketsString= ticketsString.substring(0, ticketsString.length - 1);
       }
-      console.log(ticketsString);
 
       var xhr = createCORSRequest('POST', url);
       if (!xhr) {

@@ -21,7 +21,6 @@ function getProduct() {
   // Response handlers.
   xhr.onload = function() {
     var response = xhr.response;
-    console.log(response[0].items);
     sessionStorage.setItem('productInfo',JSON.stringify(response[0].items));
     displayProduct(response[0].items);
   };
@@ -122,7 +121,6 @@ function buttonSelected(ticketNumber){
   } else {
     ticketChosenArr = ticketChosenArr.filter(function(e) { return e !== ticketNumber })
   }
-  console.log(ticketChosenArr);
   sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketChosenArr));
 }
 
@@ -179,7 +177,6 @@ function displayImages(productResponse){
 }
 
 function displayQuestions(productResponse){
-  console.log(productResponse);
   if (!(productResponse['question'].includes("?"))){
     productResponse['question'] = productResponse['question'] +"?"
   }
@@ -253,7 +250,6 @@ function checkCorrectAnswer(id, answer, callback){
 }
 
 function purhaseButtonSelected(){
-  console.log(getCookieValue("name"));
   // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
     $.alert({
@@ -290,14 +286,19 @@ function purhaseButtonSelected(){
     var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
     var ticketsString = tickets.join(",");
 
+
+    // keeping flag to see if the item is already in the cart
     var itemInCart = false;
+    // looping through items in cart
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
+      // checking if name of the item is the same as the current product
       if (cartJson[i]['name'] == product['name']){
+        // if so, set flag to true
         itemInCart = true;
-        // split ticketsString
-        console.log(ticketString);
+        // and append the ticket string to the product ticket Numbers
         cartJson[i]['ticketNumbers'] += "," + ticketsString;
       }
+      // update the session storage - does nothing if item wasn't in cart
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
     if (itemInCart == false){
@@ -312,6 +313,8 @@ function purhaseButtonSelected(){
       cartJson.push(jdata);
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
+    updateCart(cartJson);
+    // send cart to server here
     loadCart();
     blockTickets();
     document.getElementById("submitButton").text = `
@@ -335,6 +338,32 @@ function purhaseButtonSelected(){
       }
     });
   }
+}
+
+function updateCart(cartItems){
+  var url = 'http://localhost:8081/updateCart';
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  var jdata = {
+    "cartItems": cartItems
+  };
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    console.log(response);
+  };
+
+  xhr.onerror = function() {
+    alert('Error: An errror occured whilst loading the page.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(JSON.stringify(jdata));
 }
 
 function getCookieValue(cname) {

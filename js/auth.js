@@ -19,6 +19,7 @@ function handleAuth(){
       var response = xhr.response;
       console.log(response);
       if (response){
+        sendToServer(response);
         writeCookie(response);
         handleLoginButton();
         // write to local storage
@@ -49,8 +50,40 @@ function writeCookie(data){
   document.cookie = "phonenumber="+data['phone_number']+";"
   document.cookie = "expires="+ now.toUTCString()+";"
   document.cookie = "path=/";
-  console.log(document.cookie);
-  console.log(getCookieValue('email'));
+  // console.log(document.cookie);
+  // console.log(getCookieValue('email'));
+}
+
+function sendToServer(data){
+  var url = 'https://api.copordrop.co.uk/userLoggedIn'
+  try {
+    // Response handlers.
+    var xhr = createCORSRequest('POST', url);
+    if (!xhr) {
+      alert('CORS not supported');
+      return;
+    }
+
+    xhr.onload = function() {
+      var headers = xhr.getAllResponseHeaders();
+      console.log(headers);
+      var response = xhr.response;
+      if (response){
+        console.log(response);
+      }
+    };
+
+    xhr.onerror = function() {
+      alert('Error: An errror occured whilst loading the page.');
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(data));
+  } catch (err){
+    if (!err instanceof TypeError){
+     throw err.message;
+   }
+ }
 }
 
 function getCookieValue(cname) {

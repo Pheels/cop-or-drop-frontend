@@ -1,9 +1,7 @@
 <html data-wf-page="5c1a4627e3b12b377ae7a48d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
 <script type="text/javascript" src="/js/auth.js"></script>
-  <script type="text/javascript">
-    sessionStorage.clear()
-    document.cookie = "name= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    console.log("Removed cookie");
-    window.location.href = "https://www.copordrop.co.uk";
-  </script>
+  <script type="text/javascript" src="./js/logout.js"></script>
+  <script type="text/javascript" src="./js/auth.js"></script>
+  <script type="text/javascript" src="./js/shared.js"></script>
+  <body onload="logout()">
 </html>

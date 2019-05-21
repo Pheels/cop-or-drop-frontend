@@ -31,3 +31,24 @@ function loadCart(){
     `
   }
 }
+
+function getSessionData(){
+  var url = 'http://localhost:8081/getSessionData';
+  var xhr = createCORSRequest('GET', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    console.log(response);
+  };
+
+  xhr.onerror = function() {
+    alert('Error: An errror occured whilst loading the page.');
+  };
+
+  xhr.send();
+}
