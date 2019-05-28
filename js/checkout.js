@@ -19,6 +19,7 @@ function getCartItems(){
         getProduct(cartJson[i]['id'], cartJson[i], false);
       }
     }
+
   } else {
     //nothing in cart
   }
@@ -44,10 +45,8 @@ function getProduct(id, cartJson, lastItem, totalPrice) {
     displayProduct(response[0].items, cartJson);
     var totalPrice = sessionStorage.getItem('total');
     if (lastItem){
-      document.getElementById("shopping-cart").innerHTML += `
-        <div class="total-price-box">
-          <div class="total-price">Total Price: £`+totalPrice+`</div>
-        </div>`;
+      document.getElementById("total-price-box").innerHTML += `
+      <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
     }
     return totalPrice;
   };
@@ -59,11 +58,6 @@ function getProduct(id, cartJson, lastItem, totalPrice) {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(jsondata);
 }
-
-// function calculateTotalPrice(){
-//   var price = cartJson['ticketNumbers'].split(",").length * (Number(response[0].items['price']) / Number(response[0].items['numberAllowedTickets']));
-//
-// }
 
 function displayProduct(item, cartJson){
   var image = item['s3Location'] + '/image1.jpg'
@@ -96,7 +90,7 @@ function displayProduct(item, cartJson){
 
     <div class="item-price" id="`+name+`-price">
       <span>Price:<br></span>
-        <font color="#86939E">£`+totalPrice+`</font></div>
+        <font color="#86939E" id='`+name+`-price-value'>\xA3`+totalPrice+`</font></div>
     <div class="buttons">
       <span class="edit-btn"></span>
     </div>
@@ -108,12 +102,17 @@ function displayProduct(item, cartJson){
 }
 
 function removeItem(name){
+  var tprice = Number(document.getElementById(name+'-price-value').textContent.replace("\xA3", ""));
   document.getElementById(name+"-item").outerHTML = "";
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+  var total = sessionStorage.getItem('cartItems');
   var newCartJson = [];
   for (var i = 0; i < Object.keys(cartJson).length; i ++){
-    console.log(cartJson[i]['name']);
     if (cartJson[i]['name'].replace("_", " ") == name){
+      sessionStorage.setItem('total', Number(sessionStorage.getItem('total'))-tprice);
+      document.getElementById("total-price-box").innerHTML = `
+      <div class="total-price">Total Price: \xA3`+sessionStorage.getItem('total')+`</div>`;
+
       // do nothing
     } else {
       newCartJson.push(cartJson[i]);
@@ -126,20 +125,7 @@ function removeItem(name){
 function purhaseButtonSelected(){
   console.log(getCookieValue("name"));
   // no answer selected
-  if (!sessionStorage.getItem('questionSelected')){
-    $.alert({
-      title: 'Please Note:',
-      content: 'You must answer the question before you can enter the competition.',
-      boxWidth: '50%',
-      useBootstrap: false,
-      offsetBottom: 60,
-      onDestroy: function () {
-        // before the modal is hidden.
-        var elmnt = document.getElementById("questions");
-        elmnt.scrollIntoView();
-      }
-    });
-  } else if (document.getElementById("termscheckbox").checked == false){
+  if (document.getElementById("termscheckbox").checked == false){
     $.alert({
       title: 'Please Note:',
       content: 'You must agree to the terms and conditions in order to participate.',
@@ -163,26 +149,17 @@ function purhaseButtonSelected(){
 
         }
       });
-  } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
+  } else if (1 == 1) {
     // length greater than 2 as otherwise just empty brackets.
-
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
     <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
     `;
 
-    // calculate price
-    var product = JSON.parse(sessionStorage.getItem('productInfo'));
-    var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
-    var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
-    var timestamp = new Date().toLocaleString();
-    var ticketsString = tickets.join(",");
-
     // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
 
-    // check if answer correct, if not then 0,0,0 the ticketNumbers
-    checkCorrectAnswer(product['id'], sessionStorage.getItem('questionSelected'), function(answerResponse){
+    // get total price
       //send api request to add ticket
       var ticketsString = tickets.join(",");
       var url = 'https://api.copordrop.co.uk/postNewTickets';
@@ -279,21 +256,5 @@ function purhaseButtonSelected(){
             `;
           }
         });
-  });
-
-  // no bids selected
-  } else {
-    $.alert({
-      title: 'Please Note:',
-      content: 'You must chose at least one valid bid number before continuing.',
-      boxWidth: '50%',
-      useBootstrap: false,
-      offsetBottom: 60,
-      onDestroy: function () {
-        // before the modal is hidden.
-        var elmnt = document.getElementById("raffle-title");
-        elmnt.scrollIntoView();
-      }
-    });
   }
 }

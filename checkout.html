@@ -2,19 +2,24 @@
 <!--  This site was created in Webflow. http://www.webflow.com  -->
 <!--  Last Published: Sat Mar 23 2019 14:54:01 GMT+0000 (UTC)  -->
 <html data-wf-page="5c91136812597aef81862f1d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
+<script src="https://d1tdp7z6w94jbb.cloudfront.net/js/jquery-3.3.1.min.js" type="text/javascript" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="./js/checkout.js"></script>
+<script type="text/javascript" src="./js/auth.js"></script>
+<script type="text/javascript" src="./js/shared.js"></script>
+<script type="text/javascript">
+  function loadPage(){
+    handleLoginButton();
+    getCartItems();
+    loadCart();
+  }
+</script>
+<body onload="loadPage()">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://checkout.stripe.com/checkout.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript" src="./js/checkout.js"></script>
-  <script type="text/javascript" src="./js/auth.js"></script>
-  <script type="text/javascript" src="./js/shared.js"></script>
-  <script type="text/javascript">
-    function loadPage(){
-      handleLoginButton();
-      getCartItems();
-      loadCart();
-    }
-  </script>
-  <body onload="loadPage()">
   <title>Checkout</title>
   <meta content="contact" property="og:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -22,6 +27,7 @@
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
   <link href="css/cop-or-drop.webflow.css" rel="stylesheet" type="text/css">
+  <script src="https://checkout.stripe.com/checkout.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="css/checkout.css" rel="stylesheet" type="text/css">
   <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
@@ -40,7 +46,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Shopping Cart</title>
 
-        <script src="https://code.jquery.com/jquery-2.2.4.js" charset="utf-8"></script>
+        <!-- <script src="https://code.jquery.com/jquery-2.2.4.js" charset="utf-8"></script> -->
         <meta name="robots" content="noindex,follow" />
       </head>
       <body>
@@ -81,6 +87,8 @@
           <!-- <div class="total-price-box">
             <div class="total-price">Total Price: £150.50</div>
           </div> -->
+        </div>
+        <div class="total-price-box" id="total-price-box">
         </div>
         <div class="bottom-section">
           <div id="termsconditions" class="checkbox-field w-checkbox"><input type="checkbox" id="termscheckbox" name="termscheckbox"><label for="termscheckbox" class="w-form-label">&nbsp;I have read and agree to the&nbsp;</label><a href="/terms.html">terms and conditions</a>.</div>
@@ -146,7 +154,6 @@
       </div>
     </div>
   </div>
-  <script src="https://d1tdp7z6w94jbb.cloudfront.net/js/jquery-3.3.1.min.js" type="text/javascript" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="./js/webflow.js" type="text/javascript"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>

@@ -23,7 +23,6 @@ function matchFirstRegex(pattern, string){
 
 function loadCart(){
   var items = sessionStorage.getItem("cartItems");
-  console.log(JSON.parse(items).length);
   if (items){
     document.getElementById("checkoutButton").innerHTML = `
     <i class="fa nav-link w-nav-link" style="font-size:23px">&#xf07a;</i>

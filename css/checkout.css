@@ -42,8 +42,21 @@ body {
 }
 
 .total-price-box {
-  padding: 20px 30px;
+  /* padding: 20px 30px;
+  height: 60px; */
   border-top:  1px solid #E1E8EE;
+  width: 750px;
+  height: 60px;
+  border-bottom: 1px solid #E1E8EE;
+  padding: 0px 30px;
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+  background: #FFFFFF;
+  box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+  border-radius: 6px;
+  /* display: flex; */
+  /* flex-direction: column; */
   /* height: auto; */
   /* display: flex; */
   /* display:inline-block; */
@@ -177,6 +190,13 @@ input:focus {
   font-size: 20px;
   font-weight: 400;
   text-align: right;
+  /* width: 750px;
+  height: auto;
+  background: #FFFFFF;
+  box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column; */
 }
 
 .bottom-section{
