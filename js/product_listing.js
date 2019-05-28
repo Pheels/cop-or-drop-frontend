@@ -295,7 +295,7 @@ function purhaseButtonSelected(){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
         // split ticketsString
-        console.log(ticketString);
+        console.log(ticketsString);
         cartJson[i]['ticketNumbers'] += "," + ticketsString;
       }
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));

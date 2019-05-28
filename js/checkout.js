@@ -2,6 +2,7 @@ function getCartItems(){
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
 
   if (cartJson){
+    sessionStorage.setItem('total', 0);
     //set cart title
     document.getElementById("shopping-cart").innerHTML += `
     <!-- Title -->
@@ -23,7 +24,7 @@ function getCartItems(){
   }
 }
 
-function getProduct(id, cartJson, lastItem) {
+function getProduct(id, cartJson, lastItem, totalPrice) {
   var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
 
   // format json to get product
@@ -41,12 +42,14 @@ function getProduct(id, cartJson, lastItem) {
   xhr.onload = function() {
     var response = xhr.response;
     displayProduct(response[0].items, cartJson);
+    var totalPrice = sessionStorage.getItem('total');
     if (lastItem){
       document.getElementById("shopping-cart").innerHTML += `
         <div class="total-price-box">
-          <div class="total-price">Total Price: £150.50</div>
+          <div class="total-price">Total Price: £`+totalPrice+`</div>
         </div>`;
     }
+    return totalPrice;
   };
 
   xhr.onerror = function() {
@@ -57,12 +60,19 @@ function getProduct(id, cartJson, lastItem) {
   xhr.send(jsondata);
 }
 
+// function calculateTotalPrice(){
+//   var price = cartJson['ticketNumbers'].split(",").length * (Number(response[0].items['price']) / Number(response[0].items['numberAllowedTickets']));
+//
+// }
+
 function displayProduct(item, cartJson){
   var image = item['s3Location'] + '/image1.jpg'
   var description = item['description']
   var name = item['name'].replace("_", " ");
   var tickets = cartJson['ticketNumbers'].replace(",", ", ");
   var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
+  var total = sessionStorage.getItem('total');
+  sessionStorage.setItem('total', Number(total) + Number(totalPrice));
 
   document.getElementById("shopping-cart").innerHTML += `
    <div class="item" id="`+name+`-item">
@@ -94,6 +104,7 @@ function displayProduct(item, cartJson){
 `
   console.log(item);
   console.log(cartJson);
+  return totalPrice;
 }
 
 function removeItem(name){
