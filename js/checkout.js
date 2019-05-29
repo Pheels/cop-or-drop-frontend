@@ -131,12 +131,7 @@ function purhaseButtonSelected(){
       content: 'You must agree to the terms and conditions in order to participate.',
       boxWidth: '50%',
       useBootstrap: false,
-      offsetBottom: 70,
-      onDestroy: function () {
-        // before the modal is hidden.
-        var elmnt = document.getElementById("termscheckbox");
-        elmnt.scrollIntoView();
-      }
+      offsetBottom: 50
     });
   } else if (getCookieValue("name") == ""){
       $.alert({
@@ -144,13 +139,16 @@ function purhaseButtonSelected(){
         content: 'You must be signed in to participate.',
         boxWidth: '50%',
         useBootstrap: false,
-        offsetBottom: 70,
+        offsetBottom: 60,
         onDestroy: function () {
-
         }
       });
-  } else if (1 == 1) {
-    // length greater than 2 as otherwise just empty brackets.
+  } else {
+    var ticketsString = tickets.join(",");
+    var validationUrl = 'https://api.copordrop.co.uk/checkTicketsAvailable';
+
+    // do a check here to ensure criteria is fulfilled
+    // criteria = response from server with price
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
