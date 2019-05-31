@@ -64,6 +64,10 @@ function displayProduct(item, cartJson){
   var description = item['description']
   var name = item['name'].replace("_", " ");
   var tickets = cartJson['ticketNumbers'].replace(",", ", ");
+  if (tickets.slice(-1) == ','){
+    tickets = tickets.substring(0, tickets.length - 1);
+
+  }
   var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
   var total = sessionStorage.getItem('total');
   sessionStorage.setItem('total', Number(total) + Number(totalPrice));
@@ -144,115 +148,172 @@ function purhaseButtonSelected(){
         }
       });
   } else {
-    var ticketsString = tickets.join(",");
-    var validationUrl = 'https://api.copordrop.co.uk/checkTicketsAvailable';
-
-    // do a check here to ensure criteria is fulfilled
-    // criteria = response from server with price
+    var url = 'https://api.copordrop.co.uk/checkTickets';
+    var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
+    // var cartItemsNew = []
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
     <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
     `;
 
-    // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
-
-    // get total price
-      //send api request to add ticket
-      var ticketsString = tickets.join(",");
-      var url = 'https://api.copordrop.co.uk/postNewTickets';
-
-      // should this not be answerResponse and not session storage?
-      if (sessionStorage.getItem('answer') == 'false'){
-        ticketsString = "";
-        for (var l=0; l < tickets.length; l++){
-          ticketsString += "0,"
-        }
-        ticketsString= ticketsString.substring(0, ticketsString.length - 1);
-      }
-
-      var xhr = createCORSRequest('POST', url);
-      if (!xhr) {
-        alert('CORS not supported');
-        return;
-      }
-
-      // Response handlers.
-      xhr.onload = function() {
-        var response = xhr.response;
-        console.log(response);
-        if (response.response == "Ticket(s) inserted successfully"){
-          document.getElementById("raffle-buttons").innerHTML = `
-          <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
-          `
-          document.getElementById("submitButton").remove();
-          document.getElementById("questions").remove();
-        } else {
-          alert(response.response);
-        }
-      };
-
-      xhr.onerror = function() {
-        alert('Error: An errror occured whilst loading the page.');
-      };
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var name = cookies[i].split('=')[0].toLowerCase();
-        var value = cookies[i].split('=')[1].toLowerCase();
-        if (name === 'email'){
-          console.log(value);
-        }
-
-      }
-
-      // configure stripe handler
-      var handler = StripeCheckout.configure({
-        key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
-        image: '',
-        locale: 'auto',
-        shippingAddress: true,
-        billingAddress: true,
-        email: getCookieValue("email"),
-        token: function(token) {
-            $.ajax({
-              url: 'https://api.copordrop.co.uk/postNewPayment',
-              type: 'POST',
-              data: {
-                stripeToken: token.id,
-                stripePrice: price*100,
-                item: product['name']
-              }
-            }).done(function(stripeCustomer) {
-              var jdata = {
-                "name": product['name'],
-                "userName": "Oliver",
-                "timestamp": timestamp,
-                "paymentMethod": "Stripe",
-                "paymentId": stripeCustomer.id,
-                "ticketNumbers": ticketsString
-              };
-              var jsondata = JSON.stringify(jdata);
-              console.log(jsondata);
-              xhr.setRequestHeader("Content-Type", "application/json");
-              xhr.send(jsondata);
-            }).fail(function(e) {
-              alert('There was an error processing the payment. Please try again.')
-            });
+    $.each(cartItems, function(index, val) {
+        JSON.stringify(val);
+        $.post(url, val)
+         .done(function (data) {
+            if (data['ticketsTaken']){
+              $.confirm({
+                title: 'Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
+                content: 'Press ok to remove the bids.',
+                typeAnimated: true,
+                boxWidth: '50%',
+                useBootstrap: false,
+                offsetBottom: 50,
+                escapeKey: true,
+                buttons: {
+                    Ok: {
+                        text: 'Ok',
+                        btnClass: 'btn-default',
+                        action: removeBids(data)
+                    }
+                }
+              });
+            } else {
+              cartItems = sessionStorage.getItem('cartItems');
+              cartItems[index]['ticketsString'] = data['ticketsString'];
+              sessionStorage.setItem('cartItems', cartItems);
             }
         });
-
-        // open stripe handler
-        event.preventDefault()
-        handler.open({
-          name: 'CopOrDrop',
-          description: '',
-          currency: 'gbp',
-          amount: price*100,
-          closed: function () {
-            document.getElementById("submitButton").innerHTML = `
-            <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
-            `;
-          }
-        });
+    });
+    // console.log(sessionStorage.getItem('cartItems'));
   }
+}
+
+function removeBids(data){
+  var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
+  var ticketsTaken = data['ticketsTaken'].split(',');
+  var cartItemsNew = cartItems;
+
+  // go through every cart item
+  for(var i = 0; i < cartItems.length; i++) {
+    // check that the name matches
+    if (cartItems[i]['name'] == data['name']){
+      // split the ticketNumbers string
+      var tickets = cartItems[i]['ticketNumbers'].split(',');
+      // go through all ticket numbers
+      for (var x = 0; x < tickets.length; x++){
+        //go throught tickets taken
+        for (var y = 0; y < ticketsTaken.length; x++){
+          // check if ticket numbers match
+          if (parseInt(tickets[x], 10) == parseInt(ticketsTaken[y], 10)){
+            cartItemsNew[i]['ticketNumbers'] = removeByIndex(tickets, x).join(',');
+            sessionStorage.setItem('cartItems', JSON.stringify(cartItemsNew));
+            console.log(sessionStorage.getItem('cartItems'));
+            return;
+          }
+          // remove item(s) from tickets, (be careful of 0), and join them again.
+        }
+      }
+    }
+  }
+
+}
+
+function removeByIndex(array, index){
+    return array.filter(function(elem, _index){
+        return index != _index;
+    });
+}
+
+
+function displayStripe(){
+  // get total price
+    //send api request to add ticket
+    // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
+    var ticketsString = tickets.join(",");
+    var url = 'https://api.copordrop.co.uk/postNewTickets';
+
+    var xhr = createCORSRequest('POST', url);
+    if (!xhr) {
+      alert('CORS not supported');
+      return;
+    }
+
+    // Response handlers.
+    xhr.onload = function() {
+      var response = xhr.response;
+      console.log(response);
+      if (response.response == "Ticket(s) inserted successfully"){
+        document.getElementById("raffle-buttons").innerHTML = `
+        <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
+        `
+        document.getElementById("submitButton").remove();
+        document.getElementById("questions").remove();
+      } else {
+        alert(response.response);
+      }
+    };
+
+    xhr.onerror = function() {
+      alert('Error: An errror occured whilst loading the page.');
+    };
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var name = cookies[i].split('=')[0].toLowerCase();
+      var value = cookies[i].split('=')[1].toLowerCase();
+      if (name === 'email'){
+        console.log(value);
+      }
+
+    }
+
+    // configure stripe handler
+    var handler = StripeCheckout.configure({
+      key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
+      image: '',
+      locale: 'auto',
+      shippingAddress: true,
+      billingAddress: true,
+      email: getCookieValue("email"),
+      token: function(token) {
+          $.ajax({
+            url: 'https://api.copordrop.co.uk/postNewPayment',
+            type: 'POST',
+            data: {
+              stripeToken: token.id,
+              stripePrice: price*100,
+              item: product['name']
+            }
+          }).done(function(stripeCustomer) {
+            var jdata = {
+              "name": product['name'],
+              "userName": "Oliver",
+              "timestamp": timestamp,
+              "paymentMethod": "Stripe",
+              "paymentId": stripeCustomer.id,
+              "ticketNumbers": ticketsString
+            };
+            var jsondata = JSON.stringify(jdata);
+            console.log(jsondata);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(jsondata);
+          }).fail(function(e) {
+            alert('There was an error processing the payment. Please try again.')
+          });
+          }
+      });
+
+      // open stripe handler
+      event.preventDefault()
+      handler.open({
+        name: 'CopOrDrop',
+        description: '',
+        currency: 'gbp',
+        amount: price*100,
+        closed: function () {
+          document.getElementById("submitButton").innerHTML = `
+          <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
+          `;
+        }
+      });
 }

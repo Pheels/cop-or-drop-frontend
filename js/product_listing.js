@@ -307,7 +307,8 @@ function purhaseButtonSelected(){
         "userName": "Oliver",
         "timestamp": timestamp,
         "ticketNumbers": tickets.join(","),
-        "id": product['id']
+        "id": product['id'],
+        "answer": sessionStorage.getItem('questionSelected')
       };
       cartJson.push(jdata);
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
