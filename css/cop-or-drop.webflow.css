@@ -11,11 +11,12 @@ img {
 
 .div-block-3 {
   position: relative;
-  top: -80px;
+  top: -90px;
   z-index: 2;
   margin-right: 0px;
   padding-right: 144px;
   padding-left: 144px;
+  padding-top: 10px;
   text-align: center;
 }
 
@@ -32,6 +33,19 @@ img {
   position: static;
   z-index: 99;
   margin-top: 30px;
+  margin-bottom: 30px;
+  font-family: 'Druk wide', sans-serif;
+  font-size: 3.5em;
+  line-height: 1em;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.h11 {
+  position: static;
+  z-index: 99;
+  margin-top: 15px;
   margin-bottom: 30px;
   font-family: 'Druk wide', sans-serif;
   font-size: 3.5em;
@@ -86,6 +100,16 @@ img {
   font-weight: 500;
   letter-spacing: 15px;
   text-transform: uppercase;
+}
+
+.h22 {
+  font-family: 'Druk wide', sans-serif;
+  font-size: 1vw;
+  line-height: 1.4em;
+  font-weight: 500;
+  letter-spacing: 15px;
+  text-transform: uppercase;
+  padding-top:10px;
 }
 
 .home-section {

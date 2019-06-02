@@ -45,6 +45,8 @@ function getProduct(id, cartJson, lastItem, totalPrice) {
     displayProduct(response[0].items, cartJson);
     var totalPrice = sessionStorage.getItem('total');
     if (lastItem){
+      // calculate total price (api call)
+
       document.getElementById("total-price-box").innerHTML += `
       <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
     }
@@ -66,7 +68,6 @@ function displayProduct(item, cartJson){
   var tickets = cartJson['ticketNumbers'].replace(",", ", ");
   if (tickets.slice(-1) == ','){
     tickets = tickets.substring(0, tickets.length - 1);
-
   }
   var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
   var total = sessionStorage.getItem('total');
@@ -100,8 +101,6 @@ function displayProduct(item, cartJson){
     </div>
   </div>
 `
-  console.log(item);
-  console.log(cartJson);
   return totalPrice;
 }
 
@@ -164,7 +163,7 @@ function purhaseButtonSelected(){
             if (data['ticketsTaken']){
               $.confirm({
                 title: 'Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
-                content: 'Press ok to remove the bids.',
+                content: 'These tickets have been removed from your basket..',
                 typeAnimated: true,
                 boxWidth: '50%',
                 useBootstrap: false,
@@ -183,10 +182,61 @@ function purhaseButtonSelected(){
               cartItems[index]['ticketsString'] = data['ticketsString'];
               sessionStorage.setItem('cartItems', cartItems);
             }
+            updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]);
         });
+
     });
     // console.log(sessionStorage.getItem('cartItems'));
   }
+}
+
+function updateProductTickets(product){
+  // add class loading
+  console.log(product['name'].replace('_',' ')+"-tickets");
+  document.getElementById(product['name'].replace('_',' ')+"-tickets").innerHTML = `
+  <span>Tickets:<br></span>
+  <font color="#86939E">`+product['ticketNumbers']+`</font>`;
+
+
+  // document.getElementById("total-price-box").innerHTML += `
+  // <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
+  // console.log(product);
+}
+
+function getTotalPrice(){
+  var url = 'https://api.copordrop.co.uk/getTotalPrice';
+
+  // format json to get product
+  var jsondata = JSON.stringify({
+    id: id.toString()
+  });
+
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    displayProduct(response[0].items, cartJson);
+    var totalPrice = sessionStorage.getItem('total');
+    if (lastItem){
+      // calculate total price (api call)
+
+      document.getElementById("total-price-box").innerHTML += `
+      <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
+    }
+    return totalPrice;
+  };
+
+  xhr.onerror = function() {
+    alert('Error: An errror occured whilst loading the page.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(jsondata);
 }
 
 function removeBids(data){
@@ -224,7 +274,6 @@ function removeByIndex(array, index){
         return index != _index;
     });
 }
-
 
 function displayStripe(){
   // get total price
