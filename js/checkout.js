@@ -2,7 +2,6 @@ function getCartItems(){
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
 
   if (cartJson){
-    sessionStorage.setItem('total', 0);
     //set cart title
     document.getElementById("shopping-cart").innerHTML += `
     <!-- Title -->
@@ -12,25 +11,21 @@ function getCartItems(){
     `;
 
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
-      // last item
-      if (i == Object.keys(cartJson).length -1){
-        getProduct(cartJson[i]['id'], cartJson[i], true);
-      } else {
-        getProduct(cartJson[i]['id'], cartJson[i], false);
-      }
+      getProduct(cartJson[i]);
     }
 
+    getTotalPrice(cartJson);
   } else {
     //nothing in cart
   }
 }
 
-function getProduct(id, cartJson, lastItem, totalPrice) {
+function getProduct(cartJson) {
   var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
 
   // format json to get product
   var jsondata = JSON.stringify({
-    id: id.toString()
+    id: cartJson['id'].toString()
   });
 
   var xhr = createCORSRequest('POST', url);
@@ -43,14 +38,6 @@ function getProduct(id, cartJson, lastItem, totalPrice) {
   xhr.onload = function() {
     var response = xhr.response;
     displayProduct(response[0].items, cartJson);
-    var totalPrice = sessionStorage.getItem('total');
-    if (lastItem){
-      // calculate total price (api call)
-
-      document.getElementById("total-price-box").innerHTML += `
-      <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
-    }
-    return totalPrice;
   };
 
   xhr.onerror = function() {
@@ -66,12 +53,11 @@ function displayProduct(item, cartJson){
   var description = item['description']
   var name = item['name'].replace("_", " ");
   var tickets = cartJson['ticketNumbers'].replace(",", ", ");
+  var price = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
+
   if (tickets.slice(-1) == ','){
     tickets = tickets.substring(0, tickets.length - 1);
   }
-  var totalPrice = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
-  var total = sessionStorage.getItem('total');
-  sessionStorage.setItem('total', Number(total) + Number(totalPrice));
 
   document.getElementById("shopping-cart").innerHTML += `
    <div class="item" id="`+name+`-item">
@@ -95,13 +81,12 @@ function displayProduct(item, cartJson){
 
     <div class="item-price" id="`+name+`-price">
       <span>Price:<br></span>
-        <font color="#86939E" id='`+name+`-price-value'>\xA3`+totalPrice+`</font></div>
+        <font color="#86939E" id='`+name+`-price-value'>\xA3`+price+`</font></div>
     <div class="buttons">
       <span class="edit-btn"></span>
     </div>
   </div>
 `
-  return totalPrice;
 }
 
 function removeItem(name){
@@ -197,19 +182,10 @@ function updateProductTickets(product){
   <span>Tickets:<br></span>
   <font color="#86939E">`+product['ticketNumbers']+`</font>`;
 
-
-  // document.getElementById("total-price-box").innerHTML += `
-  // <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
-  // console.log(product);
 }
 
-function getTotalPrice(){
+function getTotalPrice(cartJson){
   var url = 'https://api.copordrop.co.uk/getTotalPrice';
-
-  // format json to get product
-  var jsondata = JSON.stringify({
-    id: id.toString()
-  });
 
   var xhr = createCORSRequest('POST', url);
   if (!xhr) {
@@ -220,15 +196,8 @@ function getTotalPrice(){
   // Response handlers.
   xhr.onload = function() {
     var response = xhr.response;
-    displayProduct(response[0].items, cartJson);
-    var totalPrice = sessionStorage.getItem('total');
-    if (lastItem){
-      // calculate total price (api call)
-
-      document.getElementById("total-price-box").innerHTML += `
-      <div class="total-price">Total Price: \xA3`+totalPrice+`</div>`;
-    }
-    return totalPrice;
+    document.getElementById("total-price-box").innerHTML += `
+    <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
   };
 
   xhr.onerror = function() {
@@ -236,7 +205,7 @@ function getTotalPrice(){
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(jsondata);
+  xhr.send(JSON.stringify(cartJson));
 }
 
 function removeBids(data){
