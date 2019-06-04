@@ -81,7 +81,8 @@ function displayProduct(item, cartJson){
 
     <div class="item-price" id="`+name+`-price">
       <span>Price:<br></span>
-        <font color="#86939E" id='`+name+`-price-value'>\xA3`+price+`</font></div>
+      <font color="#86939E" id='`+name+`-price-value'>\xA3`+price+`</font>
+    </div>
     <div class="buttons">
       <span class="edit-btn"></span>
     </div>
@@ -134,7 +135,6 @@ function purhaseButtonSelected(){
   } else {
     var url = 'https://api.copordrop.co.uk/checkTickets';
     var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
-    // var cartItemsNew = []
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
@@ -158,7 +158,8 @@ function purhaseButtonSelected(){
                     Ok: {
                         text: 'Ok',
                         btnClass: 'btn-default',
-                        action: removeBids(data)
+                        action: removeBids(data),
+                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index])
                     }
                 }
               });
@@ -167,10 +168,9 @@ function purhaseButtonSelected(){
               cartItems[index]['ticketsString'] = data['ticketsString'];
               sessionStorage.setItem('cartItems', cartItems);
             }
-            updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]);
         });
-
     });
+
     // console.log(sessionStorage.getItem('cartItems'));
   }
 }
@@ -182,6 +182,20 @@ function updateProductTickets(product){
   <span>Tickets:<br></span>
   <font color="#86939E">`+product['ticketNumbers']+`</font>`;
 
+  var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+  getTotalPrice(cartJson);
+}
+
+function updateItemPrices(cartJson, prices){
+  for (var i = 0; i < Object.keys(cartJson).length; i ++){
+    console.log(cartJson[i]['name'].replace("_", " ")+'-price-value');
+    try {
+      document.getElementById(cartJson[i]['name'].replace("_", " ")+'-price-value').textContent ="\xA3"+prices[cartJson[i]['name']];
+      console.log(prices[cartJson[i]['name']]);
+    } catch(err) {
+      // console.log(err.message);
+    }
+  }
 }
 
 function getTotalPrice(cartJson){
@@ -196,8 +210,9 @@ function getTotalPrice(cartJson){
   // Response handlers.
   xhr.onload = function() {
     var response = xhr.response;
-    document.getElementById("total-price-box").innerHTML += `
+    document.getElementById("total-price-box").innerHTML = `
     <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+    updateItemPrices(cartJson, response);
   };
 
   xhr.onerror = function() {
@@ -212,6 +227,11 @@ function removeBids(data){
   var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
   var ticketsTaken = data['ticketsTaken'].split(',');
   var cartItemsNew = cartItems;
+
+  // add class loading
+  document.getElementById("submitButton").innerHTML = `
+  <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS ></a></div>
+  `;
 
   // go through every cart item
   for(var i = 0; i < cartItems.length; i++) {
@@ -235,7 +255,6 @@ function removeBids(data){
       }
     }
   }
-
 }
 
 function removeByIndex(array, index){
