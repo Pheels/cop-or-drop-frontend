@@ -14,7 +14,11 @@ function getCartItems(){
       getProduct(cartJson[i]);
     }
 
-    getTotalPrice(cartJson);
+    getTotalPrice(cartJson, function(response){
+      document.getElementById("total-price-box").innerHTML = `
+      <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+      updateItemPrices(cartJson, response);
+    });
   } else {
     //nothing in cart
   }
@@ -141,6 +145,7 @@ function purhaseButtonSelected(){
     <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
     `;
 
+    // looping through items and confirming they are still available
     $.each(cartItems, function(index, val) {
         JSON.stringify(val);
         $.post(url, val)
@@ -159,7 +164,8 @@ function purhaseButtonSelected(){
                         text: 'Ok',
                         btnClass: 'btn-default',
                         action: removeBids(data),
-                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index])
+                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
+                        action: sessionStorage.setItem('ticketsRemoved', true)
                     }
                 }
               });
@@ -170,8 +176,11 @@ function purhaseButtonSelected(){
             }
         });
     });
-
-    // console.log(sessionStorage.getItem('cartItems'));
+    if (sessionStorage.getItem('ticketsUnavailable')){
+      sessionStorage.removeItem('ticketsRemoved');
+    } else {
+      displayStripe(cartItems);
+    }
   }
 }
 
@@ -188,17 +197,15 @@ function updateProductTickets(product){
 
 function updateItemPrices(cartJson, prices){
   for (var i = 0; i < Object.keys(cartJson).length; i ++){
-    console.log(cartJson[i]['name'].replace("_", " ")+'-price-value');
     try {
       document.getElementById(cartJson[i]['name'].replace("_", " ")+'-price-value').textContent ="\xA3"+prices[cartJson[i]['name']];
-      console.log(prices[cartJson[i]['name']]);
     } catch(err) {
       // console.log(err.message);
     }
   }
 }
 
-function getTotalPrice(cartJson){
+function getTotalPrice(cartJson, callback){
   var url = 'https://api.copordrop.co.uk/getTotalPrice';
 
   var xhr = createCORSRequest('POST', url);
@@ -210,9 +217,7 @@ function getTotalPrice(cartJson){
   // Response handlers.
   xhr.onload = function() {
     var response = xhr.response;
-    document.getElementById("total-price-box").innerHTML = `
-    <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
-    updateItemPrices(cartJson, response);
+    callback(response);
   };
 
   xhr.onerror = function() {
@@ -264,11 +269,9 @@ function removeByIndex(array, index){
 }
 
 function displayStripe(){
-  // get total price
-    //send api request to add ticket
     // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
-    var ticketsString = tickets.join(",");
     var url = 'https://api.copordrop.co.uk/postNewTickets';
+    var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
 
     var xhr = createCORSRequest('POST', url);
     if (!xhr) {
@@ -281,11 +284,7 @@ function displayStripe(){
       var response = xhr.response;
       console.log(response);
       if (response.response == "Ticket(s) inserted successfully"){
-        document.getElementById("raffle-buttons").innerHTML = `
-        <div><h2><p style="text-align:center;">Thank you! Your submission has been received!</p></h2></div>
-        `
-        document.getElementById("submitButton").remove();
-        document.getElementById("questions").remove();
+        // do something to show all has been well
       } else {
         alert(response.response);
       }
@@ -294,63 +293,61 @@ function displayStripe(){
     xhr.onerror = function() {
       alert('Error: An errror occured whilst loading the page.');
     };
+
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
       var name = cookies[i].split('=')[0].toLowerCase();
       var value = cookies[i].split('=')[1].toLowerCase();
-      if (name === 'email'){
-        console.log(value);
-      }
-
+      // if (name === 'email'){
+      //   console.log(value);
+      // }
     }
 
-    // configure stripe handler
-    var handler = StripeCheckout.configure({
-      key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
-      image: '',
-      locale: 'auto',
-      shippingAddress: true,
-      billingAddress: true,
-      email: getCookieValue("email"),
-      token: function(token) {
-          $.ajax({
-            url: 'https://api.copordrop.co.uk/postNewPayment',
-            type: 'POST',
-            data: {
-              stripeToken: token.id,
-              stripePrice: price*100,
-              item: product['name']
-            }
-          }).done(function(stripeCustomer) {
-            var jdata = {
-              "name": product['name'],
-              "userName": "Oliver",
-              "timestamp": timestamp,
-              "paymentMethod": "Stripe",
-              "paymentId": stripeCustomer.id,
-              "ticketNumbers": ticketsString
-            };
-            var jsondata = JSON.stringify(jdata);
-            console.log(jsondata);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(jsondata);
-          }).fail(function(e) {
-            alert('There was an error processing the payment. Please try again.')
-          });
-          }
-      });
+    getTotalPrice(cartJson, function(priceResponse){
 
-      // open stripe handler
-      event.preventDefault()
-      handler.open({
-        name: 'CopOrDrop',
-        description: '',
-        currency: 'gbp',
-        amount: price*100,
-        closed: function () {
-          document.getElementById("submitButton").innerHTML = `
-          <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
-          `;
-        }
+      var products = [];
+      // for (var i = 0; i < Object.keys(cartJson).length; i++) {
+      //   products.push(cartJson['name']);
+      // }
+
+       // configure stripe handler
+       var handler = StripeCheckout.configure({
+         key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
+         image: '',
+         locale: 'auto',
+         shippingAddress: true,
+         billingAddress: true,
+         email: getCookieValue("email"),
+         token: function(token) {
+             $.ajax({
+               url: 'https://api.copordrop.co.uk/postNewPayment',
+               type: 'POST',
+               data: {
+                 stripeToken: token.id,
+                 stripePrice: priceResponse['price']*100,
+                 item: products
+               }
+             }).done(function(stripeCustomer) {
+               xhr.setRequestHeader("Content-Type", "application/json");
+               xhr.send(cartJson);
+             }).fail(function(e) {
+               alert('There was an error processing the payment. Please try again.')
+             });
+           }
+         });
+
+         // open stripe handler
+         event.preventDefault()
+         handler.open({
+           name: 'CopOrDrop',
+           description: '',
+           currency: 'gbp',
+           amount: priceResponse['price']*100,
+           closed: function () {
+             document.getElementById("submitButton").innerHTML = `
+             <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
+             `;
+           }
+         });
       });
 }
