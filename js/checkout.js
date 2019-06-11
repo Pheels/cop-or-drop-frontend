@@ -116,7 +116,6 @@ function removeItem(name){
 }
 
 function purhaseButtonSelected(){
-  console.log(getCookieValue("name"));
   // no answer selected
   if (document.getElementById("termscheckbox").checked == false){
     $.alert({
@@ -186,14 +185,15 @@ function purhaseButtonSelected(){
 
 function updateProductTickets(product){
   // add class loading
-  console.log(product['name'].replace('_',' ')+"-tickets");
   document.getElementById(product['name'].replace('_',' ')+"-tickets").innerHTML = `
   <span>Tickets:<br></span>
   <font color="#86939E">`+product['ticketNumbers']+`</font>`;
 
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
-  getTotalPrice(cartJson, function(result){
-    console.log(result);
+  getTotalPrice(cartJson, function(response){
+    document.getElementById("total-price-box").innerHTML = `
+    <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+    updateItemPrices(cartJson, response);
   });
 }
 
@@ -232,8 +232,9 @@ function getTotalPrice(cartJson, callback){
 
 function removeBids(data){
   var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
-  var ticketsTaken = data['ticketsTaken'].split(',');
   var cartItemsNew = cartItems;
+  var ticketsTaken = data['ticketsTaken'].replace(' ','').split(',');
+  var ticketsTakenNumbers = ticketsTaken.map(Number);
 
   // add class loading
   document.getElementById("submitButton").innerHTML = `
@@ -246,23 +247,33 @@ function removeBids(data){
     if (cartItems[i]['name'] == data['name']){
       // split the ticketNumbers string
       var tickets = cartItems[i]['ticketNumbers'].split(',');
-      // go through all ticket numbers
-      for (var x = 0; x < tickets.length; x++){
-        //go throught tickets taken
-        for (var y = 0; y < ticketsTaken.length; x++){
-          // check if ticket numbers match
-          if (parseInt(tickets[x], 10) == parseInt(ticketsTaken[y], 10)){
-            // remove item from basket
+      var ticketsNumbers = tickets.map(Number);
 
-            cartItemsNew[i]['ticketNumbers'] = removeByIndex(tickets, x).join(',');
-            sessionStorage.setItem('cartItems', JSON.stringify(cartItemsNew));
-            console.log(sessionStorage.getItem('cartItems'));
-            // do i want to return here? it means just removing one ticket at once
-            return;
+      var ticketsFiltered = ticketsNumbers.filter(function(item) {
+        return ticketsTakenNumbers.indexOf(item) < 0; // Returns true for items not found in b.
+      });
+
+      var ticketString = "";
+
+      if (ticketsFiltered.length > 0){
+        for (var x=0; x < ticketsFiltered.length; x++){
+          console.log(ticketsFiltered[x]);
+          if (ticketsFiltered[x] < 10){
+            ticketString += "0" + ticketsFiltered[x] + ",";
+          } else {
+            ticketString += ticketsFiltered[x] + ",";
           }
-          // remove item(s) from tickets, (be careful of 0), and join them again.
         }
+        ticketString = ticketString.substring(0, ticketString.length - 1);
+        cartItemsNew[i]['ticketNumbers'] =  ticketString;
+        sessionStorage.setItem('cartItems', JSON.stringify(cartItemsNew));
+        console.log(sessionStorage.getItem('cartItems'));
+
+      } else {
+        // remove item from document
       }
+
+
     }
   }
 }
@@ -377,7 +388,6 @@ function displayStripe(){
                      // Response handlers.
                      xhr.onload = function() {
                        var response = xhr.response;
-                       console.log(response);
                        if (response.response == "Ticket(s) inserted successfully"){
                          // do something to show all has been well
                        } else {
@@ -386,7 +396,6 @@ function displayStripe(){
                      };
 
                      var jsondata = JSON.stringify(jdata);
-                     console.log(jsondata);
                      xhr.send(jsondata);
                   }
                 });
