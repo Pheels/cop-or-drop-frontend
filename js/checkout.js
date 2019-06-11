@@ -176,7 +176,7 @@ function purhaseButtonSelected(){
             }
         });
     });
-    if (sessionStorage.getItem('ticketsUnavailable')){
+    if (sessionStorage.getItem('ticketsRemoved')){
       sessionStorage.removeItem('ticketsRemoved');
     } else {
       displayStripe(cartItems);
@@ -192,7 +192,9 @@ function updateProductTickets(product){
   <font color="#86939E">`+product['ticketNumbers']+`</font>`;
 
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
-  getTotalPrice(cartJson);
+  getTotalPrice(cartJson, function(result){
+    console.log(result);
+  });
 }
 
 function updateItemPrices(cartJson, prices){
@@ -250,9 +252,12 @@ function removeBids(data){
         for (var y = 0; y < ticketsTaken.length; x++){
           // check if ticket numbers match
           if (parseInt(tickets[x], 10) == parseInt(ticketsTaken[y], 10)){
+            // remove item from basket
+
             cartItemsNew[i]['ticketNumbers'] = removeByIndex(tickets, x).join(',');
             sessionStorage.setItem('cartItems', JSON.stringify(cartItemsNew));
             console.log(sessionStorage.getItem('cartItems'));
+            // do i want to return here? it means just removing one ticket at once
             return;
           }
           // remove item(s) from tickets, (be careful of 0), and join them again.
@@ -268,47 +273,46 @@ function removeByIndex(array, index){
     });
 }
 
+function finalCheckTickets(cartItem, jdata, callback){
+  var url = 'https://api.copordrop.co.uk/checkTickets';
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var response = xhr.response;
+    callback(response, jdata);
+  };
+
+  xhr.onerror = function() {
+    alert('Error: An errror occured whilst loading the page.');
+  };
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(JSON.stringify(cartItem));
+
+}
+
 function displayStripe(){
     // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
-    var url = 'https://api.copordrop.co.uk/postNewTickets';
+
     var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
-
-    var xhr = createCORSRequest('POST', url);
-    if (!xhr) {
-      alert('CORS not supported');
-      return;
-    }
-
-    // Response handlers.
-    xhr.onload = function() {
-      var response = xhr.response;
-      console.log(response);
-      if (response.response == "Ticket(s) inserted successfully"){
-        // do something to show all has been well
-      } else {
-        alert(response.response);
-      }
-    };
-
-    xhr.onerror = function() {
-      alert('Error: An errror occured whilst loading the page.');
-    };
 
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
       var name = cookies[i].split('=')[0].toLowerCase();
       var value = cookies[i].split('=')[1].toLowerCase();
-      // if (name === 'email'){
-      //   console.log(value);
-      // }
     }
 
     getTotalPrice(cartJson, function(priceResponse){
 
       var products = [];
-      // for (var i = 0; i < Object.keys(cartJson).length; i++) {
-      //   products.push(cartJson['name']);
-      // }
+      for (var i = 0; i < Object.keys(cartJson).length; i++) {
+        products.push(cartJson['name']);
+      }
 
        // configure stripe handler
        var handler = StripeCheckout.configure({
@@ -328,8 +332,65 @@ function displayStripe(){
                  item: products
                }
              }).done(function(stripeCustomer) {
-               xhr.setRequestHeader("Content-Type", "application/json");
-               xhr.send(cartJson);
+               for (var i = 0; i < Object.keys(cartJson).length; i ++){
+                 var timestamp = new Date().toLocaleString();
+                 var jdata = {
+                    "name": cartJson[i]['name'],
+                    "userName": "Oliver",
+                    "timestamp": timestamp,
+                    "paymentMethod": "Stripe",
+                    "paymentId": stripeCustomer.id,
+                    "ticketNumbers": cartJson[i]['ticketNumbers']
+                  };
+                 finalCheckTickets(cartJson[i], jdata, function(result) {
+                   if (result['ticketsTaken']){
+                     $.confirm({
+                       title: 'Unable to process payment: Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
+                       content: 'These tickets have been removed from your basket..',
+                       typeAnimated: true,
+                       boxWidth: '50%',
+                       useBootstrap: false,
+                       offsetBottom: 50,
+                       escapeKey: true,
+                       buttons: {
+                           Ok: {
+                               text: 'Ok',
+                               btnClass: 'btn-default',
+                               action: removeBids(data),
+                               action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
+                               action: sessionStorage.setItem('ticketsRemoved', true)
+                           }
+                       }
+                     });
+                   } else {
+                     var url = 'https://api.copordrop.co.uk/postNewTickets';
+                     var xhr = createCORSRequest('POST', url);
+                     if (!xhr) {
+                       alert('CORS not supported');
+                       return;
+                     }
+
+                     xhr.onerror = function() {
+                       alert('Error: An errror occured whilst loading the page.');
+                     };
+
+                     // Response handlers.
+                     xhr.onload = function() {
+                       var response = xhr.response;
+                       console.log(response);
+                       if (response.response == "Ticket(s) inserted successfully"){
+                         // do something to show all has been well
+                       } else {
+                         alert(response.response);
+                       }
+                     };
+
+                     var jsondata = JSON.stringify(jdata);
+                     console.log(jsondata);
+                     xhr.send(jsondata);
+                  }
+                });
+              }
              }).fail(function(e) {
                alert('There was an error processing the payment. Please try again.')
              });
@@ -349,5 +410,5 @@ function displayStripe(){
              `;
            }
          });
-      });
+    });
 }
