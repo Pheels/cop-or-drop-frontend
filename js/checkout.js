@@ -87,10 +87,36 @@ function displayProduct(item, cartJson){
       <font color="#86939E" id='`+name+`-price-value'>\xA3`+price+`</font>
     </div>
     <div class="buttons">
-      <span class="edit-btn"></span>
+      <span class="edit-btn" onclick="editItem('`+name+`')"></span>
     </div>
   </div>
 `
+}
+
+function editItem(name){
+  // set ticketsChosen
+  var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+  var ticketsChosen = [];
+  var newCartJson = [];
+  var newUrl = 'https://copordrop.co.uk/product-listing.html?name='
+  for(var i = 0; i < Object.keys(cartJson).length; i++) {
+    // check that the name matches
+    if (cartJson[i]['name'].replace("_", " ") == name){
+      newUrl += cartJson[i]['name'].replace("_", "%20") + '&id='+cartJson[i]['id'] + '&fwd=true';
+      var ticketSplit = cartJson[i]['ticketNumbers'].split(",");
+      for (var x = 0; x < ticketSplit.length; x++) {
+        ticketsChosen.push(String(ticketSplit[x]));
+      }
+      // cartJson[i]['ticketNumbers'] = "";
+      // newCartJson.push(cartJson[i]);
+    } else {
+      newCartJson.push(cartJson[i]);
+    }
+  }
+
+  sessionStorage.setItem('ticketsChosen', JSON.stringify(ticketsChosen));
+  sessionStorage.setItem('cartItems', JSON.stringify(newCartJson));
+  window.location.replace(newUrl);
 }
 
 function removeItem(name){
@@ -116,7 +142,7 @@ function removeItem(name){
   loadCart();
 }
 
-function purhaseButtonSelected(){
+function purchaseButtonSelected(){
   // no answer selected
   if (document.getElementById("termscheckbox").checked == false){
     $.alert({
@@ -142,7 +168,7 @@ function purhaseButtonSelected(){
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
-    <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
+    <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
     `;
 
     // looping through items and confirming they are still available
@@ -243,7 +269,7 @@ function removeBids(data){
 
   // add class loading
   document.getElementById("submitButton").innerHTML = `
-  <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS ></a></div>
+  <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS ></a></div>
   `;
 
   // go through every cart item
@@ -399,6 +425,7 @@ function displayStripe(){
                      };
 
                      var jsondata = JSON.stringify(jdata);
+                     console.log(jsondata);
                      xhr.send(jsondata);
                   }
                 });
@@ -418,7 +445,7 @@ function displayStripe(){
            amount: priceResponse['price']*100,
            closed: function () {
              document.getElementById("submitButton").innerHTML = `
-             <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
+             <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">PURCHASE TICKETS &gt;</a></div>
              `;
            }
          });

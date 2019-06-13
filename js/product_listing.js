@@ -1,11 +1,16 @@
 function getProduct() {
   sessionStorage.removeItem("questionSelected");
-  sessionStorage.removeItem('ticketsChosen');
+
   sessionStorage.removeItem('answer');
+  var fwd = true;
   var url = 'https://api.copordrop.co.uk/getIndividualItemByID';
   //get id and name from url query string
   var urlParams = new URLSearchParams(window.location.search);
-  var id = matchFirstRegex(/id=.*/g, urlParams.toString()).replace("id=", "");
+  if (!(urlParams.toString().includes('fwd=true'))){
+    sessionStorage.removeItem('ticketsChosen');
+    fwd = false;
+  }
+  var id = matchFirstRegex(/id=[0-9]+/g, urlParams.toString()).replace("id=", "");
 
   // format json to get product
   var jsondata = JSON.stringify({
@@ -23,7 +28,7 @@ function getProduct() {
     var response = xhr.response;
     console.log(response[0].items);
     sessionStorage.setItem('productInfo',JSON.stringify(response[0].items));
-    displayProduct(response[0].items);
+    displayProduct(response[0].items, fwd);
   };
 
   xhr.onerror = function() {
@@ -34,15 +39,15 @@ function getProduct() {
   xhr.send(jsondata);
 }
 
-function displayProduct(productResponse){
-  getTicketsForItem(productResponse);
+function displayProduct(productResponse, fwd){
+  getTicketsForItem(productResponse, fwd);
   displayImages(productResponse);
   displayProductName(productResponse['name']);
   displayInformation(productResponse);
   displayQuestions(productResponse);
 }
 
-function getTicketsForItem(productResponse){
+function getTicketsForItem(productResponse, fwd){
   var url = 'https://api.copordrop.co.uk/getTicketNumbers';
   var xhr = createCORSRequest('POST', url);
   // format json to get product
@@ -59,7 +64,7 @@ function getTicketsForItem(productResponse){
   // Response handlers.
   xhr.onload = function() {
     var tickets = xhr.response;
-    displayTickets(productResponse, tickets);
+    displayTickets(productResponse, tickets, fwd);
   };
 
   xhr.onerror = function() {
@@ -71,13 +76,15 @@ function getTicketsForItem(productResponse){
 
 }
 
-function displayTickets(productResponse, tickets){
+function displayTickets(productResponse, tickets, fwd){
 
-  // REMEMBER TO CHECK ticketS BEFORE ACCEPTING PAYMENT AS LOCAL STORAGE CAN BE EDITED
-
-  // store ticketsChosen locally
-  var ticketsChosen = [];
-  sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+  if (fwd == false) {
+    // store ticketsChosen locally
+    var ticketsChosen = [];
+    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+  }  else {
+    var ticketsChosen = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+  }
 
   // store taken tickets
   var ticketsTaken;
@@ -85,33 +92,39 @@ function displayTickets(productResponse, tickets){
     ticketsTaken = tickets['ticketNumbers'].split(",");
   }
 
-    // do api call to get tickets for item and grey out already bought ones
-    for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
-      var ticketNumber;
-      if (i.toString().length < 2){
-        //prepend zero
-        ticketNumber = 0+ ""+i;
-      } else {
-        ticketNumber = i;
-      }
-      // store current html to avoid double lookup
-      var ihtml = document.getElementById("raffle-buttons").innerHTML;
+  for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
+    var ticketNumber;
+    if (i.toString().length < 2){
+      //prepend zero
+      ticketNumber = 0+ ""+i;
+    } else {
+      ticketNumber = i;
+    }
+    // store current html to avoid double lookup
+    var ihtml = document.getElementById("raffle-buttons").innerHTML;
 
-      if (ticketsTaken && ticketsTaken.includes(i.toString())){
-        document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
-        `
-      } else {
-        document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
-        `
-      }
+    if (ticketsTaken && ticketsTaken.includes(i.toString())){
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
+      `
+    } else {
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
+      `
+    }
+  }
+  if (fwd == true){
+    for (var i = 0; i < ticketsChosen.length; i++){
+      console.log(ticketsChosen[i]);
+      buttonSelected(ticketsChosen[i]);
+    }
   }
   blockTickets();
   loadCart();
 }
 
 function buttonSelected(ticketNumber){
+  console.log("raffle-button-"+ticketNumber);
   var button = document.getElementById("raffle-button-"+ticketNumber);
 
   //change css class
@@ -353,6 +366,7 @@ function getCookieValue(cname) {
   }
   return "";
 }
+
 function blockTickets(){
   var cartJson = JSON.parse(sessionStorage.getItem("cartItems"));
   var product = JSON.parse(sessionStorage.getItem('productInfo'));
