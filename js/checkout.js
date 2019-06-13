@@ -13,7 +13,6 @@ function getCartItems(){
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       getProduct(cartJson[i]);
     }
-
     getTotalPrice(cartJson, function(response){
       document.getElementById("total-price-box").innerHTML = `
       <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
@@ -95,23 +94,25 @@ function displayProduct(item, cartJson){
 }
 
 function removeItem(name){
-  var tprice = Number(document.getElementById(name+'-price-value').textContent.replace("\xA3", ""));
   document.getElementById(name+"-item").outerHTML = "";
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
   var total = sessionStorage.getItem('cartItems');
   var newCartJson = [];
   for (var i = 0; i < Object.keys(cartJson).length; i ++){
-    if (cartJson[i]['name'].replace("_", " ") == name){
-      sessionStorage.setItem('total', Number(sessionStorage.getItem('total'))-tprice);
-      document.getElementById("total-price-box").innerHTML = `
-      <div class="total-price">Total Price: \xA3`+sessionStorage.getItem('total')+`</div>`;
-
-      // do nothing
-    } else {
+    if (!(cartJson[i]['name'].replace("_", " ") == name)){
       newCartJson.push(cartJson[i]);
     }
   }
   sessionStorage.setItem('cartItems', JSON.stringify(newCartJson));
+  if (!newCartJson === undefined || !newCartJson.length == 0 ){
+     getTotalPrice(newCartJson, function(response){
+      document.getElementById("total-price-box").innerHTML = `
+      <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+    });
+  } else {
+    document.getElementById("total-price-box").innerHTML = `
+    <div class="total-price"></div>`;
+  }
   loadCart();
 }
 
@@ -162,12 +163,13 @@ function purhaseButtonSelected(){
                     Ok: {
                         text: 'Ok',
                         btnClass: 'btn-default',
+                        action: window.stop(),
                         action: removeBids(data),
                         action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
-                        action: sessionStorage.setItem('ticketsRemoved', true)
                     }
                 }
               });
+
             } else {
               cartItems = sessionStorage.getItem('cartItems');
               cartItems[index]['ticketsString'] = data['ticketsString'];
@@ -175,21 +177,22 @@ function purhaseButtonSelected(){
             }
         });
     });
-    if (sessionStorage.getItem('ticketsRemoved')){
-      sessionStorage.removeItem('ticketsRemoved');
-    } else {
-      displayStripe(cartItems);
-    }
+    // stop stripe if removing items.
+    displayStripe(cartItems);
   }
 }
 
 function updateProductTickets(product){
-  // add class loading
-  document.getElementById(product['name'].replace('_',' ')+"-tickets").innerHTML = `
-  <span>Tickets:<br></span>
-  <font color="#86939E">`+product['ticketNumbers']+`</font>`;
-
+  try {
+    // add class loading
+    document.getElementById(product['name'].replace('_',' ')+"-tickets").innerHTML = `
+    <span>Tickets:<br></span>
+    <font color="#86939E">`+product['ticketNumbers']+`</font>`;
+  } catch(err) {
+    // console.log(err.message);
+  }
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
+
   getTotalPrice(cartJson, function(response){
     document.getElementById("total-price-box").innerHTML = `
     <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
@@ -227,7 +230,9 @@ function getTotalPrice(cartJson, callback){
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(JSON.stringify(cartJson));
+  if (!cartJson === undefined || !cartJson.length == 0 ){
+    xhr.send(JSON.stringify(cartJson));
+  }
 }
 
 function removeBids(data){
@@ -257,7 +262,6 @@ function removeBids(data){
 
       if (ticketsFiltered.length > 0){
         for (var x=0; x < ticketsFiltered.length; x++){
-          console.log(ticketsFiltered[x]);
           if (ticketsFiltered[x] < 10){
             ticketString += "0" + ticketsFiltered[x] + ",";
           } else {
@@ -267,9 +271,9 @@ function removeBids(data){
         ticketString = ticketString.substring(0, ticketString.length - 1);
         cartItemsNew[i]['ticketNumbers'] =  ticketString;
         sessionStorage.setItem('cartItems', JSON.stringify(cartItemsNew));
-        console.log(sessionStorage.getItem('cartItems'));
 
       } else {
+        removeItem(cartItems[i]['name'].replace("_"," "));
         // remove item from document
       }
 
@@ -369,7 +373,6 @@ function displayStripe(){
                                btnClass: 'btn-default',
                                action: removeBids(data),
                                action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
-                               action: sessionStorage.setItem('ticketsRemoved', true)
                            }
                        }
                      });
