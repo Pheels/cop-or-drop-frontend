@@ -124,7 +124,6 @@ function displayTickets(productResponse, tickets, fwd){
 }
 
 function buttonSelected(ticketNumber){
-  console.log("raffle-button-"+ticketNumber);
   var button = document.getElementById("raffle-button-"+ticketNumber);
 
   //change css class
@@ -135,8 +134,10 @@ function buttonSelected(ticketNumber){
   } else {
     ticketChosenArr = ticketChosenArr.filter(function(e) { return e !== ticketNumber })
   }
-  console.log(ticketChosenArr);
-  sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketChosenArr));
+  var uniqueArray = ticketChosenArr.filter(function(elem, index, self) {
+    return index === self.indexOf(elem);
+  });
+  sessionStorage.setItem('ticketsChosen',JSON.stringify(uniqueArray));
 }
 
 function displayInformation(productResponse){
@@ -192,7 +193,6 @@ function displayImages(productResponse){
 }
 
 function displayQuestions(productResponse){
-  console.log(productResponse);
   if (!(productResponse['question'].includes("?"))){
     productResponse['question'] = productResponse['question'] +"?"
   }
@@ -266,7 +266,6 @@ function checkCorrectAnswer(id, answer, callback){
 }
 
 function purhaseButtonSelected(){
-  console.log(getCookieValue("name"));
   // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
     $.alert({
@@ -297,7 +296,10 @@ function purhaseButtonSelected(){
 
     // calculate price
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
-    var tickets = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+    var ticketsArr = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+    var tickets = ticketsArr.filter(function(elem, index, self) {
+      return index === self.indexOf(elem);
+    });
     var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
     var timestamp = new Date().toLocaleString();
     var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
@@ -308,7 +310,6 @@ function purhaseButtonSelected(){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
         // split ticketsString
-        console.log(ticketsString);
         cartJson[i]['ticketNumbers'] += "," + ticketsString;
       }
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));

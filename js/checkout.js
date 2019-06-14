@@ -51,11 +51,15 @@ function getProduct(cartJson) {
   xhr.send(jsondata);
 }
 
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
 function displayProduct(item, cartJson){
   var image = item['s3Location'] + '/image1.jpg'
   var description = item['description']
   var name = item['name'].replace("_", " ");
-  var tickets = cartJson['ticketNumbers'].replace(",", ", ");
+  var tickets = replaceAll(cartJson['ticketNumbers'], ",", ", ");
   var price = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
 
   if (tickets.slice(-1) == ','){
@@ -403,7 +407,7 @@ function displayStripe(){
                        }
                      });
                    } else {
-                     var url = 'https://api.copordrop.co.uk/postNewTickets';
+                     var url = 'https://api.copordrop.co.uk/postNewTickets/';
                      var xhr = createCORSRequest('POST', url);
                      if (!xhr) {
                        alert('CORS not supported');
@@ -426,6 +430,7 @@ function displayStripe(){
 
                      var jsondata = JSON.stringify(jdata);
                      console.log(jsondata);
+                     xhr.setRequestHeader("Content-Type", "application/json");
                      xhr.send(jsondata);
                   }
                 });
