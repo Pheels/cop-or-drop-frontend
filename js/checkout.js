@@ -353,12 +353,6 @@ function displayStripe(){
     }
 
     getTotalPrice(cartJson, function(priceResponse){
-
-      var products = [];
-      for (var i = 0; i < Object.keys(cartJson).length; i++) {
-        products.push(cartJson['name']);
-      }
-
        // configure stripe handler
        var handler = StripeCheckout.configure({
          key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
@@ -368,78 +362,22 @@ function displayStripe(){
          billingAddress: true,
          email: getCookieValue("email"),
          token: function(token) {
-             $.ajax({
-               url: 'https://api.copordrop.co.uk/postNewPayment',
-               type: 'POST',
-               data: {
-                 stripeToken: token.id,
-                 stripePrice: priceResponse['price']*100,
-                 item: products
-               }
-             }).done(function(stripeCustomer) {
-               for (var i = 0; i < Object.keys(cartJson).length; i ++){
-                 var timestamp = new Date().toLocaleString();
-                 var jdata = {
-                    "name": cartJson[i]['name'],
-                    "userName": "Oliver",
-                    "timestamp": timestamp,
-                    "paymentMethod": "Stripe",
-                    "paymentId": stripeCustomer.id,
-                    "ticketNumbers": cartJson[i]['ticketNumbers']
-                  };
-                 finalCheckTickets(cartJson[i], jdata, function(result) {
-                   if (result['ticketsTaken']){
-                     $.confirm({
-                       title: 'Unable to process payment: Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
-                       content: 'These tickets have been removed from your basket..',
-                       typeAnimated: true,
-                       boxWidth: '50%',
-                       useBootstrap: false,
-                       offsetBottom: 50,
-                       escapeKey: true,
-                       buttons: {
-                           Ok: {
-                               text: 'Ok',
-                               btnClass: 'btn-default',
-                               action: removeBids(data),
-                               action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
-                           }
-                       }
-                     });
-                   } else {
-                     var url = 'https://api.copordrop.co.uk/postNewTickets/';
-                     var xhr = createCORSRequest('POST', url);
-                     if (!xhr) {
-                       alert('CORS not supported');
-                       return;
-                     }
+           $.ajax({
+             url: 'https://api.copordrop.co.uk/postNewPayment',
+             type: 'POST',
+             data: {
+               stripeToken: token.id,
+               stripePrice: priceResponse['price']*100,
+               products: cartJson
+             }
+           }).done(function(stripeCustomer) {
+             console.log(stripeCustomer);
+             // read response and react accordingly
 
-                     xhr.onerror = function() {
-                       alert('Error: An errror occured whilst loading the page.');
-                     };
-
-                     // Response handlers.
-                     xhr.onload = function() {
-                       var response = xhr.response;
-                       if (response.response == "Ticket(s) inserted successfully"){
-                         // do something to show all has been well
-                       } else {
-                         alert(response.response);
-                       }
-                     };
-
-                     var jsondata = JSON.stringify(jdata);
-                     console.log(jsondata);
-                     xhr.setRequestHeader("Content-Type", "application/json");
-                     xhr.send(jsondata);
-                  }
-                });
-              }
-             }).fail(function(e) {
-               alert('There was an error processing the payment. Please try again.')
-             });
-           }
-         });
+           }).fail(function(e) {
+             alert('There was an error processing the payment. Please try again.')
+           });
+       }});
 
          // open stripe handler
          event.preventDefault()
@@ -454,5 +392,5 @@ function displayStripe(){
              `;
            }
          });
-    });
+       });
 }
