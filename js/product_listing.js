@@ -318,7 +318,7 @@ function purhaseButtonSelected(){
       // push new item to cart
       var jdata = {
         "name": product['name'],
-        "userName": "Oliver",
+        "userName": getCookieValue("name"),
         "timestamp": timestamp,
         "ticketNumbers": tickets.join(","),
         "id": product['id'],

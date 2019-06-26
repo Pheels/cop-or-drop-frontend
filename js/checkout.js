@@ -1,7 +1,7 @@
 function getCartItems(){
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
 
-  if (cartJson){
+  if (cartJson && cartJson.length > 0){
     //set cart title
     document.getElementById("shopping-cart").innerHTML += `
     <!-- Title -->
@@ -19,7 +19,15 @@ function getCartItems(){
       updateItemPrices(cartJson, response);
     });
   } else {
-    //nothing in cart
+    document.getElementById("shopping-cart").innerHTML += `
+    <!-- Title -->
+    <div class="title-cart">
+      Shopping Cart
+    </div>
+    `;
+    document.getElementById("total-price-box").innerHTML += `
+    <div style="color:#5E6977;font-size:15px;padding-top:15px;">There is currently nothing in your basket.</div>`;
+    console.log("empty basket");
   }
 }
 
@@ -166,7 +174,23 @@ function purchaseButtonSelected(){
         onDestroy: function () {
         }
       });
-  } else {
+  } else if (JSON.parse(sessionStorage.getItem('cartItems')).length == 0){
+    $.confirm({
+      title: 'Basket is Empty',
+      content: 'There are currently no items in your basket.',
+      typeAnimated: true,
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 50,
+      escapeKey: true,
+      buttons: {
+          Ok: {
+              text: 'Ok'
+          }
+      }
+    });
+  }
+  else {
     var url = 'https://api.copordrop.co.uk/checkTickets';
     var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
 
@@ -238,6 +262,7 @@ function updateItemPrices(cartJson, prices){
       // console.log(err.message);
     }
   }
+
 }
 
 function getTotalPrice(cartJson, callback){
@@ -362,6 +387,11 @@ function displayStripe(){
          billingAddress: true,
          email: getCookieValue("email"),
          token: function(token) {
+           console.log(JSON.stringify({
+             stripeToken: token.id,
+             stripePrice: priceResponse['price']*100,
+             products: cartJson
+           }));
            $.ajax({
              url: 'https://api.copordrop.co.uk/postNewPayment',
              type: 'POST',
@@ -371,6 +401,26 @@ function displayStripe(){
                products: cartJson
              }
            }).done(function(stripeCustomer) {
+             if (stripeCustomer['object'] == 'charge'){
+               var clearStorage = [];
+               sessionStorage.setItem('cartItems', JSON.stringify(clearStorage));
+               sessionStorage.setItem('productInfo', JSON.stringify(clearStorage));
+               document.getElementById("shopping-cart").innerHTML = `
+               <!-- Title -->
+               <div class="title-cart">
+               Thankyou, your submission has been received.
+               </div>
+               `
+               var pricebox = document.getElementById("total-price-box");
+               pricebox.parentNode.removeChild(pricebox);
+
+               document.getElementById("submitButton").innerHTML = `
+               `
+               document.getElementById("termsconditions").innerHTML = `
+               `
+               loadCart();
+               // display checkout complete.
+             }
              console.log(stripeCustomer);
              // read response and react accordingly
 
