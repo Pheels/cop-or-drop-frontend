@@ -381,7 +381,7 @@ function displayStripe(){
        // configure stripe handler
        var handler = StripeCheckout.configure({
          key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
-         image: '',
+         image: 'images/copordropsmall.png',
          locale: 'auto',
          shippingAddress: true,
          billingAddress: true,
@@ -408,7 +408,7 @@ function displayStripe(){
                document.getElementById("shopping-cart").innerHTML = `
                <!-- Title -->
                <div class="title-cart">
-               Thankyou, your submission has been received.
+               Thankyou, your submission has been received, you will receive a confirmation email shortly.
                </div>
                `
                var pricebox = document.getElementById("total-price-box");
