@@ -143,17 +143,60 @@ function buttonSelected(ticketNumber){
 function displayInformation(productResponse){
   document.getElementById("information").innerHTML =`
   <div class="product-price">Ticket Price: &pound;`+(productResponse['price']/productResponse['numberAllowedTickets'])+`</div>
-  <div class="product-worth">Item Value: &pound;`+productResponse['price']+`</div>
-  <div class="product-description-long">`+productResponse['description']+`<br></div>
+  <div class="product-worth">RRP: &pound;`+productResponse['rrp']+`</div>
+  <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
   `;
+  setTimer(productResponse);
+}
+
+
+
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
+
+function setTimer(productResponse){
+  // Set the date we're counting down to
+  var date = new Date(Date.parse(productResponse['created']));
+  date = date.addDays(productResponse['countdown']);
+  // var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
+  // var countDownDate = date.toLocaleDateString("en-US", options).getTime();
+  var countDownDate = date.getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+    var now = new Date().getTime();
+    // console.log('from ' + countFrom + ' to ' + countDownDate);
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the result in the element with id="demo"
+    document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("timer").innerHTML = "EXPIRED";
+    }
+  }, 1000);
 }
 
 function displayProductName(name){
   document.getElementById("title").innerHTML =`
-    <title>`+name.replace("_", " ")+`</title>
+    <title>`+name.replace(/_/g, " ")+`</title>
   `
   document.getElementById("product-name").innerHTML =`
-  <div class="h1">`+name.replace("_", " ")+`</div>
+  <div class="h1">`+name.replace(/_/g, " ");+`</div>
   `
 }
 
@@ -209,14 +252,19 @@ function displayQuestions(productResponse){
   <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" class="checkbox w-checkbox-input">
   <label for="checkbox-2" class="p w-form-label">`+productResponse['answer2']+`</label></div>
   `
-  document.getElementById("answer3").innerHTML = `
-  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-3" name="checkbox-3" data-name="Checkbox 3" class="checkbox w-checkbox-input">
-  <label for="checkbox-3" class="p w-form-label">`+productResponse['answer3']+`</label></div>
-  `
-  document.getElementById("answer4").innerHTML = `
-  <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-4" name="checkbox-4" data-name="Checkbox 4" class="checkbox w-checkbox-input">
-  <label for="checkbox-4" class="p w-form-label">`+productResponse['answer4']+`</label></div>
-  `
+  if (productResponse['answer3'] !== ""){
+    document.getElementById("answer3").innerHTML = `
+    <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-3" name="checkbox-3" data-name="Checkbox 3" class="checkbox w-checkbox-input">
+    <label for="checkbox-3" class="p w-form-label">`+productResponse['answer3']+`</label></div>
+    `
+  }
+
+  if (productResponse['answer4'] !== ""){
+    document.getElementById("answer4").innerHTML = `
+    <div class="checkbox-field w-checkbox"><input type="checkbox" onclick="selectOnlyThis(this.id)" id="checkbox-4" name="checkbox-4" data-name="Checkbox 4" class="checkbox w-checkbox-input">
+    <label for="checkbox-4" class="p w-form-label">`+productResponse['answer4']+`</label></div>`
+  }
+
   var questionImage = productResponse['s3Location'] + '/question.jpg'
   document.getElementById("question-image").innerHTML = `
   <img src="`+questionImage+`" srcset="`+questionImage+` 500w, `+questionImage+` 800w, `+questionImage+` 1080w, `+questionImage+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero">
@@ -372,13 +420,15 @@ function blockTickets(){
   var cartJson = JSON.parse(sessionStorage.getItem("cartItems"));
   var product = JSON.parse(sessionStorage.getItem('productInfo'));
 
-  for (var i = 0; i < Object.keys(cartJson).length; i ++){
-    if (cartJson[i]['name'] == product['name']){
-      var ticketNumbers = cartJson[i]['ticketNumbers'].replace(" ", "").split(",");
-      for (var x = 0; x < ticketNumbers.length; x++){
-        document.getElementById("raffle-button-"+ticketNumbers[x]).outerHTML = `
-        <a id="raffle-button-`+ticketNumbers[x]+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumbers[x]+`</a>
-        `;
+  if (cartJson){
+    for (var i = 0; i < Object.keys(cartJson).length; i ++){
+      if (cartJson[i]['name'] == product['name']){
+        var ticketNumbers = cartJson[i]['ticketNumbers'].replace(" ", "").split(",");
+        for (var x = 0; x < ticketNumbers.length; x++){
+          document.getElementById("raffle-button-"+ticketNumbers[x]).outerHTML = `
+          <a id="raffle-button-`+ticketNumbers[x]+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumbers[x]+`</a>
+          `;
+        }
       }
     }
   }

@@ -3,6 +3,7 @@
 <!--  Last Published: Sat Mar 23 2019 14:54:01 GMT+0000 (UTC)  -->
 <html data-wf-page="5c1a4627e3b12b377ae7a48d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
 <head>
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png"/>
   <meta charset="utf-8">
   <title>Cop Or Drop</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -48,7 +49,7 @@
         <div class="w-slider-mask">
           <div class="slide w-slide">
             <div class="slider-wrap">
-              <img src="images/kicks2.jpg" class="image-16">
+              <img src="images/kicks2.jpg" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" class="image-16">
               <div class="div-block-3">
                 <div class="h2">WE ARE</div>
                   <div class="h1">COP OR DROP</div>
@@ -74,10 +75,17 @@
         <div class="right-arrow w-slider-arrow-right">
           <div class="icon w-icon-slider-right"></div>
         </div>
-        <div class="slide-nav w-slider-nav w-round"></div>
+        <div id="slide-nav" class="slide-nav w-slider-nav w-round"></div>
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+    function makeScroll() {
+      // find element with w-slider-dot w-active and click it
+      $('.w-slider-dot w-active').click();
+    }
+    setInterval(makeScroll, 2000);
+  </script>
   <div class="section charities">
     <div class="w-container">
       <div class="h2">WHO WE WORK WITH</div>

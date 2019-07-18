@@ -26,7 +26,7 @@ function displayProducts(jsonResponse){
       if (item['active']){
         var image = item['s3Location'] + '/image1.jpg'
         var description = item['description']
-        var name = item['name'].replace("_", " ");
+        var name = item['name'].replace(/_/g, " ");
         var id = item['id'];
         document.getElementById("product-wrap").innerHTML = document.getElementById("product-wrap").innerHTML + `
         <div class="product-item">
