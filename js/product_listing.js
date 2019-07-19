@@ -187,6 +187,7 @@ function setTimer(productResponse){
     if (distance < 0) {
       clearInterval(x);
       document.getElementById("timer").innerHTML = "EXPIRED";
+      timerExpired();
     }
   }, 1000);
 }

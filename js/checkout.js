@@ -66,7 +66,7 @@ function replaceAll(str, find, replace) {
 function displayProduct(item, cartJson){
   var image = item['s3Location'] + '/image1.jpg'
   var description = item['description']
-  var name = item['name'].replace("_", " ");
+  var name = item['name'].replace(/_/g, " ");
   var tickets = replaceAll(cartJson['ticketNumbers'], ",", ", ");
   var price = cartJson['ticketNumbers'].split(",").length * (Number(item['price']) / Number(item['numberAllowedTickets']));
 
@@ -114,7 +114,7 @@ function editItem(name){
   for(var i = 0; i < Object.keys(cartJson).length; i++) {
     // check that the name matches
     if (cartJson[i]['name'].replace("_", " ") == name){
-      newUrl += cartJson[i]['name'].replace("_", "%20") + '&id='+cartJson[i]['id'] + '&fwd=true';
+      newUrl += cartJson[i]['name'].replace(/\n/g, "%20") + '&id='+cartJson[i]['id'] + '&fwd=true';
       var ticketSplit = cartJson[i]['ticketNumbers'].split(",");
       for (var x = 0; x < ticketSplit.length; x++) {
         ticketsChosen.push(String(ticketSplit[x]));
@@ -137,7 +137,7 @@ function removeItem(name){
   var total = sessionStorage.getItem('cartItems');
   var newCartJson = [];
   for (var i = 0; i < Object.keys(cartJson).length; i ++){
-    if (!(cartJson[i]['name'].replace("_", " ") == name)){
+    if (!(cartJson[i]['name'].replace(/_/g, " ") == name)){
       newCartJson.push(cartJson[i]);
     }
   }
