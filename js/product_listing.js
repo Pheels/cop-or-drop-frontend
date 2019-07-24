@@ -141,8 +141,9 @@ function buttonSelected(ticketNumber){
 }
 
 function displayInformation(productResponse){
+  var price = (productResponse['price']/productResponse['numberAllowedTickets']).toFixed(2);
   document.getElementById("information").innerHTML =`
-  <div class="product-price">Ticket Price: &pound;`+(productResponse['price']/productResponse['numberAllowedTickets'])+`</div>
+  <div class="product-price">Ticket Price: &pound;`+price+`</div>
   <div class="product-worth">RRP: &pound;`+productResponse['rrp']+`</div>
   <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
   `;
@@ -275,7 +276,8 @@ function displayQuestions(productResponse){
 
 function selectOnlyThis(id) {
     if (document.getElementById(id).checked){
-      for (var i = 1;i <= 4; i++){
+      var numberBoxes = document.getElementsByTagName('input').length;
+      for (var i = 1;i <= numberBoxes; i++){
           document.getElementById("checkbox-"+i).checked = false;
       }
       document.getElementById(id).checked = true;
