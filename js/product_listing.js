@@ -150,14 +150,11 @@ function displayInformation(productResponse){
   setTimer(productResponse);
 }
 
-
-
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
 }
-
 
 function setTimer(productResponse){
   // Set the date we're counting down to
@@ -186,9 +183,39 @@ function setTimer(productResponse){
 
     // If the count down is finished, write some text
     if (distance < 0) {
+      // call endpoint here
       clearInterval(x);
-      document.getElementById("timer").innerHTML = "EXPIRED";
-      timerExpired();
+      var url = 'https://api.copordrop.co.uk/incTimerResets';
+      var xhr = createCORSRequest('POST', url);
+      // format json to get product
+      var ticketsJson = JSON.stringify({
+        id: productResponse['id'],
+        numberAllowedTickets: productResponse['numberAllowedTickets'],
+        name: productResponse['name']
+      });
+
+      if (!xhr) {
+        alert('CORS not supported');
+        return;
+      }
+
+      // Response handlers.
+      xhr.onload = function() {
+        var resp = xhr.response;
+        if (resp.maxIncrements == true){
+          document.getElementById("timer").innerHTML = "EXPIRED";
+        } else {
+          location.reload();
+        }
+      };
+
+      xhr.onerror = function() {
+        alert('Error: An errror occured whilst loading the page.');
+      };
+
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(ticketsJson);
+
     }
   }, 1000);
 }
@@ -198,7 +225,7 @@ function displayProductName(name){
     <title>`+name.replace(/_/g, " ")+`</title>
   `
   document.getElementById("product-name").innerHTML =`
-  <div class="h1">`+name.replace(/_/g, " ");+`</div>
+  <div class="h9">`+name.replace(/_/g, " ");+`</div>
   `
 }
 
@@ -339,9 +366,25 @@ function purhaseButtonSelected(){
         useBootstrap: false,
         offsetBottom: 70,
         onDestroy: function () {
-
+          // before the modal is hidden.
+          var elmnt = document.getElementById("questions");
+          elmnt.scrollIntoView();
         }
       });
+      // $.confirm({
+      //   title: 'Please Note:',
+      //   content: 'You must be signed in to participate.',
+      //   typeAnimated: true,
+      //   boxWidth: '50%',
+      //   useBootstrap: false,
+      //   offsetBottom: 50,
+      //   escapeKey: true,
+      //   buttons: {
+      //       Ok: {
+      //           text: 'Sign In'
+      //       }
+      //   }
+      // });
   } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
     // length greater than 2 as otherwise just empty brackets.
 

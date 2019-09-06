@@ -2,6 +2,11 @@
 <!--  This site was created in Webflow. http://www.webflow.com  -->
 <!--  Last Published: Sat Mar 23 2019 14:54:01 GMT+0000 (UTC)  -->
 <html data-wf-page="5c1a4627e3b12b377ae7a48d" data-wf-site="5c1a4627e3b12b65c3e7a48c">
+<style>
+body, html {
+overflow-x: hidden;
+}
+</style>
 <head>
   <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png"/>
   <meta charset="utf-8">
@@ -45,11 +50,11 @@
   </div>
   <div class="home-section">
     <div class="div-block-10">
-      <div data-animation="slide" data-hide-arrows="1" data-duration="500" data-infinite="1" class="slider w-slider">
+      <div data-animation="slide" data-hide-arrows="1" data-duration="500" class="slider w-slider">
         <div class="w-slider-mask">
           <div class="slide w-slide">
             <div class="slider-wrap">
-              <img src="images/kicks2.jpg" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" class="image-16">
+              <img src="images/headerimage1.jpg" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" class="image-16">
               <div class="div-block-3">
                 <div class="h2">WE ARE</div>
                   <div class="h1">COP OR DROP</div>
@@ -61,10 +66,10 @@
           </div>
           <div class="slide w-slide">
             <div class="slider-wrap">
-              <img src="images/Slider2@3x.jpg" class="image-16" style="width:1306px;height:500px;">
+              <img src="images/Slider2@3x.png" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" class="image-16">
               <div class="div-block-3">
-                <div class="h22">KEEP UP WITH OUR</div>
-                  <div class="h11">INSTAGRAM</div>
+                <div class="h2">KEEP UP WITH OUR</div>
+                  <div class="h1">INSTAGRAM</div>
               </div>
             </div>
           </div>
@@ -86,15 +91,6 @@
     }
     setInterval(makeScroll, 2000);
   </script>
-  <div class="section charities" id="charities">
-    <div class="w-container">
-      <div class="h2">WHO WE WORK WITH</div>
-      <div class="charities w-row">
-        <div class="charity-logo w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6"><img src="images/Trinity---Desktop2x.png" srcset="images/Trinity---Desktop2x-p-500.png 500w, images/Trinity---Desktop2x.png 728w" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" alt="" class="charity-logo-image"></div>
-        <div class="charity-logo w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6"><img src="images/Diabetes---Desktop2x.png" srcset="images/Diabetes---Desktop2x-p-500.png 500w, images/Diabetes---Desktop2x.png 655w" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" alt="" class="charity-logo-image"></div>
-      </div>
-    </div>
-  </div>
   <div class="section latest-raffles">
     <div class="w-container">
       <div class="columns-9 w-row">
@@ -103,8 +99,8 @@
           <div class="h1">LATEST prizes</div>
         </div>
         <div class="column w-col w-col-4 w-col-stack">
-          <div class="p"></div><a href="products.html" class="button special w-button">VIEW ALL <span class="text-span">›</span></a></div>
-      </div>
+          <div class="p"></div><a href="products.html" class="button special w-button">VIEW ALL <span class="text-span">›</span></a>
+      </div></div>
     </div>
     <div class="div-block-9">
       <div class="ticket-homepage"><img src="images/Asset51@3x.png" srcset="images/Asset51@3x.png 500w, images/Asset51@3x.png 769w" sizes="(max-width: 479px) 37vw, (max-width: 767px) 38vw, (max-width: 991px) 39vw, 320px" alt="" class="ticket-homepage _1"></div>
@@ -112,7 +108,7 @@
       <div class="ticket-homepage"><img src="images/Asset53@3x.png" srcset="images/Asset53@3x.png 500w, images/Asset53@3x.png 769w" sizes="(max-width: 479px) 37vw, (max-width: 767px) 38vw, (max-width: 991px) 39vw, 320px" alt="" class="ticket-homepage _3"></div>
     </div><a href="#" class="button hide w-button">VIEW ALL<span class="text-span">›</span></a></div>
   <div class="section how-we-work" id="about-us">
-    <div class="our-mission w-container">
+    <!-- <div class="our-mission w-container">
       <div class="columns-3 w-row">
         <div class="column-2 w-col w-col-8 w-col-small-small-stack w-col-stack">
           <div class="quote">Our mission is to get the general public to participate in our competitions so we can donate a percentage to charity, whilst also offering exclusive high end products to the winners.</div>
@@ -121,7 +117,7 @@
           <div class="p mobile-mission">Every ticket purchased gives the buyer the chance to win their selected item. Whilst helping to improve the lives of the many diabetic people.</div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <div class="container-3 w-container">
       <div data-animation="slide" data-hide-arrows="1" data-duration="500" data-infinite="1" class="slider-2 w-slider">
         <div class="mask w-slider-mask">
@@ -143,32 +139,41 @@
       </div>
     </div> -->
   </div>
+  <div class="section charities" id="charities">
+    <div class="w-container">
+      <div class="h23">WHO WE WORK WITH</div>
+      <div class="charities w-row">
+        <a href="https://www.trinityhospice.co.uk/?fbclid=IwAR1qU-oc6g02KaesNUVpgTF6xYS2Dkov1pGBm6PbSMkV88NOdVwrMkhPgG4"><div class="charity-logo w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6"><img src="images/trinity-new2.jpg" srcset="images/trinity-new2.jpg 500w, images/trinity-new2.jpg 655w" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" alt="" class="charity-logo-image"></div></a>
+        <a href="https://donate.diabetes.org.uk/donate/~my-donation"><div class="charity-logo w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6"><img src="images/Diabetes---Desktop2x.png" srcset="images/Diabetes---Desktop2x-p-500.png 500w, images/Diabetes---Desktop2x.png 655w" sizes="(max-width: 479px) 42vw, (max-width: 767px) 46vw, (max-width: 991px) 250px, 300px" alt="" class="charity-logo-image2"></div></a>
+      </div>
+    </div>
+  </div>
   <div class="section charities-why">
     <div class="container-4 w-container">
-      <div class="h1">DID YOU KNOW</div>
+      <div class="h111">WHY WE WORK WITH CHARITIES</div>
+      <div class="h11">DID YOU KNOW</div>
     </div>
     <div class="columns-5 w-row">
       <div class="w-col w-col-4">
-        <div class="h4 white">90%</div>
-        <div class="text-block-2">Of people have type 2 diabetes</div>
+        <div class="h4 white">700 PATIENTS</div>
+        <div class="charitytext">ARE BEING CARED FOR AT TRINITY ANY ONE TIME</div>
       </div>
-      <div class="column-11 w-col w-col-4">
-        <div class="h4 white">10%</div>
-        <div class="text-block-2">Of people have type 1 diabetes</div>
-      </div>
-      <div class="column-12 w-col w-col-4">
-        <div class="h4 white">3.7MIL</div>
-        <div class="text-block-2">people have type 2 diabetes</div>
+      <div class="column-12 w-col2 w-col-4">
+        <div class="h4 white">4.7MIL</div>
+        <div class="charitytext">PEOPLE IN THE UK HAVE DIABETES</div>
       </div>
     </div>
     <div class="columns-7 w-row">
-      <div class="column-16 w-col w-col-6 w-col-small-6 w-col-tiny-6"><img src="images/Did-You-know---1---Desktop2x.png" alt="" class="image-14"></div>
-      <div class="column-17 w-col w-col-6 w-col-small-6 w-col-tiny-6"><img src="images/Did-You-know---2---Desktop2x.png" alt="" class="image-15"></div>
+      <div class="column-16 w-col w-col-6 w-col-small-6 w-col-tiny-6"><img src="images/trinity-nurse-1-flipped-557x346.jpg" alt="" class="image-14"></div>
+      <div class="column-17 w-col w-col-6 w-col-small-6 w-col-tiny-6"><img src="images/kingscollegeresearch_04.jpg" alt="" class="image-15"></div>
     </div>
     <div class="columns-8 w-row">
-      <div class="column-15 w-col w-col-8 w-col-stack"></div>
+      <!-- <div class="column-15 w-col w-col-8 w-col-stack"></div> -->
+      <div class="column-144 w-col w-col-4 w-col-stack">
+        <div class="p charities"><div class="p charitiesH">ROYAL TRINITY HOSPICE</div>A hospice isn't a place full of death - it's a place full of life, where every day is extraordinary! We work hard to stay at the leading edge of palliative care by listening. learning and expanding our services as technology brings new opportunities and patient expectations change.</div>
+      </div>
       <div class="column-14 w-col w-col-4 w-col-stack">
-        <div class="p charities">We want to help those suffering and those that have family and friends diagnosed with Diabetes by creating a raffle that not only gives to charities but offers you the things you want.</div>
+        <div class="p charities"><div class="p charitiesH">DIABETES UK</div>We want to help those suffering and those that have family and friends diagnosed with Diabetes by creating a raffle that not only gives to charities but offers you the things you want.</div>
       </div>
     </div>
   </div>
@@ -189,7 +194,7 @@
       </div>
       <div class="footercolumn">
         <div class="p white">Join Us On Social Media<br>
-          <a href="https://twitter.com/CopOrDropComps"><img class="footerpic" src="images/twitter.png"></a><a href="https://www.facebook.com/CopOrDropRaffles/"><img class="footerpicfb" src="images/facebook.png"></a><a href="https://www.instagram.com/copordropcompetitions/"><img class="footerpic" src="images/instagram.png"></a>
+          <a href="https://twitter.com/CopOrDropComps"><img class="footerpic" src="images/twitter.png"></a><a href="https://www.facebook.com/CopOrDropCompetitions/"><img class="footerpicfb" src="images/facebook.png"></a><a href="https://www.instagram.com/copordropcompetitions/"><img class="footerpic" src="images/instagram.png"></a>
         </div>
       </div>
     </div>

@@ -29,6 +29,27 @@ img {
   font-weight: 400;
 }
 
+.charitytext {
+  font-family: Cop, sans-serif;
+  color: #FFFFFF;
+  line-height: 20px;
+  font-size: 15px;
+}
+
+.h9 {
+  position: static;
+  z-index: 99;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-family: 'Druk wide', sans-serif;
+  font-size: 1.5em;
+  line-height: 1em;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color:#000000;
+}
+
 .h1 {
   position: static;
   z-index: 99;
@@ -53,6 +74,14 @@ img {
   font-weight: 900;
   letter-spacing: 3px;
   text-transform: uppercase;
+}
+.h111 {
+  font-family: Cop, sans-serif;
+  color: #e8e8e8;
+  font-size: 25px;
+  line-height: 20px;
+  letter-spacing: 6px;
+  padding-bottom: 20px;
 }
 
 .h3 {
@@ -100,6 +129,10 @@ img {
 .p.charities {
   margin-top: 0px;
 }
+.p.charitiesH {
+  padding-bottom: 10px;
+  font-size: 25px;
+}
 
 .p.mobile-mission {
   color: #fff;
@@ -107,11 +140,12 @@ img {
 
 .h2 {
   font-family: 'Druk wide', sans-serif;
-  font-size: 1vw;
+  font-size: 3vw;
   line-height: 1.4em;
   font-weight: 500;
   letter-spacing: 15px;
   text-transform: uppercase;
+  color:#000000;
 }
 
 .h22 {
@@ -124,12 +158,21 @@ img {
   padding-top:10px;
 }
 
+.h23 {
+  font-family: 'Druk wide', sans-serif;
+  font-size: 2vw;
+  line-height: 1.4em;
+  font-weight: 500;
+  letter-spacing: 15px;
+  text-transform: uppercase;
+  padding-top:10px;
+}
 .home-section {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
   margin-bottom: 0px;
   padding-bottom: 0px;
@@ -211,7 +254,7 @@ img {
   right: 0%;
   bottom: auto;
   z-index: 99;
-  overflow: visible;
+  /* overflow: visible; */
   background-color: #e8e8e8;
   font-family: 'Druk wide', sans-serif;
   font-size: 14px;
@@ -288,11 +331,11 @@ img {
   background-color: #fff;
   text-align: left;
   flex-wrap: wrap;
-  padding: 50px;
+  padding: -50px;
 }
 
 .section.how-we-work {
-  overflow: hidden;
+  /* overflow: hidden; */
   padding-top: 0px;
   padding-bottom: 1px;
   background-color: #0d0d0d;
@@ -311,7 +354,7 @@ img {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin-top: 0px;
   padding-top: 90px;
   padding-bottom: 101px;
@@ -435,6 +478,10 @@ img {
   width: 270px;
 }
 
+.charity-logo-image2 {
+  padding-top: 75px;
+  width: 270px;
+}
 .h4 {
   position: relative;
   z-index: 99;
@@ -456,7 +503,16 @@ img {
   font-weight: 700;
   text-align: center;
 }
-
+.h4.white {
+  position: static;
+  margin-top: 0px;
+  font-family: Cop, sans-serif;
+  color: #fff;
+  font-size: 2em;
+  font-weight: 700;
+  text-align: center;
+  padding-bottom:2px;
+}
 .text-block-2 {
   color: #fff;
   font-size: 12px;
@@ -517,12 +573,28 @@ hr {
   justify-content: flex-start;
   color: #fff;
   text-align: left;
+  float: right;
+}
+.column-144 {
+  margin-left: 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-right: 100px;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  color: #fff;
+  text-align: left;
+  float:left;
 }
 
 .columns-7 {
   position: relative;
   /* left: 1px; */
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 95%;
   height: 333px;
   margin-top: 48px;
@@ -642,10 +714,12 @@ hr {
   width: 90%;
   max-width: 1200px;
   padding-bottom: 0px;
+
 }
 
 .image-16 {
   width: 100%;
+  overflow: hidden;
 }
 
 .button {
@@ -714,7 +788,7 @@ hr {
     color: #fff;
     padding: 0 5px;
     vertical-align: bottom;
-    margin-left: -5px;
+    margin-left: 0px;
     margin-bottom: 11px;
 }
 
@@ -787,7 +861,7 @@ hr {
 
 .image-17 {
   position: relative;
-  top: -79px;
+  /* top: -79px; */
   display: block;
   width: 90%;
   margin-right: auto;
@@ -809,7 +883,7 @@ hr {
 
 .product-info-wrap {
   position: relative;
-  top: -70px;
+  /* top: -70px; */
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1136,12 +1210,21 @@ hr {
 }
 
 @media (max-width: 991px) {
-  .div-block-3 {
+  /* .div-block-3 {
     top: -67px;
-  }
+  } */
   .h1 {
     margin-bottom: 30px;
     font-size: 9vw;
+    color:#000000;
+  }
+  .h11 {
+    margin-bottom: 30px;
+    font-size: 9vw;
+  }
+  .h111 {
+    margin-bottom: 30px;
+    font-size: 5vw;
   }
   .p.mobile-mission {
     margin-top: 32px;
@@ -1151,6 +1234,14 @@ hr {
   }
   .h2 {
     font-size: 1.6vw;
+    letter-spacing: 13px;
+  }
+  .h22 {
+    font-size: 1.6vw;
+    letter-spacing: 13px;
+  }
+  .h23 {
+    font-size: 2.6vw;
     letter-spacing: 13px;
   }
   .left-arrow {
@@ -1214,6 +1305,9 @@ hr {
   }
   .charity-logo-image {
     width: 250px;
+  }
+  .charity-logo-image2 {
+    width: 270px;
   }
   .h4.white {
     font-size: 3em;
@@ -1325,6 +1419,11 @@ hr {
   .h1 {
     font-size: 7vw;
     text-transform: uppercase;
+    color:#000000;
+  }
+  .h11 {
+    font-size: 7vw;
+    text-transform: uppercase;
   }
   .p {
     text-align: center;
@@ -1333,6 +1432,7 @@ hr {
     margin-top: 0px;
     padding-right: 69px;
     padding-left: 69px;
+    margin-left: 15px;
   }
   .p.mobile-mission {
     margin-top: 22px;
@@ -1340,6 +1440,18 @@ hr {
   }
   .h2 {
     font-size: 1.6vw;
+    line-height: 1.5em;
+    text-align: center;
+    letter-spacing: 10px;
+  }
+  .h22 {
+    font-size: 1.6vw;
+    line-height: 1.5em;
+    text-align: center;
+    letter-spacing: 10px;
+  }
+  .h23 {
+    font-size: 2.6vw;
     line-height: 1.5em;
     text-align: center;
     letter-spacing: 10px;
@@ -1368,6 +1480,9 @@ hr {
   }
   .charity-logo-image {
     width: 250px;
+  }
+  .charity-logo-image2 {
+    width: 270px;
   }
   .text-block-2 {
     margin-top: 11px;
@@ -1479,6 +1594,11 @@ hr {
   .h1 {
     position: static;
     font-size: 7vw;
+    color:#000000;
+  }
+  .h11 {
+    position: static;
+    font-size: 7vw;
   }
   .p {
     font-size: 12px;
@@ -1494,6 +1614,14 @@ hr {
   }
   .h2 {
     font-size: 1.6vw;
+    letter-spacing: 7px;
+  }
+  .h22 {
+    font-size: 1.6vw;
+    letter-spacing: 7px;
+  }
+  .h23 {
+    font-size: 2.6vw;
     letter-spacing: 7px;
   }
   .home-section {
@@ -1528,6 +1656,9 @@ hr {
   }
   .charity-logo-image {
     width: 120px;
+  }
+  .charity-logo-image2 {
+    width: 270px;
   }
   .h4.white {
     font-size: 2.3em;

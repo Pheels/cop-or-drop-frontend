@@ -570,6 +570,14 @@ textarea.w-select {
   padding-left: 10px;
   padding-right: 10px;
 }
+.w-col2 {
+  position: relative;
+  float: right;
+  width: 100%;
+  min-height: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .w-col .w-col {
   padding-left: 0;
   padding-right: 0;
@@ -1010,8 +1018,8 @@ textarea.w-select {
 .w-slider-dot {
   position: relative;
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 2em;
+  height: 2em;
   background-color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   margin: 0 3px 0.5em;
@@ -1425,10 +1433,10 @@ textarea.w-select {
 .w-lightbox-spinner:after {
   content: "";
   position: absolute;
-  top: -4px;
+  /* top: -4px;
   right: -4px;
   bottom: -4px;
-  left: -4px;
+  left: -4px; */
   border: 3px solid transparent;
   border-bottom-color: #fff;
   border-radius: 50%;
