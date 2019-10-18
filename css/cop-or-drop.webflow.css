@@ -1018,22 +1018,46 @@ hr {
   height: 100px;
 }
 
-.tabDividerImg{
-  display: inline-block;
-  position: relative;
+.tabDividerSelected{
+  border-bottom: 7.5px solid #CC5A59;
+  padding-bottom: 5px;
 }
 
 .section-444 {
   /* position: relative;
   z-index: 99; */
-  /* margin-top: 30px; */
-  font-family: 'Druk wide', sans-serif;
+  margin-top: 10px;
+  font-family: 'Sf pro medium';
+  font-weight:1400px;
   /* font-size: 0.8em; */
   line-height: 1em;
-  font-weight: 300;
   text-align: center;
   letter-spacing: 3px;
-  /* display: inline-block; */
+  display: inline-block;
+  margin-left:40px;
+  margin-right:40px;
+  vertical-align: sub;
+  font-size: 22px;
+  cursor:pointer;
+  z-index: 1;
+ position:relative;
+}
+
+.section-444-chosen {
+  /* position: relative;
+  z-index: 99; */
+  /* margin-top: 30px; */
+  font-family: 'Sf pro bold';
+  font-weight:2000px;
+  /* font-size: 0.8em; */
+  line-height: 1em;
+  text-align: center;
+  letter-spacing: 3px;
+  display: inline-block;
+  margin-left:30px;
+  margin-right:30px;
+  vertical-align: sub;
+  font-size: 22px;
 }
 
 .h5 {
@@ -1919,19 +1943,19 @@ hr {
   font-style: italic;
 }
 @font-face {
-  font-family: 'Sf pro display';
+  font-family: 'Sf pro bold';
   src: url('../fonts/SF-Pro-Display-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Sf pro display';
+  font-family: 'Sf pro medium';
   src: url('../fonts/SF-Pro-Display-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Sf pro display';
+  font-family: 'Sf pro regular';
   src: url('../fonts/SF-Pro-Display-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
@@ -1967,6 +1991,12 @@ hr {
   font-style: italic;
 }
 @font-face {
+  font-family: 'Druk wide medium';
+  src: url('../fonts/Druk-Wide-Medium.otf') format('opentype');
+  /* font-weight: 100; */
+  font-style: normal;
+}
+@font-face {
   font-family: 'Druk wide';
   src: url('../fonts/Druk-Wide-Bold-Italic.otf') format('opentype');
   font-weight: 700;
@@ -1975,7 +2005,7 @@ hr {
 @font-face {
   font-family: 'Druk wide';
   src: url('../fonts/Druk-Wide-Heavy.otf') format('opentype');
-  font-weight: 900;
+  font-weight: 700;
   font-style: normal;
 }
 @font-face {

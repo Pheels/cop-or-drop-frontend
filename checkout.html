@@ -17,6 +17,13 @@ body, html {
 overflow-x: hidden;
 }
 </style>
+<script type="text/javascript">
+  function loadPage(){
+    handleLoginButton();
+    loadCart();
+    getCartItems();
+  }
+</script>
 <body onload="loadPage()">
   <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png"/>
   <link href="css/jquery-confirm.css" rel="stylesheet" type="text/css">

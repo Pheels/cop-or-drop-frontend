@@ -76,6 +76,26 @@ function getTicketsForItem(productResponse, fwd){
 
 }
 
+function tabDividerSelected(lowValue, maxValue, ticketsTaken){
+  var previousSelected  = document.getElementsByClassName("section-444-chosen");
+  var previousSelectedID = previousSelected[0].id;
+  // remove from old selected
+  previousSelected = document.getElementById(previousSelectedID);
+  previousSelected.classList.remove("section-444-chosen");
+  previousSelected.classList.remove("tabDividerSelected");
+  previousSelected.classList.add("section-444")
+
+  // add to new selected
+  var newChosen = document.getElementById("splitTicketsSection-"+lowValue);
+  newChosen.classList.remove("section-444");
+  newChosen.classList.add("tabDividerSelected");
+  newChosen.classList.add("section-444-chosen");
+
+  // display buttons
+  document.getElementById("raffle-buttons").innerHTML = ` `;
+  displayTicketsSplit(parseInt(lowValue, 10), parseInt(maxValue, 10), ticketsTaken);
+}
+
 function displayTickets(productResponse, tickets, fwd){
 
   if (fwd == false) {
@@ -91,40 +111,35 @@ function displayTickets(productResponse, tickets, fwd){
   if (tickets['Size'] > 0){
     ticketsTaken = tickets['ticketNumbers'].split(",");
   }
-  // // check if number of tickets greater than 60 - split them up
-  // if (productResponse['numberAllowedTickets'] > 60){
-  //   var numberSplits = Math.ceil(productResponse['numberAllowedTickets'] / 60);
-  //   for (var x= 0; x <= numberSplits; x++){
-  //     document.getElementById("ticketNumberSections").innerHTML = ihtml + `
-  //
-  //     `
-  //   }
-  //
-  // } else {
+  // work out number of tab dividers
+  var numberTabDividers = productResponse['numberAllowedTickets']  / 60;
+  var numberTabs = Math.ceil(productResponse['numberAllowedTickets'] / 60);
 
-    for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
-
-      var ticketNumber;
-      if (i.toString().length < 2){
-        //prepend zero
-        ticketNumber = 0+ ""+i;
-      } else {
-        ticketNumber = i;
+  // display tab dividers
+  if (numberTabs > 1){
+    document.getElementById("ticketNumberSections").innerHTML = `
+    <div id="splitTicketsSection-01" class="section-444-chosen tabDividerSelected"  onclick="tabDividerSelected('01', '60', `+ticketsTaken+`)">01-60</div>
+    `
+    var currentValue = 60;
+    for (var x = 1; x < numberTabs; x++){
+      var maxValue = currentValue+60;
+      if (productResponse['numberAllowedTickets'] < maxValue){
+        maxValue = productResponse['numberAllowedTickets'];
       }
-      // store current html to avoid double lookup
-      var ihtml = document.getElementById("raffle-buttons").innerHTML;
-
-      if (ticketsTaken && ticketsTaken.includes(i.toString())){
-        document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
-        `
-      } else {
-        document.getElementById("raffle-buttons").innerHTML = ihtml + `
-        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
-        `
-      // }
+      var ticketNumberSections = document.getElementById("ticketNumberSections").innerHTML;
+      document.getElementById("ticketNumberSections").innerHTML = ticketNumberSections + `
+      <div id="splitTicketsSection-`+currentValue+`" class="section-444" onclick="tabDividerSelected('`+currentValue+`','`+maxValue+`', `+ticketsTaken+`)">`+currentValue +`-`+maxValue+`</div></a>
+      `
+      currentValue+=60;
     }
+  } else {
+    document.getElementById("ticketNumberSections").innerHTML = `
+    <div id="splitTicketsSection" class="section-444-chosen" onclick="tabDividerSelected('01,'`+productResponse['numberAllowedTickets']+`',`+ticketsTaken+`)">01-`+productResponse['numberAllowedTickets'] +`</div>
+    `
   }
+
+  displayTicketsSplit(1, 60, ticketsTaken);
+
   if (fwd == true){
     for (var i = 0; i < ticketsChosen.length; i++){
       console.log(ticketsChosen[i]);
@@ -133,6 +148,30 @@ function displayTickets(productResponse, tickets, fwd){
   }
   blockTickets();
   loadCart();
+}
+
+function displayTicketsSplit(low, high, ticketsTaken){
+  for (var i=low; i <=high; i++){
+    var ticketNumber;
+    if (i.toString().length < 2){
+      //prepend zero
+      ticketNumber = 0+ ""+i;
+    } else {
+      ticketNumber = i;
+    }
+    // store current html to avoid double lookup
+    var ihtml = document.getElementById("raffle-buttons").innerHTML;
+
+    if (ticketsTaken && ticketsTaken.includes(i.toString())){
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
+      `
+    } else {
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
+      `
+    }
+  }
 }
 
 function buttonSelected(ticketNumber){
