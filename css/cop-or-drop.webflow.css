@@ -494,6 +494,8 @@ img {
   letter-spacing: 3px;
 }
 
+
+
 .h4.white {
   position: static;
   margin-top: 0px;
@@ -1005,6 +1007,33 @@ hr {
   padding-top: 60px;
   padding-bottom: 40px;
   text-align: center;
+  background-color: #e8e8e8;
+}
+
+.section-44 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  background-color: #FFFFFF;
+  height: 100px;
+}
+
+.tabDividerImg{
+  display: inline-block;
+  position: relative;
+}
+
+.section-444 {
+  /* position: relative;
+  z-index: 99; */
+  /* margin-top: 30px; */
+  font-family: 'Druk wide', sans-serif;
+  /* font-size: 0.8em; */
+  line-height: 1em;
+  font-weight: 300;
+  text-align: center;
+  letter-spacing: 3px;
+  /* display: inline-block; */
 }
 
 .h5 {
@@ -1013,7 +1042,8 @@ hr {
   margin-top: 0px;
   font-family: 'Druk wide', sans-serif;
   color: #262626;
-  font-size: 2.6em;
+  font-size: 2.0em;
+  padding-bottom: 20px;
   line-height: 1em;
   font-weight: 900;
   text-align: center;

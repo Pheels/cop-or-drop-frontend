@@ -91,26 +91,38 @@ function displayTickets(productResponse, tickets, fwd){
   if (tickets['Size'] > 0){
     ticketsTaken = tickets['ticketNumbers'].split(",");
   }
+  // // check if number of tickets greater than 60 - split them up
+  // if (productResponse['numberAllowedTickets'] > 60){
+  //   var numberSplits = Math.ceil(productResponse['numberAllowedTickets'] / 60);
+  //   for (var x= 0; x <= numberSplits; x++){
+  //     document.getElementById("ticketNumberSections").innerHTML = ihtml + `
+  //
+  //     `
+  //   }
+  //
+  // } else {
 
-  for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
-    var ticketNumber;
-    if (i.toString().length < 2){
-      //prepend zero
-      ticketNumber = 0+ ""+i;
-    } else {
-      ticketNumber = i;
-    }
-    // store current html to avoid double lookup
-    var ihtml = document.getElementById("raffle-buttons").innerHTML;
+    for (var i=1; i <= productResponse['numberAllowedTickets']; i++){
 
-    if (ticketsTaken && ticketsTaken.includes(i.toString())){
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
-      `
-    } else {
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
-      `
+      var ticketNumber;
+      if (i.toString().length < 2){
+        //prepend zero
+        ticketNumber = 0+ ""+i;
+      } else {
+        ticketNumber = i;
+      }
+      // store current html to avoid double lookup
+      var ihtml = document.getElementById("raffle-buttons").innerHTML;
+
+      if (ticketsTaken && ticketsTaken.includes(i.toString())){
+        document.getElementById("raffle-buttons").innerHTML = ihtml + `
+        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
+        `
+      } else {
+        document.getElementById("raffle-buttons").innerHTML = ihtml + `
+        <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
+        `
+      // }
     }
   }
   if (fwd == true){
