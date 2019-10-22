@@ -76,7 +76,7 @@ function getTicketsForItem(productResponse, fwd){
 
 }
 
-function tabDividerSelected(lowValue, maxValue, ticketsTaken){
+function tabDividerSelected(lowValue, maxValue){
   var previousSelected  = document.getElementsByClassName("section-444-chosen");
   var previousSelectedID = previousSelected[0].id;
   // remove from old selected
@@ -93,65 +93,7 @@ function tabDividerSelected(lowValue, maxValue, ticketsTaken){
 
   // display buttons
   document.getElementById("raffle-buttons").innerHTML = ` `;
-  displayTicketsSplit(parseInt(lowValue, 10), parseInt(maxValue, 10), ticketsTaken);
-}
-
-function displayTickets(productResponse, tickets, fwd){
-
-  if (fwd == false) {
-    // store ticketsChosen locally
-    var ticketsChosen = [];
-    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
-  }  else {
-    var ticketsChosen = JSON.parse(sessionStorage.getItem('ticketsChosen'));
-  }
-
-  // store taken tickets
-  var ticketsTaken;
-  if (tickets['Size'] > 0){
-    ticketsTaken = tickets['ticketNumbers'].split(",");
-  }
-  // work out number of tab dividers
-  var numberTabDividers = productResponse['numberAllowedTickets']  / 60;
-  var numberTabs = Math.ceil(productResponse['numberAllowedTickets'] / 60);
-
-  // display tab dividers
-  if (numberTabs > 1){
-    document.getElementById("ticketNumberSections").innerHTML = `
-    <div id="splitTicketsSection-01" class="section-444-chosen tabDividerSelected"  onclick="tabDividerSelected('01', '60', `+ticketsTaken+`)">01-60</div>
-    `
-    var currentValue = 60;
-    for (var x = 1; x < numberTabs; x++){
-      var maxValue = currentValue+60;
-      if (productResponse['numberAllowedTickets'] < maxValue){
-        maxValue = productResponse['numberAllowedTickets'];
-      }
-      var ticketNumberSections = document.getElementById("ticketNumberSections").innerHTML;
-      document.getElementById("ticketNumberSections").innerHTML = ticketNumberSections + `
-      <div id="splitTicketsSection-`+currentValue+`" class="section-444" onclick="tabDividerSelected('`+currentValue+`','`+maxValue+`', `+ticketsTaken+`)">`+currentValue +`-`+maxValue+`</div></a>
-      `
-      currentValue+=60;
-    }
-  } else {
-    document.getElementById("ticketNumberSections").innerHTML = `
-    <div id="splitTicketsSection" class="section-444-chosen" onclick="tabDividerSelected('01,'`+productResponse['numberAllowedTickets']+`',`+ticketsTaken+`)">01-`+productResponse['numberAllowedTickets'] +`</div>
-    `
-  }
-
-  displayTicketsSplit(1, 60, ticketsTaken);
-
-  if (fwd == true){
-    for (var i = 0; i < ticketsChosen.length; i++){
-      console.log(ticketsChosen[i]);
-      buttonSelected(ticketsChosen[i]);
-    }
-  }
-  blockTickets();
-  loadCart();
-}
-
-function displayTicketsSplit(low, high, ticketsTaken){
-  for (var i=low; i <=high; i++){
+  for (var i=parseInt(lowValue,10); i <=parseInt(maxValue,10); i++){
     var ticketNumber;
     if (i.toString().length < 2){
       //prepend zero
@@ -159,6 +101,8 @@ function displayTicketsSplit(low, high, ticketsTaken){
     } else {
       ticketNumber = i;
     }
+
+    var ticketsTaken = sessionStorage.getItem('ticketsTaken').split(',');
     // store current html to avoid double lookup
     var ihtml = document.getElementById("raffle-buttons").innerHTML;
 
@@ -172,6 +116,87 @@ function displayTicketsSplit(low, high, ticketsTaken){
       `
     }
   }
+  // displayTicketsSplit(parseInt(lowValue, 10), parseInt(maxValue, 10), ticketsTaken);
+}
+
+function displayTickets(productResponse, tickets, fwd){
+  var product = JSON.parse(sessionStorage.getItem('productInfo'));
+  var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+
+  if (fwd == false) {
+    // store ticketsChosen locally
+    var ticketsChosen = [];
+    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+  }  else {
+    var ticketsChosen = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+  }
+
+  // store taken tickets
+  var ticketsTaken;
+  if (tickets['Size'] > 0){
+    ticketsTaken = tickets['ticketNumbers'].split(",");
+    // also need to append the ticketNumbers from cartjson itemq
+    sessionStorage.setItem('ticketsTaken',ticketsTaken);
+  }
+
+  // work out number of tab dividers
+  var numberTabDividers = productResponse['numberAllowedTickets']  / 60;
+  var numberTabs = Math.ceil(productResponse['numberAllowedTickets'] / 60);
+
+  // display tab dividers
+  if (numberTabs > 1){
+    document.getElementById("ticketNumberSections").innerHTML = `
+    <div id="splitTicketsSection-01" class="section-444-chosen tabDividerSelected"  onclick="tabDividerSelected('01', '60')">01-60</div>
+    `
+    var currentValue = 60;
+    for (var x = 1; x < numberTabs; x++){
+      var maxValue = currentValue+60;
+      if (productResponse['numberAllowedTickets'] < maxValue){
+        maxValue = productResponse['numberAllowedTickets'];
+      }
+      var ticketNumberSections = document.getElementById("ticketNumberSections").innerHTML;
+      document.getElementById("ticketNumberSections").innerHTML = ticketNumberSections + `
+      <div id="splitTicketsSection-`+currentValue+`" class="section-444" onclick="tabDividerSelected('`+currentValue+`','`+maxValue+`')">`+currentValue +`-`+maxValue+`</div></a>
+      `
+      currentValue+=60;
+    }
+  } else {
+    document.getElementById("ticketNumberSections").innerHTML = `
+    <div id="splitTicketsSection" class="section-444-chosen" onclick="tabDividerSelected('01,'`+productResponse['numberAllowedTickets']+`')">01-`+productResponse['numberAllowedTickets'] +`</div>
+    `
+  }
+
+  for (var i=1; i <=60; i++){
+    var ticketNumber;
+    if (i.toString().length < 2){
+      //prepend zero
+      ticketNumber = 0+ ""+i;
+    } else {
+      ticketNumber = i;
+    }
+    // store current html to avoid double lookup
+    var ihtml = document.getElementById("raffle-buttons").innerHTML;
+
+    if (ticketsTaken && ticketsTaken.includes(i.toString())){
+      console.log(i.toString());
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
+      `
+    } else {
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
+      `
+    }
+  }
+
+  if (fwd == true){
+    for (var i = 0; i < ticketsChosen.length; i++){
+      console.log(ticketsChosen[i]);
+      buttonSelected(ticketsChosen[i]);
+    }
+  }
+  blockTickets();
+  loadCart();
 }
 
 function buttonSelected(ticketNumber){
@@ -472,13 +497,15 @@ function purhaseButtonSelected(){
       cartJson.push(jdata);
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
+    sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken')+","+ticketsString);
+
     loadCart();
     blockTickets();
     document.getElementById("submitButton").text = `
     <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
     `
-    var ticketsChosen = [];
-    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+    // var ticketsChosen = [];
+    // sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
 
   // no bids selected
   } else {
