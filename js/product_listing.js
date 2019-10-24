@@ -93,30 +93,7 @@ function tabDividerSelected(lowValue, maxValue){
 
   // display buttons
   document.getElementById("raffle-buttons").innerHTML = ` `;
-  for (var i=parseInt(lowValue,10); i <=parseInt(maxValue,10); i++){
-    var ticketNumber;
-    if (i.toString().length < 2){
-      //prepend zero
-      ticketNumber = 0+ ""+i;
-    } else {
-      ticketNumber = i;
-    }
-
-    var ticketsTaken = sessionStorage.getItem('ticketsTaken').split(',');
-    // store current html to avoid double lookup
-    var ihtml = document.getElementById("raffle-buttons").innerHTML;
-
-    if (ticketsTaken && ticketsTaken.includes(i.toString())){
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
-      `
-    } else {
-      document.getElementById("raffle-buttons").innerHTML = ihtml + `
-      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
-      `
-    }
-  }
-  // displayTicketsSplit(parseInt(lowValue, 10), parseInt(maxValue, 10), ticketsTaken);
+  loadTicketButtons(lowValue, maxValue);
 }
 
 function displayTickets(productResponse, tickets, fwd){
@@ -131,17 +108,40 @@ function displayTickets(productResponse, tickets, fwd){
     var ticketsChosen = JSON.parse(sessionStorage.getItem('ticketsChosen'));
   }
 
-  // store taken tickets
-  var ticketsTaken;
+  var ticketsTaken = '';
   if (tickets['Size'] > 0){
-    ticketsTaken = tickets['ticketNumbers'].split(",");
-    // also need to append the ticketNumbers from cartjson itemq
-    sessionStorage.setItem('ticketsTaken',ticketsTaken);
+    var ticketSplit = tickets['ticketNumbers'].split(",");
+    for (var y = 0; y < ticketSplit.length; y ++){
+      var ticketNumber = ticketSplit[y];
+      // prepend zero if single number
+      if (ticketNumber.toString().length < 2){
+        //prepend zero
+        ticketNumber = 0+ ""+ticketNumber;
+      }
+
+      // append to final string
+      if (ticketsTaken.length > 0){
+        ticketsTaken += ',' + ticketNumber;
+      } else {
+        ticketsTaken = ticketNumber;
+      }
+    }
+  }
+  sessionStorage.setItem('ticketsTaken', ticketsTaken);
+
+  // add taken tickets from cart and db to session storage.
+  if (cartJson){
+    for (var i = 0; i < Object.keys(cartJson).length; i ++){
+      if (cartJson[i]['name'] == product['name']){
+        sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken') + ','+cartJson[i]['ticketNumbers']);
+      }
+    }
   }
 
   // work out number of tab dividers
   var numberTabDividers = productResponse['numberAllowedTickets']  / 60;
   var numberTabs = Math.ceil(productResponse['numberAllowedTickets'] / 60);
+  var minNumberButtons = 60;
 
   // display tab dividers
   if (numberTabs > 1){
@@ -161,12 +161,32 @@ function displayTickets(productResponse, tickets, fwd){
       currentValue+=60;
     }
   } else {
+    minNumberButtons = parseInt(productResponse['numberAllowedTickets'], 10);
     document.getElementById("ticketNumberSections").innerHTML = `
     <div id="splitTicketsSection" class="section-444-chosen" onclick="tabDividerSelected('01,'`+productResponse['numberAllowedTickets']+`')">01-`+productResponse['numberAllowedTickets'] +`</div>
     `
   }
 
-  for (var i=1; i <=60; i++){
+  loadTicketButtons(01, minNumberButtons);
+
+  if (fwd == true){
+    for (var i = 0; i < ticketsChosen.length; i++){
+      buttonSelected(ticketsChosen[i]);
+    }
+  }
+  blockTickets();
+  loadCart();
+}
+
+function loadTicketButtons(buttonStart, buttonEnd){
+  var bStart;
+  if (parseInt(buttonStart,10) == 1){
+    bStart = parseInt(buttonStart,10);
+  } else {
+    bStart = parseInt(buttonStart,10) + 1;
+  }
+
+  for (var i = bStart; i <= parseInt(buttonEnd,10) ; i++){
     var ticketNumber;
     if (i.toString().length < 2){
       //prepend zero
@@ -174,29 +194,31 @@ function displayTickets(productResponse, tickets, fwd){
     } else {
       ticketNumber = i;
     }
+
     // store current html to avoid double lookup
     var ihtml = document.getElementById("raffle-buttons").innerHTML;
 
-    if (ticketsTaken && ticketsTaken.includes(i.toString())){
-      console.log(i.toString());
+    // tickets in db or cart
+    var ticketsTaken = sessionStorage.getItem('ticketsTaken');
+
+    // tickets chosen by the user
+    var ticketsChosen = sessionStorage.getItem('ticketsChosen');
+
+    if (ticketsTaken && ticketsTaken.split(',').includes(ticketNumber.toString())){
       document.getElementById("raffle-buttons").innerHTML = ihtml + `
       <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
       `
+    } else if (ticketsChosen && ticketsChosen.includes(ticketNumber.toString())) {
+      document.getElementById("raffle-buttons").innerHTML = ihtml + `
+      <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
+      `
+      buttonSelected(ticketNumber.toString());
     } else {
       document.getElementById("raffle-buttons").innerHTML = ihtml + `
       <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
       `
     }
   }
-
-  if (fwd == true){
-    for (var i = 0; i < ticketsChosen.length; i++){
-      console.log(ticketsChosen[i]);
-      buttonSelected(ticketsChosen[i]);
-    }
-  }
-  blockTickets();
-  loadCart();
 }
 
 function buttonSelected(ticketNumber){
@@ -419,7 +441,7 @@ function checkCorrectAnswer(id, answer, callback){
   xhr.send(jsondata);
 }
 
-function purhaseButtonSelected(){
+function purchaseButtonSelected(){
   // no answer selected
   if (!sessionStorage.getItem('questionSelected')){
     $.alert({
@@ -497,15 +519,15 @@ function purhaseButtonSelected(){
       cartJson.push(jdata);
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
-    sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken')+","+ticketsString);
-
     loadCart();
     blockTickets();
     document.getElementById("submitButton").text = `
-    <a href="#" onclick=purhaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
+    <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
     `
-    // var ticketsChosen = [];
-    // sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+    sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken') + ',' + ticketsString);
+
+    var ticketsChosen = [];
+    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
 
   // no bids selected
   } else {
@@ -549,9 +571,13 @@ function blockTickets(){
       if (cartJson[i]['name'] == product['name']){
         var ticketNumbers = cartJson[i]['ticketNumbers'].replace(" ", "").split(",");
         for (var x = 0; x < ticketNumbers.length; x++){
-          document.getElementById("raffle-button-"+ticketNumbers[x]).outerHTML = `
-          <a id="raffle-button-`+ticketNumbers[x]+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumbers[x]+`</a>
-          `;
+          try {
+            document.getElementById("raffle-button-"+ticketNumbers[x]).outerHTML = `
+            <a id="raffle-button-`+ticketNumbers[x]+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumbers[x]+`</a>
+            `;
+          } catch (err){
+            // ticket not on page
+          }
         }
       }
     }

@@ -86,7 +86,7 @@ html.w-mod-touch * {
 }
 .w-button {
   display: inline-block;
-  padding: 9px 15px;
+  /* padding: 9px 15px; */
   background-color: #3898EC;
   color: white;
   border: 0;
@@ -94,6 +94,7 @@ html.w-mod-touch * {
   text-decoration: none;
   cursor: pointer;
   border-radius: 0;
+  text-align: center;
 }
 
 .w-button-taken {
@@ -598,7 +599,7 @@ textarea.w-select {
   width: 41.66666667%;
 }
 .w-col-6 {
-  width: 50%;
+  /* width: 50%; */
 }
 .w-col-7 {
   width: 58.33333333%;
