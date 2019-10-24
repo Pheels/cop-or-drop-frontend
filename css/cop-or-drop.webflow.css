@@ -1091,6 +1091,7 @@ hr {
   padding-top: 15px;
   padding-bottom: 15px;
   background-color: #3a3c61;
+  border-radius: 5px;
 }
 
 .raffle-number-taken {
