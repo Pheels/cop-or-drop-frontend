@@ -110,7 +110,7 @@ img {
   font-weight: 500;
   border-bottom: 1px solid #e8e8e8;
   width: 60%;
-  padding-bottom:10px;
+  padding-bottom:15px;
   cursor: pointer;
   text-align: left;
 }
@@ -360,7 +360,8 @@ img {
   background-color: #fff;
   text-align: left;
   flex-wrap: wrap;
-  padding-bottom: 50px;
+  padding-top: 75px;
+  padding-bottom: 75px;
 }
 
 .section.how-we-work {
@@ -1043,7 +1044,7 @@ hr {
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 600;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 
