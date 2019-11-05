@@ -576,6 +576,7 @@ hr {
   color: #fff;
   text-align: left;
   float: right;
+  padding-top: 50px;
 }
 .column-144 {
   margin-left: 10px;
@@ -591,6 +592,7 @@ hr {
   color: #fff;
   text-align: left;
   float:left;
+  padding-top: 50px;
 }
 
 .columns-7 {
