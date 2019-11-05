@@ -9,6 +9,11 @@ img {
   display: inline-block;
 }
 
+.term {
+  width:100%;
+  text-align: -webkit-center;
+}
+
 .div-block-3 {
   position: relative;
   top: -90px;
@@ -94,6 +99,30 @@ img {
   line-height: 2em;
   font-weight: 300;
   letter-spacing: 2px;
+}
+
+.h33 {
+  position: static;
+  z-index: 99;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  line-height: 2em;
+  font-weight: 500;
+  border-bottom: 1px solid #e8e8e8;
+  width: 60%;
+  padding-bottom:10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.terms-writing {
+  width: 60%;
+  font-size: 16px;
+  font-family: Arial;
+  color: #000;
+  font-size: 16px;
+  line-height: 23px;
+  font-weight: 400;
 }
 
 .termsbox {
@@ -293,7 +322,7 @@ img {
 }
 
 .section {
-  padding-top: 89px;
+  padding-top: 50px;
 }
 
 .section.latest-raffles {
@@ -331,7 +360,7 @@ img {
   background-color: #fff;
   text-align: left;
   flex-wrap: wrap;
-  padding: -50px;
+  padding-bottom: 50px;
 }
 
 .section.how-we-work {
@@ -729,13 +758,14 @@ hr {
 .button {
   display: block;
   margin-top: 0px;
-  padding: 10px 40px;
+  padding: 5px 20px;
   background-color: #e67070;
   -webkit-transition: background-color 200ms ease;
   transition: background-color 200ms ease;
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
+  border-radius: 40px;
 }
 
 .button:hover {
@@ -769,7 +799,8 @@ hr {
 
 .div-block-11 {
   margin-top: 63px;
-  margin-bottom: 33px;
+  /* margin-bottom: 33px; */
+  width:100%;
 }
 
 .badge {
@@ -826,7 +857,7 @@ hr {
   display: flex;
   width: 30%;
   margin-bottom: 0px;
-  padding-top: 157px;
+  padding-top: 75px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -845,7 +876,7 @@ hr {
   display: -ms-flexbox;
   display: flex;
   width: 100%;
-  height: 20vw;
+  height: 25vw;
   margin-right: auto;
   margin-left: auto;
   -webkit-box-orient: vertical;
@@ -868,9 +899,11 @@ hr {
   /* top: -79px; */
   display: block;
   width: 90%;
+  height: 90%;
   margin-right: auto;
   margin-left: auto;
-  padding-bottom: 20px;
+  border-radius: 10px;
+  /* padding-bottom: 20px; */
 }
 
 .product-title {
@@ -888,7 +921,7 @@ hr {
 
 .product-info-wrap {
   position: relative;
-  /* top: -70px; */
+  top: -15px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1004,6 +1037,15 @@ hr {
 .thumb3 {
   width: 100%;
 }
+
+.terms-title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
 
 .section-4 {
   padding-top: 60px;

@@ -30,8 +30,8 @@ function displayProducts(jsonResponse){
         var id = item['id'];
         document.getElementById("product-wrap").innerHTML = document.getElementById("product-wrap").innerHTML + `
         <div class="product-item">
-          <div class="div-block-12" id="`+name+`-button"><img src="`+image+`" width="59" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 767px) 85vw, (max-width: 991px) 41vw, 25vw" alt="" class="image-17">
-            <div class="product-info-wrap"><a href="" onclick="toProductListing('`+id+`', '`+name+`')" class="button w-button">view this product &gt;</a>
+          <div class="div-block-12" id="`+name+`-button"><img src="`+image+`"  class="image-17"> 
+            <div class="product-info-wrap"><a href="" onclick="toProductListing('`+id+`', '`+name+`')" class="button w-button">win this product &gt;</a>
               <div class="product-title">`+name+`</div>
               <!-- <div class="product-description">`+description+`</div> -->
             </div>
