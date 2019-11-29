@@ -579,6 +579,15 @@ textarea.w-select {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.w-col22 {
+  position: relative;
+  float: left;
+  width: 100%;
+  min-height: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .w-col .w-col {
   padding-left: 0;
   padding-right: 0;
@@ -653,6 +662,9 @@ textarea.w-select {
   .w-col-medium-6 {
     width: 50%;
   }
+  .w-col-medium-66 {
+    width: 100%;
+  }
   .w-col-medium-7 {
     width: 58.33333333%;
   }
@@ -712,8 +724,8 @@ textarea.w-select {
   .w-col-small-5 {
     width: 41.66666667%;
   }
-  .w-col-small-6 {
-    width: 50%;
+  .w-col-small-66 {
+    width: 100%;
   }
   .w-col-small-7 {
     width: 58.33333333%;
@@ -768,8 +780,8 @@ textarea.w-select {
   .w-col-tiny-5 {
     width: 41.66666667%;
   }
-  .w-col-tiny-6 {
-    width: 50%;
+  .w-col-tiny-66 {
+    width: 100%;
   }
   .w-col-tiny-7 {
     width: 58.33333333%;

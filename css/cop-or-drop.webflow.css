@@ -552,7 +552,7 @@ line-height:2;
   margin-top: 0px;
   font-family: Cop, sans-serif;
   color: #fff;
-  font-size: 2em;
+  font-size: 2.6em;
   font-weight: 700;
   text-align: center;
   padding-bottom:2px;
@@ -569,7 +569,7 @@ line-height:2;
 .columns-5 {
   width: 100%;
   max-width: 1200px;
-  margin-top: 61px;
+  /* margin-top: 61px; */
 }
 
 .footer {
@@ -632,7 +632,7 @@ hr {
   -ms-flex-pack: start;
   justify-content: flex-start;
   color: #fff;
-  text-align: left;
+  text-align: center;
   float:left;
   padding-top: 50px;
 }
@@ -1323,6 +1323,9 @@ hr {
 }
 
 @media (max-width: 991px) {
+  .section.charities{
+    padding-top: 0px;
+  }
   /* .div-block-3 {
     top: -67px;
   } */
@@ -1524,6 +1527,9 @@ hr {
 }
 
 @media (max-width: 767px) {
+  .section.charities{
+    padding-top: 0px;
+  }
   .div-block-3 {
     width: auto;
     padding-right: 21px;
@@ -1545,7 +1551,7 @@ hr {
     margin-top: 0px;
     padding-right: 69px;
     padding-left: 69px;
-    margin-left: 15px;
+    /* margin-left: 15px; */
   }
   .p.mobile-mission {
     margin-top: 22px;
@@ -1617,13 +1623,14 @@ hr {
   }
   .column-12 {
     margin-top: 25px;
+    margin-right: 20px;
   }
   .column-14 {
     padding-right: 10px;
     padding-left: 10px;
   }
   .columns-7 {
-    left: 31px;
+    /* left: 31px; */
     height: 155px;
   }
   .image-14 {
@@ -1701,6 +1708,10 @@ hr {
 }
 
 @media (max-width: 479px) {
+  .column-144 {
+    padding-right:20px;
+    margin-left: 0px;
+  }
   .div-block-3 {
     top: -57px;
   }
@@ -1774,7 +1785,7 @@ hr {
     width: 270px;
   }
   .h4.white {
-    font-size: 2.3em;
+    font-size: 1em;
   }
   .text-block-2 {
     font-size: 10px;
@@ -1795,10 +1806,11 @@ hr {
     height: auto;
   }
   .column-16 {
-    padding-left: 0px;
+    /* padding-left: 0px; */
   }
   .column-17 {
-    padding-right: 0px;
+    /* padding-right: 0px; */
+    margin-top:10px;
   }
   .div-block-9 {
     margin-bottom: 50px;

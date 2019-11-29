@@ -380,7 +380,7 @@ function displayStripe(){
     getTotalPrice(cartJson, function(priceResponse){
        // configure stripe handler
        var handler = StripeCheckout.configure({
-         key: 'pk_test_7YtUrmQsMxOWEHuVtbCPfccO000KeLEQHe',
+         key: 'pk_live_OBqjV17Ab5zMLF7AJ8osoMVh00MloX18QK',
          image: 'images/copordropsmall.png',
          locale: 'auto',
          shippingAddress: true,
