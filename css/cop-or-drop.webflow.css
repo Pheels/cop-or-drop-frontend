@@ -252,6 +252,18 @@ img {
   width: 100%;
 }
 
+.announcement {
+line-height:2;
+}
+.announcement-text {
+  font-size: medium;
+  text-align: center;
+  font-family: 'Druk', sans-serif;
+  font-weight: bold;
+  background-color: black;
+  color:#e8e8e8;
+}
+
 .slider-wrap {
   position: relative;
   z-index: 0;
