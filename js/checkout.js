@@ -15,7 +15,7 @@ function getCartItems(){
     }
     getTotalPrice(cartJson, function(response){
       document.getElementById("total-price-box").innerHTML = `
-      <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+      <div class="total-price">Total Price: \xA3`+Math.round(response['price'])+`</div>`;
       updateItemPrices(cartJson, response);
     });
   } else {
@@ -96,7 +96,7 @@ function displayProduct(item, cartJson){
 
     <div class="item-price" id="`+name+`-price">
       <span>Price:<br></span>
-      <font color="#86939E" id='`+name+`-price-value'>\xA3`+price+`</font>
+      <font color="#86939E" id='`+name+`-price-value'>\xA3`+Math.round(price)+`</font>
     </div>
     <div class="buttons">
       <span class="edit-btn" onclick="editItem('`+name+`')"></span>
@@ -145,7 +145,7 @@ function removeItem(name){
   if (!newCartJson === undefined || !newCartJson.length == 0 ){
      getTotalPrice(newCartJson, function(response){
       document.getElementById("total-price-box").innerHTML = `
-      <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+      <div class="total-price">Total Price: \xA3`+Math.round(response['price'])+`</div>`;
     });
   } else {
     document.getElementById("total-price-box").innerHTML = `
@@ -249,7 +249,7 @@ function updateProductTickets(product){
 
   getTotalPrice(cartJson, function(response){
     document.getElementById("total-price-box").innerHTML = `
-    <div class="total-price">Total Price: \xA3`+response['price']+`</div>`;
+    <div class="total-price">Total Price: \xA3`+Math.round(response['price'])+`</div>`;
     updateItemPrices(cartJson, response);
   });
 }

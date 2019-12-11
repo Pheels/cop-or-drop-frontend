@@ -4,8 +4,7 @@ function displayDocument(name){
       var html = document.getElementById("privacycookies").innerHTML = `
         <div onclick="closeDocument('privacy')" class="h33 up">Privacy and cookies policy
         <img src="images/down.png" height="35px" width="35px" style="float:right"></div>
-        <iframe src="https://drive.google.com/file/d/15M74lXZiV4708au-jjhkDYlGQ8Gi3wPX/preview" width="60%" height="580"</iframe>
-        `
+        <iframe src="https://drive.google.com/file/d/15M74lXZiV4708au-jjhkDYlGQ8Gi3wPX/preview" width="60%" height="580"></iframe>        `
       break;
     case 'refund':
     var html = document.getElementById("refund").innerHTML = `
@@ -18,8 +17,7 @@ function displayDocument(name){
     var html = document.getElementById("termsconditions").innerHTML = `
       <div onclick="closeDocument('terms')" class="h33 up">Terms and Conditions&nbsp&nbsp&nbsp&nbsp
       <img src="images/down.png" height="35px" width="35px" style="float:right"></div>
-      <iframe src="https://drive.google.com/file/d/15M74lXZiV4708au-jjhkDYlGQ8Gi3wPX/preview" width="60%" height="580"</iframe>
-      `
+      <iframe src="https://drive.google.com/file/d/1Z46emJKhgAArR5SZJLR0RIyNnlhE3j2j/preview" width="60%" height="580"></iframe>      `
       break
     case 'copyright':
     var html = document.getElementById("copyright").innerHTML = `

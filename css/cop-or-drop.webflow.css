@@ -160,7 +160,9 @@ img {
 }
 .p.charitiesH {
   padding-bottom: 10px;
-  font-size: 25px;
+  font-size: 20px;
+  width: 80%;
+  margin-top: 100px;
 }
 
 .p.mobile-mission {
@@ -228,7 +230,7 @@ img {
 
 .slider {
   width: 100%;
-  height: 700px;
+  height: 600px;
   background-color: transparent;
 }
 
@@ -633,8 +635,8 @@ hr {
   justify-content: flex-start;
   color: #fff;
   text-align: center;
-  float:left;
-  padding-top: 50px;
+  float:center;
+  padding-top: 10px;
 }
 
 .columns-7 {
@@ -643,7 +645,7 @@ hr {
   /* overflow: hidden; */
   width: 95%;
   height: 333px;
-  margin-top: 48px;
+  /* margin-top: 48px; */
 }
 
 .columns-8 {
@@ -997,6 +999,7 @@ hr {
 .lightbox-link {
   width: 20%;
   margin-right: 19px;
+  margin-top: 10px;
 }
 
 .lightbox-link.hero {
@@ -1753,6 +1756,7 @@ hr {
   }
   .slider {
     height: auto;
+    padding-top: 20px;
   }
   .section.how-we-work {
     padding-bottom: 0px;

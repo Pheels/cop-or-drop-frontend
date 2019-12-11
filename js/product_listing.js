@@ -354,7 +354,7 @@ function displayImages(productResponse){
   `
 
   // set smaller images
-  for (var i=2; i <5; i++){
+  for (var i=2; i <8; i++){
     var image = productResponse['s3Location'] + '/image'+i+'.jpg'
     document.getElementById("image"+i).innerHTML = `
     <img onclick=swapImage("`+image+`","thumb`+i+`","image`+i+`") src="`+image+`" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+i+`">
@@ -465,8 +465,9 @@ function purchaseButtonSelected(){
         offsetBottom: 70,
         onDestroy: function () {
           // before the modal is hidden.
-          var elmnt = document.getElementById("questions");
-          elmnt.scrollIntoView();
+          var currentLocation = window.location;
+          var loginurl = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/login?response_type=token&client_id=1qp9mcr1it0amvi42atlq6egco&redirect_uri=https://copordrop.co.uk";
+          window.location.href = loginurl;
         }
       });
       // $.confirm({
