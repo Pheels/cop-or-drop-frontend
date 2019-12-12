@@ -1075,7 +1075,7 @@ hr {
   padding-bottom: 30px;
   text-align: center;
   background-color: #FFFFFF;
-  height: 100px;
+  height: auto;
 }
 
 .tabDividerSelected{
@@ -1093,7 +1093,7 @@ hr {
   line-height: 1em;
   text-align: center;
   letter-spacing: 3px;
-  display: inline-block;
+  display: inline-flex;
   margin-left:40px;
   margin-right:40px;
   vertical-align: sub;
@@ -1139,7 +1139,7 @@ hr {
   width: 800px;
   max-width: 95%;
   margin: 30px auto 40px;
-  text-align: left;
+  /* text-align: left; */
 }
 
 .raffle-number {
@@ -1673,6 +1673,7 @@ hr {
   }
   .listing-title {
     margin-bottom: 50px;
+    padding-top: 75px;
   }
   .h5 {
     font-size: 1.3em;
@@ -1711,6 +1712,12 @@ hr {
 }
 
 @media (max-width: 479px) {
+  .section-44 {
+    display: inline-grid;
+  }
+  .section-444 {
+    display: unset;
+  }
   .column-144 {
     padding-right:20px;
     margin-left: 0px;
@@ -1752,11 +1759,11 @@ hr {
     letter-spacing: 7px;
   }
   .home-section {
-    padding-bottom: 34px;
+    /* padding-bottom: 34px; */
   }
   .slider {
     height: auto;
-    padding-top: 20px;
+    padding-top: 50px;
   }
   .section.how-we-work {
     padding-bottom: 0px;

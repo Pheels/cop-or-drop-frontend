@@ -466,7 +466,7 @@ function purchaseButtonSelected(){
         onDestroy: function () {
           // before the modal is hidden.
           var currentLocation = window.location;
-          var loginurl = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/login?response_type=token&client_id=1qp9mcr1it0amvi42atlq6egco&redirect_uri=https://copordrop.co.uk";
+          var loginurl = "https://copordrop.auth.eu-west-2.amazoncognito.com/login?response_type=token&client_id=18p2gch2p4inco7ph3va66h9gj&redirect_uri=https://copordrop.co.uk";
           window.location.href = loginurl;
         }
       });
