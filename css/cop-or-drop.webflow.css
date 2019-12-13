@@ -1325,6 +1325,11 @@ hr {
   border-color: #fff;
 }
 
+@media (max-width: 1600px) {
+
+}
+
+
 @media (max-width: 991px) {
   .section.charities{
     padding-top: 0px;

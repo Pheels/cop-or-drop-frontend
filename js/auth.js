@@ -74,6 +74,6 @@ function handleLoginButton(){
   } else {
     var loginButton = document.getElementById('login-button');
     loginButton.textContent = "LOGOUT";
-    loginButton.href = "https://cop-or-drop.auth.eu-west-2.amazoncognito.com/logout?client_id=1qp9mcr1it0amvi42atlq6egco&logout_uri=https://copordrop.co.uk/logout.html";
+    loginButton.href = "https://copordropauth.auth.eu-west-2.amazoncognito.com/logout?response_type=token&client_id=420ptsudtlkf5l67p5ues2t7q1&redirect_uri=https://copordrop.co.uk/logout.html";
   }
 }
