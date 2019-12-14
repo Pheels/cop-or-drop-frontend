@@ -14,6 +14,12 @@ img {
   text-align: -webkit-center;
 }
 
+.info-text {
+  width: 80%;
+  padding-left:60px;
+  padding-top:20px
+}
+
 .div-block-3 {
   position: relative;
   top: -90px;
@@ -1326,7 +1332,9 @@ hr {
 }
 
 @media (max-width: 1600px) {
-
+  .section.charities{
+    padding-top: 0px;
+  }
 }
 
 
@@ -1654,6 +1662,8 @@ hr {
   }
   .column-16 {
     height: 100%;
+    position: relative;
+    width: 50%;
   }
   .column-17 {
     height: 100%;
@@ -1827,6 +1837,7 @@ hr {
   .column-17 {
     /* padding-right: 0px; */
     margin-top:10px;
+    width: 50%;
   }
   .div-block-9 {
     margin-bottom: 50px;
