@@ -242,7 +242,7 @@ function displayInformation(productResponse){
   var price = (productResponse['price']/productResponse['numberAllowedTickets']).toFixed(2);
   document.getElementById("information").innerHTML =`
   <div class="product-price">Ticket Price: &pound;`+price+`</div>
-  <div class="product-worth">RRP: &pound;`+productResponse['rrp']+`</div>
+  <div class="product-worth">TOTAL RRP: &pound;`+productResponse['rrp']+`</div>
   <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
   `;
   setTimer(productResponse);
@@ -328,21 +328,25 @@ function displayProductName(name){
 }
 
 function swapImage(imagePath, thumb, id){
+  var productInfo = JSON.parse(sessionStorage.getItem('productInfo'));
   console.log(imagePath + " " + thumb + " " + id);
+
   // get the main image and the current image path
   var mainImage = document.getElementById("image1");
-  var mainImagePath = matchFirstRegex(/src=.*" srcset/g, mainImage.innerHTML).replace("src=\"", "").replace(" srcset", "").replace("\"", "");
+  // var mainImagePath = matchFirstRegex(/src=.*" srcset/g, mainImage.innerHTML).replace("src=\"", "").replace(" srcset", "").replace("\"", "");
 
   // get the small image and rewrite main image html
   var smallImage = document.getElementById(id);
+  var className = document.getElementById(id).className;
+  var mainImagePath = productInfo['s3Location'] + "/"+ className + ".jpg";
+  console.log(mainImagePath);
   mainImage.innerHTML = `
   <img src="`+imagePath+`" srcset="`+imagePath+` 500w, `+imagePath+` 800w, `+imagePath+` 1080w, `+imagePath+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
   `
-  // rewrite small image html
-  smallImage.innerHTML = `
-  <img onclick=swapImage("`+mainImagePath+`","`+thumb+`","`+id+`") src="`+mainImagePath +`" srcset="`+mainImagePath +` 500w, `+mainImagePath +` 800w, `+mainImagePath +` 1080w, `+mainImagePath+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+thumb+`">
-
-  `
+  // // rewrite small image html
+  // smallImage.innerHTML = `
+  // <img onclick=swapImage("`+mainImagePath+`","`+thumb+`","`+id+`") src="`+mainImagePath +`" srcset="`+mainImagePath +` 500w, `+mainImagePath +` 800w, `+mainImagePath +` 1080w, `+mainImagePath+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb1">
+  // `
 }
 
 function displayImages(productResponse){
@@ -350,16 +354,23 @@ function displayImages(productResponse){
 
   // set main image
   document.getElementById("image1").innerHTML = `
-  <img src="`+image1+`" srcset="`+image1+` 500w, `+image1+` 800w, `+image1+` 1080w, `+image1+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
+    <img src="`+image1+`" srcset="`+image1+` 500w, `+image1+` 800w, `+image1+` 1080w, `+image1+` 1194w" sizes="(max-width: 991px) 95vw, 42vw" alt="" class="hero"></a>
   `
 
   // set smaller images
-  for (var i=2; i <8; i++){
-    var image = productResponse['s3Location'] + '/image'+i+'.jpg'
-    document.getElementById("image"+i).innerHTML = `
-    <img onclick=swapImage("`+image+`","thumb`+i+`","image`+i+`") src="`+image+`" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+i+`">
-    `
+  for (var i=1; i <15; i++){
+    try {
+      var image = productResponse['s3Location'] + '/image'+i+'.jpg'
+      document.getElementById("smaller-images").innerHTML += `
+      <a href="#!" class="lightbox-link w-inline-block w-lightbox">
+      <div id="image`+i+`" class="image`+i+`">
+      <img onclick=swapImage("`+image+`","thumb`+i+`","image`+i+`") src="`+image+`" srcset="`+image+` 500w, `+image+` 800w, `+image+` 1080w, `+image+` 1194w" sizes="(max-width: 991px) 15vw, 7vw" alt="" class="thumb`+i+`">
+      </div>
+      `
+  } catch(error){
+    // do nothing
   }
+}
 }
 
 function displayQuestions(productResponse){
@@ -515,7 +526,8 @@ function purchaseButtonSelected(){
         "timestamp": timestamp,
         "ticketNumbers": tickets.join(","),
         "id": product['id'],
-        "answer": sessionStorage.getItem('questionSelected')
+        "answer": sessionStorage.getItem('questionSelected'),
+        "url": window.location.href
       };
       cartJson.push(jdata);
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));

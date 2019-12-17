@@ -398,7 +398,9 @@ function displayStripe(){
              data: {
                stripeToken: token.id,
                stripePrice: priceResponse['price']*100,
-               products: cartJson
+               products: cartJson,
+               email: getCookieValue("email"),
+               name: getCookieValue("name")
              }
            }).done(function(stripeCustomer) {
              if (stripeCustomer['object'] == 'charge'){
