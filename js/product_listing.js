@@ -513,8 +513,21 @@ function purchaseButtonSelected(){
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
-        // split ticketsString
-        cartJson[i]['ticketNumbers'] += "," + ticketsString;
+        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > 5){
+          $.alert({
+            title: 'Please Note:',
+            content: 'Each user is limited to 5 entries per item.',
+            boxWidth: '50%',
+            useBootstrap: false,
+            offsetBottom: 70, 
+            onDestroy: function () {
+              return;
+            }
+          });
+        } else {
+          // split ticketsString
+          cartJson[i]['ticketNumbers'] += "," + ticketsString;
+        }
       }
       sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }

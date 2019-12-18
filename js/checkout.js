@@ -113,7 +113,7 @@ function editItem(name){
   var newUrl = 'https://copordrop.co.uk/product-listing.html?name='
   for(var i = 0; i < Object.keys(cartJson).length; i++) {
     // check that the name matches
-    if (cartJson[i]['name'].replace("_", " ") == name){
+    if (cartJson[i]['name'].replace(/_/g, " ") == name){
       newUrl += cartJson[i]['name'].replace(/\n/g, "%20") + '&id='+cartJson[i]['id'] + '&fwd=true';
       var ticketSplit = cartJson[i]['ticketNumbers'].split(",");
       for (var x = 0; x < ticketSplit.length; x++) {
