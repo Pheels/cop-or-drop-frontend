@@ -146,7 +146,7 @@ function displayTickets(productResponse, tickets, fwd){
   // display tab dividers
   if (numberTabs > 1){
     document.getElementById("ticketNumberSections").innerHTML = `
-    <div id="splitTicketsSection-01" class="section-444-chosen tabDividerSelected"  onclick="tabDividerSelected('01', '60')">01-60</div>
+    <div id="splitTicketsSection-01" class="section-444-chosen tabDividerSelected ticketTab"  onclick="tabDividerSelected('01', '60')">01-60</div>
     `
     var currentValue = 60;
     for (var x = 1; x < numberTabs; x++){
@@ -156,7 +156,7 @@ function displayTickets(productResponse, tickets, fwd){
       }
       var ticketNumberSections = document.getElementById("ticketNumberSections").innerHTML;
       document.getElementById("ticketNumberSections").innerHTML = ticketNumberSections + `
-      <div id="splitTicketsSection-`+currentValue+`" class="section-444" onclick="tabDividerSelected('`+currentValue+`','`+maxValue+`')">`+currentValue +`-`+maxValue+`</div></a>
+      <div id="splitTicketsSection-`+currentValue+`" class="section-444 ticketTab" onclick="tabDividerSelected('`+currentValue+`','`+maxValue+`')">`+currentValue +`-`+maxValue+`</div></a>
       `
       currentValue+=60;
     }
@@ -595,4 +595,28 @@ function blockTickets(){
       }
     }
   }
+}
+
+function luckyDipSelected(){
+  var item = JSON.parse(sessionStorage.getItem('productInfo'));
+  var ticketSplitTabs = document.getElementsByClassName("ticketTab");
+  while (true) {
+    var randomTab = Math.floor(Math.random() * ticketSplitTabs.length) + 1
+    var tab = ticketSplitTabs[randomTab-1];
+    document.getElementById(tab.id).click();
+    var availableTickets = document.getElementsByClassName("raffle-number");
+    if (availableTickets.length < 1){
+      //do nothing
+    } else {
+      var buttons = Object.keys(availableTickets);
+      var buttonSelected = availableTickets[buttons[ buttons.length * Math.random() << 0]];
+      document.getElementById(buttonSelected.id).click();
+      break;
+    }
+  }
+  // choose random section
+  // check if available tickets exist
+    // select this one
+  // else change section
+
 }
