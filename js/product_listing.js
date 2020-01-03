@@ -241,7 +241,8 @@ function buttonSelected(ticketNumber){
 function displayInformation(productResponse){
   var price = (productResponse['price']/productResponse['numberAllowedTickets']).toFixed(2);
   document.getElementById("information").innerHTML =`
-  <div class="product-price">Ticket Price: &pound;`+price+`</div>
+  <div style='color:red;text-decoration:line-through' class="product-price-old">Ticket Price: &pound;`+String((parseFloat(price) + 1).toFixed(2))+`</div>
+  <div class="product-price">Ticket Price: &pound;`+price+`<br><br></div>
   <div class="product-worth">TOTAL RRP: &pound;`+productResponse['rrp']+`</div>
   <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
   `;
@@ -513,13 +514,13 @@ function purchaseButtonSelected(){
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
-        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > 5){
+        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > 15){
           $.alert({
             title: 'Please Note:',
-            content: 'Each user is limited to 5 entries per item.',
+            content: 'Each user is limited to 15 entries per item.',
             boxWidth: '50%',
             useBootstrap: false,
-            offsetBottom: 70, 
+            offsetBottom: 70,
             onDestroy: function () {
               return;
             }

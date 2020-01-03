@@ -268,7 +268,7 @@ line-height:2;
   text-align: center;
   font-family: 'Druk', sans-serif;
   font-weight: bold;
-  background-color: black;
+  background-color: red;
   color:#e8e8e8;
 }
 
@@ -1023,10 +1023,19 @@ hr {
 }
 
 .product-price {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 0px;
   padding-bottom: 30px;
   border-bottom: 1px dashed #969696;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.product-price-old {
+  margin-top: 30px;
+  margin-bottom: 0px;
+  padding-bottom: 10px;
+  /* border-bottom: 1px dashed #969696; */
   font-size: 21px;
   font-weight: 700;
 }
@@ -1138,6 +1147,7 @@ hr {
   font-weight: 900;
   text-align: center;
   letter-spacing: 3px;
+  padding-bottom:50px;
 }
 
 .div-block-15 {
@@ -1351,24 +1361,38 @@ hr {
 }
 
 @media (max-width: 1600px) {
+
+  .image-17 {
+    width: 70%;
+    /* top: -126px; */
+  }
+
   .section.charities{
     padding-top: 0px;
   }
-  .p.charitiesH {
+  /* .p.charitiesH {
     margin-top: 175px;
-  }
+  } */
 }
 
 @media (max-width: 2000px) {
   .section.charities{
     padding-top: 0px;
   }
-  .p.charitiesH {
+  /* .p.charitiesH {
     padding-top: 240px;
-  }
+  } */
 }
 
 @media (max-width: 991px) {
+  .image-17 {
+    width: 50%;
+    top: -50px;
+  }
+
+  .lucky-dip {
+    margin-left: 5px;
+  }
   .section.charities{
     padding-top: 0px;
   }
@@ -1573,6 +1597,15 @@ hr {
 }
 
 @media (max-width: 767px) {
+  .image-17 {
+    width: 50%;
+    top: -126px;
+  }
+
+  .lucky-dip {
+    margin-left: 5px;
+  }
+
   .section.charities{
     padding-top: 0px;
   }
@@ -1757,6 +1790,10 @@ hr {
 }
 
 @media (max-width: 479px) {
+  .lucky-dip {
+    margin-left: 5px;
+  }
+
   .section-44 {
     display: inline-grid;
   }
@@ -1772,7 +1809,7 @@ hr {
   }
   .h1 {
     position: static;
-    font-size: 7vw;
+    font-size: 5vw;
     color:#000000;
   }
   .h11 {
@@ -1866,7 +1903,7 @@ hr {
   }
   .column-17 {
     /* padding-right: 0px; */
-    margin-top:10px;
+    /* margin-top:10px; */
     width: 50%;
   }
   .div-block-9 {
@@ -1903,8 +1940,8 @@ hr {
     height: 55vw;
   }
   .image-17 {
-    top: -126px;
-    width: 90%;
+    width: 50%;
+    top: -90px;
   }
   .product-description {
     font-size: 12px;
@@ -1924,6 +1961,11 @@ hr {
     margin-right: 10px;
   }
   .product-price {
+    margin-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+  }
+  .product-price-old {
     margin-top: 15px;
     padding-bottom: 15px;
     font-size: 16px;
