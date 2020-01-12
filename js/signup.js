@@ -192,7 +192,7 @@ function validateInputs(){
 function successfulSignup(response){
   document.getElementById("signupinputs").innerHTML = `
   <div class="successful-signup">Congratulations, your account has successfully been created!<br></div>
-  <div class="terms-title">Click <a href="/login">here</a> to login.</div>`
+  <div class="terms-title">Click <a href="/login.html">here</a> to login.</div>`
 }
 
 function validateEmail(email) {
