@@ -1475,6 +1475,7 @@ hr {
   margin-top: 7px;
   margin-right: 48px;
   margin-bottom: 7px;
+  width: 15px;
 }
 
 .checkbox-field {
@@ -1503,7 +1504,7 @@ hr {
   } */
 }
 
-@media (max-width: 2000px) {
+@media (max-height: 2600px) {
   .section.charities{
     padding-top: 0px;
   }
@@ -1674,6 +1675,7 @@ hr {
   }
   .div-block-12 {
     height: 35vw;
+    margin-top: 75px;
   }
   .columns-10 {
     display: -webkit-box;
