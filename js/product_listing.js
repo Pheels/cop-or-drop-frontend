@@ -503,6 +503,17 @@ function purchaseButtonSelected(){
     // calculate price
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
     var ticketsArr = JSON.parse(sessionStorage.getItem('ticketsChosen'));
+    var ticketLimit = 15;
+    if (ticketsArr.length > ticketLimit){
+      $.alert({
+        title: 'Please Note:',
+        content: 'Each user is limited to 15 entries per item.',
+        boxWidth: '50%',
+        useBootstrap: false,
+        offsetBottom: 70
+      });
+      return;
+    }
     var tickets = ticketsArr.filter(function(elem, index, self) {
       return index === self.indexOf(elem);
     });
@@ -515,17 +526,15 @@ function purchaseButtonSelected(){
     for (var i = 0; i < Object.keys(cartJson).length; i ++){
       if (cartJson[i]['name'] == product['name']){
         itemInCart = true;
-        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > 15){
+        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > ticketLimit){
           $.alert({
             title: 'Please Note:',
             content: 'Each user is limited to 15 entries per item.',
             boxWidth: '50%',
             useBootstrap: false,
-            offsetBottom: 70,
-            onDestroy: function () {
-              return;
-            }
+            offsetBottom: 70
           });
+          return;
         } else {
           // split ticketsString
           cartJson[i]['ticketNumbers'] += "," + ticketsString;
@@ -627,7 +636,6 @@ function luckyDipSelected(){
     var buttons = Object.keys(availableTickets);
     var buttonSelected = availableTickets[buttons[ buttons.length * Math.random() << 0]];
     chosen = true;
-    console.log('clicking button: ' + buttonSelected.id);
     document.getElementById(buttonSelected.id).click();
   }
   // }
