@@ -19,6 +19,7 @@ function handleLoginUser(){
       // Response handlers.
       xhr.onload = function() {
         var response = xhr.response;
+        console.log(response);
         if (JSON.stringify(response).includes("Incorrect username or password.")){
           $.alert({
             title: 'Please Note:',
@@ -27,6 +28,7 @@ function handleLoginUser(){
             useBootstrap: false,
             offsetBottom: 50
           });
+
         } else {
           var url2 = 'https://api.copordrop.co.uk/confirmValidJWT'
           try {
@@ -46,8 +48,7 @@ function handleLoginUser(){
               console.log(response);
               if (response){
                 writeCookie(response);
-                handleLoginButton();
-                successfulLogin();
+                successfulLogin(response);
               }
             };
 
@@ -75,9 +76,10 @@ function handleLoginUser(){
 }
 
 
-function successfulLogin(){
+function successfulLogin(response){
   // document.getElementById("signupinputs").innerHTML = `
   // <div class="successful-signup">You are now successfully logged in!<br></div>
   // <div class="terms-title">Click <a href="/products.html">here</a> to view our competitions.</div>`
-  window.location.href = "https://www.copordrop.co.uk";
+  document.location.href="/";
+  writeCookie(response);
 }

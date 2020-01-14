@@ -164,7 +164,7 @@ function purchaseButtonSelected(){
       useBootstrap: false,
       offsetBottom: 50
     });
-  } else if (getCookieValue("name") == ""){
+  } else if (getCookieValue("email") == ""){
       $.alert({
         title: 'Please Note:',
         content: 'You must be signed in to participate.',

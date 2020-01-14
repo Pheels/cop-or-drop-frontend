@@ -909,6 +909,11 @@ hr {
   border-radius: 40px;
 }
 
+.button-home {
+  padding: 20px 40px;
+  font-size: 16px;
+}
+
 .button:hover {
   background-color: #ff8080;
 }
@@ -1473,7 +1478,7 @@ hr {
 
 .checkbox {
   margin-top: 7px;
-  margin-right: 48px;
+  margin-right: 28px;
   margin-bottom: 7px;
   width: 15px;
 }
@@ -1504,13 +1509,8 @@ hr {
   } */
 }
 
-@media (max-height: 2600px) {
-  .section.charities{
-    padding-top: 0px;
-  }
-  /* .p.charitiesH {
-    padding-top: 240px;
-  } */
+@media (max-width: 1600px) {
+
 }
 
 @media (max-width: 991px) {

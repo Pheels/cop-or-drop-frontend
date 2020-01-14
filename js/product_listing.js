@@ -204,11 +204,13 @@ function loadTicketButtons(buttonStart, buttonEnd){
     // tickets chosen by the user
     var ticketsChosen = sessionStorage.getItem('ticketsChosen');
 
+    // if the ticket is taken then block it out
     if (ticketsTaken && ticketsTaken.split(',').includes(ticketNumber.toString())){
       document.getElementById("raffle-buttons").innerHTML = ihtml + `
       <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number-taken w-button-taken">`+ticketNumber+`</a>
       `
-    } else if (ticketsChosen && ticketsChosen.includes(ticketNumber.toString())) {
+    // if the ticket is chosen then mark as such
+    } else if (ticketsChosen && JSON.parse(ticketsChosen).includes(ticketNumber.toString())) {
       document.getElementById("raffle-buttons").innerHTML = ihtml + `
       <a id="raffle-button-`+ticketNumber+`" href="#" class="raffle-number w-button" onclick="buttonSelected('`+ticketNumber+`')">`+ticketNumber+`</a>
       `
@@ -269,7 +271,6 @@ function setTimer(productResponse){
     var now = new Date().getTime();
     // console.log('from ' + countFrom + ' to ' + countDownDate);
     var distance = countDownDate - now;
-
     // Time calculations for days, hours, minutes and seconds
     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -303,6 +304,7 @@ function setTimer(productResponse){
         var resp = xhr.response;
         if (resp.maxIncrements == true){
           document.getElementById("timer").innerHTML = "EXPIRED";
+          // can't buy tickets when expired
         } else {
           location.reload();
         }
@@ -468,7 +470,7 @@ function purchaseButtonSelected(){
         elmnt.scrollIntoView();
       }
     });
-  } else if (getCookieValue("name") == ""){
+  } else if (getCookieValue("email") == ""){
       $.alert({
         title: 'Please Note:',
         content: 'You must be signed in to participate.',
@@ -478,8 +480,7 @@ function purchaseButtonSelected(){
         onDestroy: function () {
           // before the modal is hidden.
           var currentLocation = window.location;
-          var loginurl = "https://copordrop.auth.eu-west-2.amazoncognito.com/login?response_type=token&client_id=6hbrfsql0jlq7rsu7g0cu8n53l&redirect_uri=https://copordrop.co.uk";
-          window.location.href = loginurl;
+          window.location.href = "https://copordrop.co.uk/login.html";
         }
       });
       // $.confirm({
@@ -614,20 +615,22 @@ function blockTickets(){
 function luckyDipSelected(){
   var item = JSON.parse(sessionStorage.getItem('productInfo'));
   var ticketSplitTabs = document.getElementsByClassName("ticketTab");
-  while (true) {
-    var randomTab = Math.floor(Math.random() * ticketSplitTabs.length) + 1
-    var tab = ticketSplitTabs[randomTab-1];
-    document.getElementById(tab.id).click();
-    var availableTickets = document.getElementsByClassName("raffle-number");
-    if (availableTickets.length < 1){
-      //do nothing
-    } else {
-      var buttons = Object.keys(availableTickets);
-      var buttonSelected = availableTickets[buttons[ buttons.length * Math.random() << 0]];
-      document.getElementById(buttonSelected.id).click();
-      break;
-    }
+  // while () {
+  var randomTab = Math.floor(Math.random() * ticketSplitTabs.length) + 1
+  var tab = ticketSplitTabs[randomTab-1];
+  document.getElementById(tab.id).click();
+  var availableTickets = document.getElementsByClassName("raffle-number");
+  if (availableTickets.length < 1){
+    console.log('tickets in tab not available');
+    //do nothing
+  } else {
+    var buttons = Object.keys(availableTickets);
+    var buttonSelected = availableTickets[buttons[ buttons.length * Math.random() << 0]];
+    chosen = true;
+    console.log('clicking button: ' + buttonSelected.id);
+    document.getElementById(buttonSelected.id).click();
   }
+  // }
   // choose random section
   // check if available tickets exist
     // select this one
