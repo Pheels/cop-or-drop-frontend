@@ -1,7 +1,7 @@
 
 function handleLoginUser(){
       var url = 'https://api.copordrop.co.uk/loginUser';
-      var email = document.getElementById("email").value;
+      var email = document.getElementById("email").value.toLowerCase();
       var password = document.getElementById("pass").value;
 
       var json = {
@@ -20,7 +20,7 @@ function handleLoginUser(){
       xhr.onload = function() {
         var response = xhr.response;
         console.log(response);
-        if (JSON.stringify(response).includes("Incorrect username or password.")){
+        if (JSON.stringify(response).includes("Incorrect username or password.") || JSON.stringify(response) == "{}"){
           $.alert({
             title: 'Please Note:',
             content: 'Incorrect Username or Password.',
@@ -28,7 +28,6 @@ function handleLoginUser(){
             useBootstrap: false,
             offsetBottom: 50
           });
-
         } else {
           var url2 = 'https://api.copordrop.co.uk/confirmValidJWT'
           try {

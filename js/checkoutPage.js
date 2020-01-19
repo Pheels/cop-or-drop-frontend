@@ -367,6 +367,7 @@ function finalCheckTickets(cartItem, jdata, callback){
 }
 
 function displayStripe(){
+
     // ***** NOTE : REMOVE DUPLICATES FROM TICKET STRING ******* //
 
     var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));

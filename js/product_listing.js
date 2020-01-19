@@ -304,7 +304,10 @@ function setTimer(productResponse){
         var resp = xhr.response;
         if (resp.maxIncrements == true){
           document.getElementById("timer").innerHTML = "EXPIRED";
-          // can't buy tickets when expired
+          document.getElementById("subButton").classList.add('submitdisabled');
+          document.getElementById("subButton").classList.remove('button');
+          document.getElementById("subButton").disabled = true;
+          document.getElementById("expirationBar").innerHTML = `<div class="expired-text">Please Note: This competition has now expired</div>`
         } else {
           location.reload();
         }

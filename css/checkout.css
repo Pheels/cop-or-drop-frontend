@@ -12,6 +12,7 @@ body {
   color: #333;
   font-size: 20px;
   line-height: 20px;
+  overflow-x: hidden;
 }
 
 .shopping-cart {
@@ -217,8 +218,30 @@ input:focus {
   padding-bottom: 40px;
 }
 
+@media (max-width: 767px) {
+
+  .total-price-box {
+  width: 400px;
+  }
+}
 /* Responsive */
-@media (max-width: 800px) {
+@media (max-width: 767px) {
+
+.total-price-box {
+width: 400px;
+}
+  /* Product Image */
+  .product-image {
+    /* margin-right: 50px;
+    display: block; */
+    margin-left: 0px;
+    /* margin-right: auto; */
+    /* width: 50%; */
+  }
+  .tickets {
+    margin-left: 0px;
+  }
+
   .shopping-cart {
     width: 100%;
     height: auto;
@@ -229,17 +252,24 @@ input:focus {
     flex-wrap: wrap;
     justify-content: center;
 }
-  .image img {
-    width: 60%;
-  }
+.item-price {
+  padding-left: 15px;
+  padding-right: 0px;
+}
+
+.image img {
+  width: 60%;
+}
   .image,
   .tickets,
   .description {
     width: 100%;
     text-align: center;
-    margin: 6px 0;
+    /* margin: 6px 0; */
+    padding-right: 2px;
   }
-  .buttons {
-    margin-right: 20px;
-  }
+}
+.buttons {
+  margin-right: 20px;
+}
 }

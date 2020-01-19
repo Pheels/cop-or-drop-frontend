@@ -17,7 +17,7 @@ function displayDocument(name){
     var html = document.getElementById("termsconditions").innerHTML = `
       <div onclick="closeDocument('terms')" class="h33 up">Terms and Conditions&nbsp&nbsp&nbsp&nbsp
       <img src="images/down.png" height="35px" width="35px" style="float:right"></div>
-      <iframe src="https://drive.google.com/file/d/1Z46emJKhgAArR5SZJLR0RIyNnlhE3j2j/preview" width="60%" height="580"></iframe>      `
+      <iframe src="https://drive.google.com/file/d/11Ps-OWw0ybOuG_Gawrl2B5WZ1CtU0H8-/preview" width="60%" height="580"></iframe>      `
       break
     case 'copyright':
     var html = document.getElementById("copyright").innerHTML = `

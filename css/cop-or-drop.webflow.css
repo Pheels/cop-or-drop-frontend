@@ -55,6 +55,19 @@ input {
     display: inline-block;
 }
 
+.submitdisabled {
+  margin-top: 0px;
+  padding: 5px 20px;
+  -webkit-transition: background-color 200ms ease;
+  transition: background-color 200ms ease;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 40px;
+  pointer-events: none;
+  background-color: #D3D3D3;
+}
+
 .signupinputs {
     padding: 12px 20px;
     margin: 8px 0;
@@ -117,7 +130,8 @@ input {
 .info-text {
   width: 80%;
   padding-left:60px;
-  padding-top:20px
+  padding-top:20px;
+  font-size: 18px;
 }
 
 .div-block-3 {
@@ -371,6 +385,18 @@ line-height:2;
   background-color: red;
   color:#e8e8e8;
 }
+
+.expired-text {
+  font-size: medium;
+  text-align: center;
+  font-family: 'Druk', sans-serif;
+  font-weight: bold;
+  background-color: grey;
+  color:#e8e8e8;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 
 .slider-wrap {
   position: relative;
@@ -770,7 +796,7 @@ hr {
   /* left: 1px; */
   /* overflow: hidden; */
   width: 95%;
-  height: 333px;
+  /* height: 333px; */
   /* margin-top: 48px; */
 }
 
@@ -1494,7 +1520,7 @@ hr {
   border-color: #fff;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1400px) {
 
   .image-17 {
     width: 70%;
@@ -1504,9 +1530,14 @@ hr {
   .section.charities{
     padding-top: 0px;
   }
-  /* .p.charitiesH {
-    margin-top: 175px;
-  } */
+  .p.charitiesH {
+    margin-top: 75px;
+    position:relative;
+  }
+  .columns-7 {
+    /* left: 31px; */
+    height: auto;
+  }
 }
 
 @media (max-width: 1600px) {
@@ -1916,6 +1947,13 @@ hr {
   .column-23 {
     padding-right: 10px;
     padding-left: 0px;
+  }
+  .product-description-long {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .information{
+    width: 100%
   }
 }
 

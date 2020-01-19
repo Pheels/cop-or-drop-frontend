@@ -147,7 +147,7 @@ function validateInputs(){
         postcode: postcode,
         country: country,
         phone: phone,
-        email: email,
+        email: email.toLowerCase(),
         dob: dob,
         password: password1,
         insta: insta

@@ -65,7 +65,7 @@ overflow-x: hidden;
           <!-- </div></a> -->
       </div></div>
       <div class="column-19 w-col w-col-6 w-col-stack">
-        <div id="information">
+        <div id="information" class="information">
         <!-- <div class="product-price">Ticket Price: £5</div>
         <div class="product-worth">Worth: £2000</div>
         <div class="product-description-long">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br></div> -->
@@ -77,6 +77,8 @@ overflow-x: hidden;
       *Please note all competitions have a timer that expires - if all tickets have not been sold we will add an additional 7 days onto the timer.
 
       See FAQ for more information.
+      <br><br>
+      *To enter for free please see T&C'S.
     </div>
   </div>
   <div class="section-6" id="questions">
@@ -121,14 +123,17 @@ overflow-x: hidden;
     <div class="section-44" id="ticketNumberSections">
       <!-- <div id="splitTicketsSection" class="section-444-chosen tabDividerSelected" onclick=tabDividerSelected();>01-60</div> -->
     </div>
-    <div class="div-block-15">
+    <div id='expirationBar'>
+      <!-- <div class="expired-text">Please Note: This competition has now expired</div> -->
+    </div>
+    <div class="div-block-15" id="div-block-15">
       <div id="lucky-dip" class="lucky-dip-text">Can't Choose?</div><a id="lucky-dip" href="#" onclick=luckyDipSelected(); class="lucky-dip w-button" >Lucky Dip</a>
 
       <div id="raffle-buttons">
       <!-- <a href="#" class="raffle-number w-button">01</a> -->
       </div></div>
       <div id="submitButton">
-      <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button" style="padding: 10px 40px;">ADD TO CART&gt;</a></div>
+      <a href="#" id="subButton" onclick=purchaseButtonSelected(); class="button purchase w-button" style="padding: 10px 40px;">ADD TO CART&gt;</a></div>
     </div>
     <div class="footer">
       <div class="footercolumn">
