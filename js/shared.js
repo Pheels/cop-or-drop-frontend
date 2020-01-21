@@ -24,9 +24,19 @@ function matchFirstRegex(pattern, string){
 function loadCart(){
   var items = sessionStorage.getItem("cartItems");
   if (items){
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Samsung|SAMSUNG|Android/i.test(navigator.userAgent) ) {
+      var navbar = document.getElementById("w-icon-nav-menu");
+      if (navbar){
+        navbar.innerHTML = `<i class="fa nav-link w-nav-link" style="font-size:23px">&#xf07a;</i>
+        <span class='badge badge-warning nav-link w-nav-link' id='lblCartCount' href='checkout.html'>`+JSON.parse(items).length+`</span>`
+        document.getElementById("checkoutButton").innerHTML = `
+        <a href="checkout.html" class="nav-link w-nav-link" style='float:left;'>CHECKOUT</a>`
+      }
+    } else {
     document.getElementById("checkoutButton").innerHTML = `
     <i class="fa nav-link w-nav-link" style="font-size:23px">&#xf07a;</i>
     <span class='badge badge-warning nav-link w-nav-link' id='lblCartCount'>`+JSON.parse(items).length+`</span>
     `
+    }
   }
 }

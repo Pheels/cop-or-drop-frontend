@@ -13,7 +13,8 @@ overflow-x: hidden;
 <script type="text/javascript" src="./js/checkoutPage.js"></script>
 <script type="text/javascript" src="./js/auth.js"></script>
 <script type="text/javascript" src="./js/shared.js"></script>
-<style> .stripe_checkout_app { height: 580px !important; } </style>
+<style> .stripe_checkout_app { overflow-x: hidden; position: relative; left:20%; top:20%} </style>
+<!-- height: 580px !important; -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script type="text/javascript">
@@ -63,39 +64,6 @@ overflow-x: hidden;
             <div class="h1">CHECKOUT</div>
         </div>
         <div class="shopping-cart" id="shopping-cart">
-
-          <!-- Product #1 -->
-          <!-- <div class="item">
-            <div class="buttons">
-              <span class="delete-btn"></span>
-            </div>
-
-            <div class="image" id="image1">
-              <img src="images/item-2.png" alt="" />
-            </div>
-
-            <div class="description">
-              <span>Common Projects</span>
-              <span>Bball High</span>
-              <span>White</span>
-            </div>
-
-            <div class="tickets">
-              <span>Tickets:<br></span>
-              <font color="#86939E">1,2,3,4,5,6</font>
-            </div>
-
-            <div class="item-price">
-              <span>Price:<br></span>
-                <font color="#86939E">$549</font></div>
-            <div class="buttons">
-              <span class="edit-btn"></span>
-            </div>
-          </div> -->
-          <!-- </div> -->
-          <!-- <div class="total-price-box">
-            <div class="total-price">Total Price: £150.50</div>
-          </div> -->
         </div>
         <div class="total-price-box" id="total-price-box">
         </div>
@@ -179,7 +147,7 @@ overflow-x: hidden;
         <a href="checkout.html" id="checkoutButton"><i class="fa nav-link w-nav-link" style="font-size:23px">&#xf07a;</i></a>
       </nav>
       <div class="w-nav-button">
-        <div class="w-icon-nav-menu"></div>
+        <div class="w-icon-nav-menu" id="w-icon-nav-menu"></div>
       </div>
     </div>
   </div>

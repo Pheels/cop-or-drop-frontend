@@ -81,7 +81,7 @@ function displayProduct(item, cartJson){
     </div>
 
     <div class="product-image" id="`+name+`-image" >
-      <img src="`+image+`" alt="" Style="width:120px;height:80px;"/>
+      <img src="`+image+`" alt="" Style="width:120px;height:auto;"/>
     </div>
 
     <div class="description" id="`+name+`-description">
@@ -445,5 +445,15 @@ function displayStripe(){
              `;
            }
          });
+          event.preventDefault();
+          if ( screen.width <= 450){
+            document.getElementsByName("stripe_checkout_app")[0].style.left = "10%";
+            document.getElementsByName("stripe_checkout_app")[0].style.top = "10%";
+          } else if ( screen.width <= 712){
+            document.getElementsByName("stripe_checkout_app")[0].style.left = "25%";
+            document.getElementsByName("stripe_checkout_app")[0].style.top = "10%";
+          }
+
+
        });
 }

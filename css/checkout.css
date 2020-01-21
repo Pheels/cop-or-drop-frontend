@@ -15,6 +15,10 @@ body {
   overflow-x: hidden;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 .shopping-cart {
   width: 750px;
   height: auto;
@@ -218,18 +222,20 @@ input:focus {
   padding-bottom: 40px;
 }
 
-@media (max-width: 767px) {
-
-  .total-price-box {
-  width: 400px;
-  }
-}
 /* Responsive */
 @media (max-width: 767px) {
+  .total-price{
+    text-align:center;
+  }
 
-.total-price-box {
-width: 400px;
+.body{
+  overflow-x: hidden;
+  left:0px;
 }
+
+/* .total-price-box {
+width: 400px;
+} */
   /* Product Image */
   .product-image {
     /* margin-right: 50px;

@@ -5,6 +5,10 @@ body {
   line-height: 20px;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 img {
   display: inline-block;
 }
