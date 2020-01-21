@@ -166,7 +166,7 @@ function validateInputs(){
         var response = xhr.response;
         console.log(response);
         if (String(response).toLowerCase().includes("successfully") || response == null){
-          successfulSignup(response);
+          confirmEmail(response, email.toLowerCase());
         } else if (JSON.stringify(response).includes("UsernameExistsException"))  {
           $.alert({
             title: 'Please Note:',
@@ -189,10 +189,8 @@ function validateInputs(){
     }
 }
 
-function successfulSignup(response){
-  document.getElementById("signupinputs").innerHTML = `
-  <div class="successful-signup">Congratulations, your account has successfully been created!<br></div>
-  <div class="terms-title">Click <a href="/login.html">here</a> to login.</div>`
+function confirmEmail(response, email){
+  document.location.href='/confirmEmail.html?email='+email;
 }
 
 function validateEmail(email) {
