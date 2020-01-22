@@ -164,9 +164,8 @@ function validateInputs(){
       // Response handlers.
       xhr.onload = function() {
         var response = xhr.response;
-        console.log(response);
         if (String(response).toLowerCase().includes("successfully") || response == null){
-          confirmEmail(response, email.toLowerCase());
+          confirmEmail(json);
         } else if (JSON.stringify(response).includes("UsernameExistsException"))  {
           $.alert({
             title: 'Please Note:',
@@ -189,8 +188,8 @@ function validateInputs(){
     }
 }
 
-function confirmEmail(response, email){
-  document.location.href='/confirmEmail.html?email='+email;
+function confirmEmail(json){
+  document.location.href='/confirmEmail.html?email='+JSON.parse(json)['email'];
 }
 
 function validateEmail(email) {

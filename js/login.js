@@ -28,6 +28,19 @@ function handleLoginUser(){
             useBootstrap: false,
             offsetBottom: 50
           });
+        } else if(JSON.stringify(response).includes("UserNotConfirmedException")){
+          $.alert({
+            title: 'Please Note:',
+            content: 'You must verify your account before you can login.',
+            typeAnimated: true,
+            boxWidth: '50%',
+            useBootstrap: false,
+            offsetBottom: 50,
+            escapeKey: true,
+            onDestroy: function () {
+              confirmEmail(email);
+            }
+          });
         } else {
           var url2 = 'https://api.copordrop.co.uk/confirmValidJWT'
           try {
@@ -74,6 +87,9 @@ function handleLoginUser(){
     xhr.send(JSON.stringify(json));
 }
 
+function confirmEmail(email){
+  document.location.href = "/confirmEmail.html?email="+email
+}
 
 function successfulLogin(response){
   // document.getElementById("signupinputs").innerHTML = `
