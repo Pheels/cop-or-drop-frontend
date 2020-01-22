@@ -61,6 +61,36 @@ function sendConfirmationCode(){
   }
 }
 
+function resendCode(){
+  var email = document.location.href.split('=')[1];
+  var emailUrl = 'https://api.copordrop.co.uk/resendConfCode'
+  var json = JSON.stringify({
+    email: email
+  });
+  console.log(json);
+  try {
+      var xhr = createCORSRequest('POST', emailUrl);
+
+      // Response handlers.
+      xhr.onload = function() {
+        var response = xhr.response;
+        console.log(response);
+      };
+
+      xhr.onerror = function() {
+        alert('Error: An errror occured whilst loading the page.');
+      };
+
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(json);
+    } catch (err){
+      if (!err instanceof TypeError){
+        console.log(err.message)
+       throw err.message;
+     }
+  }
+}
+
 
 function successfulSignup(){
   document.getElementById("signupinputs").innerHTML = `
