@@ -16,8 +16,19 @@ function forgotPassword(){
     // Response handlers.
     xhr.onload = function() {
       console.log(xhr.response);
-      var email = document.getElementById("email").value;
-      window.location.href = "/confirmpassword.html?email="+email;
+      var response = JSON.stringify(xhr.response);
+      if (response.includes('LimitExceededException')){
+        $.alert({
+          title: 'Please Note:',
+          content: 'Password reset limit exceeded. Please try again in 15 minutes.',
+          boxWidth: '50%',
+          useBootstrap: false,
+          offsetBottom: 50
+        });
+      } else {
+        var email = document.getElementById("email").value;
+        window.location.href = "/confirmpassword.html?email="+email;
+      }
     }
 
     xhr.onerror = function() {

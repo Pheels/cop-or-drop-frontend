@@ -114,7 +114,7 @@ function editItem(name){
   for(var i = 0; i < Object.keys(cartJson).length; i++) {
     // check that the name matches
     if (cartJson[i]['name'].replace(/_/g, " ") == name){
-      newUrl += cartJson[i]['name'].replace(/\n/g, "%20") + '&id='+cartJson[i]['id'] + '&fwd=true';
+      newUrl += cartJson[i]['name'].replace(/\n/g, "%20") + '&id='+cartJson[i]['id'] + '&fwd=true#ticketNumberSections';
       var ticketSplit = cartJson[i]['ticketNumbers'].split(",");
       for (var x = 0; x < ticketSplit.length; x++) {
         ticketsChosen.push(String(ticketSplit[x]));
@@ -257,7 +257,7 @@ function updateProductTickets(product){
 function updateItemPrices(cartJson, prices){
   for (var i = 0; i < Object.keys(cartJson).length; i ++){
     try {
-      document.getElementById(cartJson[i]['name'].replace("_", " ")+'-price-value').textContent ="\xA3"+prices[cartJson[i]['name']];
+      document.getElementById(cartJson[i]['name'].replace("_", " ")+'-price-value').textContent ="\xA3"+Math.floor(prices[cartJson[i]['name']]* 100) / 100;
     } catch(err) {
       // console.log(err.message);
     }

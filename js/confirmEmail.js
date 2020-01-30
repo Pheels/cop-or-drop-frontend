@@ -74,7 +74,17 @@ function resendCode(){
       // Response handlers.
       xhr.onload = function() {
         var response = xhr.response;
-        console.log(response);
+        if (response['result']['CodeDeliveryDetails']){
+          $.alert({
+            title: 'Please Note:',
+            content: "Code has been resent.",
+            boxWidth: '50%',
+            useBootstrap: false,
+            offsetBottom: 50
+          });
+        }
+        document.getElementById('issue').outerHTML = `<label class="signup-label" for="issue" id='issue'>Still having an issue? <a href="/contact.html">Contact Us</a>.</label>`
+
       };
 
       xhr.onerror = function() {
