@@ -374,6 +374,7 @@ function displayImages(productResponse){
       </div>
       `
   } catch(error){
+      i = 15;
     // do nothing
   }
 }

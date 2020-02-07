@@ -139,6 +139,10 @@ function validateInputs(){
       document.getElementById("pass1").classList.add("signup-field-missing");
       // do nothing - html message pops up.
     } else {
+      if (phone.startsWith('0')){
+        phone = "+44" + phone.slice(1, phone.length);
+      }
+
       // send information
       var json = JSON.stringify({
         name: name,
@@ -203,7 +207,7 @@ function validatePhone(phone) {
 }
 
 function validateAddress(address) {
-    var re = /^[a-z0-9A-Z ]{0,255}$/;
+    var re = /^[a-z0-9A-Z- ]{0,255}$/;
     return re.test(String(address).toLowerCase());
 }
 
@@ -227,4 +231,8 @@ function validatePasswords(password1, password2){
   } else {
     return true;
   }
+}
+
+String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
 }

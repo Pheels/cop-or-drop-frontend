@@ -705,7 +705,7 @@ textarea.w-select {
     margin-right: 0;
   }
   .w-col {
-    width: 80%;
+    /* width: 80%; */
     left: auto;
     right: auto;
   }
@@ -1819,6 +1819,7 @@ textarea.w-select {
     display: block;
   }
 }
+
 .w-ix-emptyfix:after {
   content: "";
 }

@@ -1510,7 +1510,7 @@ hr {
   margin-top: 7px;
   margin-right: 28px;
   margin-bottom: 7px;
-  width: 15px;
+  width: auto;
 }
 
 .checkbox-field {
@@ -1527,7 +1527,7 @@ hr {
 @media (max-width: 1400px) {
 
   .image-17 {
-    width: 70%;
+    width: auto;
     /* top: -126px; */
   }
 
