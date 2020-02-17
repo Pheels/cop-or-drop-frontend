@@ -281,7 +281,8 @@ function setTimer(productResponse){
     // document.getElementById("timer").innerHTML = days + "d " + hours + "h "
     // + minutes + "m " + seconds + "s ";
 
-    document.getElementById("timer").innerHTML = "Timer will begin once 50% of tickets purchased.<br><br> 30d 0h 0m 0s"
+    document.getElementById("timer").innerHTML = "Timer will begin once 50% of tickts purchased.<br><br> 30d 0h 0m 0s"
+
 
     // If the count down is finished, write some text
     if (distance < 0) {
@@ -305,11 +306,11 @@ function setTimer(productResponse){
       xhr.onload = function() {
         var resp = xhr.response;
         if (resp.maxIncrements == true){
-          // document.getElementById("timer").innerHTML = "EXPIRED";
-          // document.getElementById("subButton").classList.add('submitdisabled');
-          // document.getElementById("subButton").classList.remove('button');
-          // document.getElementById("subButton").disabled = true;
-          // document.getElementById("expirationBar").innerHTML = `<div class="expired-text">Please Note: This competition has now expired</div>`
+          document.getElementById("timer").innerHTML = "EXPIRED";
+          document.getElementById("subButton").classList.add('submitdisabled');
+          document.getElementById("subButton").classList.remove('button');
+          document.getElementById("subButton").disabled = true;
+          document.getElementById("expirationBar").innerHTML = `<div class="expired-text">Please Note: This competition has now expired</div>`
         } else {
           location.reload();
         }
@@ -546,7 +547,7 @@ function purchaseButtonSelected(){
           cartJson[i]['ticketNumbers'] += "," + ticketsString;
         }
       }
-      sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
+      // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
     if (itemInCart == false){
       // push new item to cart
@@ -559,8 +560,8 @@ function purchaseButtonSelected(){
         "answer": sessionStorage.getItem('questionSelected'),
         "url": window.location.href
       };
-      cartJson.push(jdata);
-      sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
+      // cartJson.push(jdata);
+      // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
     }
     loadCart();
     blockTickets();
