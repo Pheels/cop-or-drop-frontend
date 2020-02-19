@@ -322,6 +322,7 @@ function purchaseButtonSelected(){
     var checkTicketsUrl = 'https://api.copordrop.co.uk/checkTickets';
     var checkPromotionalPurchaseUrl = 'https://api.copordrop.co.uk/checkPromotionalPurchase'
     var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
+    var iterator = 0;
 
     // add class loading
     document.getElementById("submitButton").innerHTML = `
@@ -352,15 +353,45 @@ function purchaseButtonSelected(){
                     }
                 }
               });
+              return false;
+            } else if (JSON.parse(data)['ticketNumber']){
+              // add class loading
+              document.getElementById("submitButton").innerHTML = `
+              <a href="#" onclick=purchaseButtonSelected();; class="button purchase w-button">PURCHASE TICKETS &gt;</a>
+              `;
+              $.confirm({
+                title: 'You have already entered the competition for ' + replaceAll(val['name'], '_', ' ') + '.',
+                content: 'Promotional items are limited to 1 per person. This item has been removed from your basket.',
+                typeAnimated: true,
+                boxWidth: '50%',
+                useBootstrap: false,
+                offsetBottom: 50,
+                escapeKey: true,
+                buttons: {
+                    Ok: {
+                        text: 'Ok',
+                        btnClass: 'btn-default',
+                        action: window.stop(),
+                        action: removeItem(replaceAll(val['name'], '_', ' ')),
+                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index])
+                    }
+                }
+              });
+              return false;
             } else {
               cartItems = sessionStorage.getItem('cartItems');
               cartItems[index]['ticketsString'] = data['ticketsString'];
               sessionStorage.setItem('cartItems', cartItems);
+
+            }
+            if (iterator == index){
+              displayStripe(cartItems);
+            } else {
+              iterator++;
             }
         });
-    });
 
-    displayStripe(cartItems);
+    });
   }
 }
 
@@ -402,28 +433,24 @@ function displayStripe(){
                name: getCookieValue("name")
              }
            }).done(function(stripeCustomer) {
-             if (stripeCustomer['object'] == 'charge'){
-               var clearStorage = [];
-               sessionStorage.setItem('cartItems', JSON.stringify(clearStorage));
-               sessionStorage.setItem('productInfo', JSON.stringify(clearStorage));
-               document.getElementById("shopping-cart").innerHTML = `
-               <!-- Title -->
-               <div class="title-cart">
-               Thankyou, your submission has been received, you will receive a confirmation email shortly.
-               </div>
-               `
-               var pricebox = document.getElementById("total-price-box");
-               pricebox.parentNode.removeChild(pricebox);
+             var clearStorage = [];
+             sessionStorage.setItem('cartItems', JSON.stringify(clearStorage));
+             sessionStorage.setItem('productInfo', JSON.stringify(clearStorage));
+             document.getElementById("shopping-cart").innerHTML = `
+             <!-- Title -->
+             <div class="title-cart">
+             Thankyou, your submission has been received, you will receive a confirmation email shortly.
+             </div>
+             `
+             var pricebox = document.getElementById("total-price-box");
+             pricebox.parentNode.removeChild(pricebox);
 
-               document.getElementById("submitButton").innerHTML = `
-               `
-               document.getElementById("termsconditions").innerHTML = `
-               `
-               loadCart();
-               // display checkout complete.
-             }
-             console.log(stripeCustomer);
-             // read response and react accordingly
+             document.getElementById("submitButton").innerHTML = `
+             `
+             document.getElementById("termsconditions").innerHTML = `
+             `
+             loadCart();
+             // display checkout complete.
 
            }).fail(function(e) {
              alert('There was an error processing the payment. Please try again.')
