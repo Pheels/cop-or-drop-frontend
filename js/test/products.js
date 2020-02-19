@@ -22,21 +22,21 @@ function getProducts() {
 
 function displayProducts(jsonResponse){
   for (var i = 0; i < Object.keys(jsonResponse).length; i ++){
-      var item = jsonResponse[i]['items'];
-        var image = item['s3Location'] + '/image1.jpg'
-        var description = item['description']
-        var name = item['name'].replace(/_/g, " ");
-        var id = item['id'];
-        document.getElementById("product-wrap").innerHTML = document.getElementById("product-wrap").innerHTML + `
-        <div class="product-item">
-          <div class="div-block-12" id="`+name+`-button"><img src="`+image+`"  class="image-17">
-            <div class="product-info-wrap"><a href="" onclick="toProductListing('`+id+`', '`+name+`')" class="button w-button">win this product &gt;</a>
-              <div class="product-title">`+name+`</div>
-              <!-- <div class="product-description">`+description+`</div> -->
-            </div>
-          </div>
-        </div>`
-    }
+    var item = jsonResponse[i]['items'];
+    var image = item['s3Location'] + '/image1.jpg'
+    var description = item['description']
+    var name = item['name'].replace(/_/g, " ");
+    var id = item['id'];
+    document.getElementById("product-wrap").innerHTML = document.getElementById("product-wrap").innerHTML + `
+    <div class="product-item">
+      <div class="div-block-12" id="`+name+`-button"><img src="`+image+`"  class="image-17">
+        <div class="product-info-wrap"><a href="" onclick="toProductListing('`+id+`', '`+name+`')" class="button w-button">win this product &gt;</a>
+          <div class="product-title">`+name+`</div>
+          <!-- <div class="product-description">`+description+`</div> -->
+        </div>
+      </div>
+    </div>`
+  }
 }
 
 function toProductListing(id, name){

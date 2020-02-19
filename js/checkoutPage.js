@@ -154,88 +154,6 @@ function removeItem(name){
   loadCart();
 }
 
-function purchaseButtonSelected(){
-  // no answer selected
-  if (document.getElementById("termscheckbox").checked == false){
-    $.alert({
-      title: 'Please Note:',
-      content: 'You must agree to the terms and conditions in order to participate.',
-      boxWidth: '50%',
-      useBootstrap: false,
-      offsetBottom: 50
-    });
-  } else if (getCookieValue("email") == ""){
-      $.alert({
-        title: 'Please Note:',
-        content: 'You must be signed in to participate.',
-        boxWidth: '50%',
-        useBootstrap: false,
-        offsetBottom: 60,
-        onDestroy: function () {
-        }
-      });
-  } else if (JSON.parse(sessionStorage.getItem('cartItems')).length == 0){
-    $.confirm({
-      title: 'Basket is Empty',
-      content: 'There are currently no items in your basket.',
-      typeAnimated: true,
-      boxWidth: '50%',
-      useBootstrap: false,
-      offsetBottom: 50,
-      escapeKey: true,
-      buttons: {
-          Ok: {
-              text: 'Ok'
-          }
-      }
-    });
-  }
-  else {
-    var url = 'https://api.copordrop.co.uk/checkTickets';
-    var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
-
-    // add class loading
-    document.getElementById("submitButton").innerHTML = `
-    <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
-    `;
-
-    // looping through items and confirming they are still available
-    $.each(cartItems, function(index, val) {
-        JSON.stringify(val);
-        $.post(url, val)
-         .done(function (data) {
-            if (data['ticketsTaken']){
-              $.confirm({
-                title: 'Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
-                content: 'These tickets have been removed from your basket..',
-                typeAnimated: true,
-                boxWidth: '50%',
-                useBootstrap: false,
-                offsetBottom: 50,
-                escapeKey: true,
-                buttons: {
-                    Ok: {
-                        text: 'Ok',
-                        btnClass: 'btn-default',
-                        action: window.stop(),
-                        action: removeBids(data),
-                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
-                    }
-                }
-              });
-
-            } else {
-              cartItems = sessionStorage.getItem('cartItems');
-              cartItems[index]['ticketsString'] = data['ticketsString'];
-              sessionStorage.setItem('cartItems', cartItems);
-            }
-        });
-    });
-    // stop stripe if removing items.
-    displayStripe(cartItems);
-  }
-}
-
 function updateProductTickets(product){
   try {
     // add class loading
@@ -331,8 +249,6 @@ function removeBids(data){
         removeItem(cartItems[i]['name'].replace("_"," "));
         // remove item from document
       }
-
-
     }
   }
 }
@@ -343,8 +259,8 @@ function removeByIndex(array, index){
     });
 }
 
-function finalCheckTickets(cartItem, jdata, callback){
-  var url = 'https://api.copordrop.co.uk/checkTickets';
+function checkPromotion(jdata, callback){
+  var url = 'https://api.copordrop.co.uk/checkPromotionalPurchase';
   var xhr = createCORSRequest('POST', url);
   if (!xhr) {
     alert('CORS not supported');
@@ -354,7 +270,7 @@ function finalCheckTickets(cartItem, jdata, callback){
   // Response handlers.
   xhr.onload = function() {
     var response = xhr.response;
-    callback(response, jdata);
+    callback(response);
   };
 
   xhr.onerror = function() {
@@ -362,8 +278,90 @@ function finalCheckTickets(cartItem, jdata, callback){
   };
 
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(JSON.stringify(cartItem));
+  xhr.send(JSON.stringify(jdata));
 
+}
+
+function purchaseButtonSelected(){
+  // no answer selected
+  if (document.getElementById("termscheckbox").checked == false){
+    $.alert({
+      title: 'Please Note:',
+      content: 'You must agree to the terms and conditions in order to participate.',
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 50
+    });
+  } else if (getCookieValue("email") == ""){
+      $.alert({
+        title: 'Please Note:',
+        content: 'You must be signed in to participate.',
+        boxWidth: '50%',
+        useBootstrap: false,
+        offsetBottom: 60,
+        onDestroy: function () {
+        }
+      });
+  } else if (JSON.parse(sessionStorage.getItem('cartItems')).length == 0){
+    $.confirm({
+      title: 'Basket is Empty',
+      content: 'There are currently no items in your basket.',
+      typeAnimated: true,
+      boxWidth: '50%',
+      useBootstrap: false,
+      offsetBottom: 50,
+      escapeKey: true,
+      buttons: {
+          Ok: {
+              text: 'Ok'
+          }
+      }
+    });
+  }
+  else {
+    var checkTicketsUrl = 'https://api.copordrop.co.uk/checkTickets';
+    var checkPromotionalPurchaseUrl = 'https://api.copordrop.co.uk/checkPromotionalPurchase'
+    var cartItems = JSON.parse(sessionStorage.getItem('cartItems'));
+
+    // add class loading
+    document.getElementById("submitButton").innerHTML = `
+    <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">Loading...</a></div>
+    `;
+
+    // looping through items and confirming they are still available
+    $.each(cartItems, function(index, val) {
+        console.log(JSON.stringify(val));
+        $.post(checkTicketsUrl, val)
+         .done(function (data) {
+            if (data['ticketsTaken']){
+              $.confirm({
+                title: 'Ticket Number(s) ' + data['ticketsTaken'] + ' already taken for item ' + data['name']+'.',
+                content: 'These tickets have been removed from your basket..',
+                typeAnimated: true,
+                boxWidth: '50%',
+                useBootstrap: false,
+                offsetBottom: 50,
+                escapeKey: true,
+                buttons: {
+                    Ok: {
+                        text: 'Ok',
+                        btnClass: 'btn-default',
+                        action: window.stop(),
+                        action: removeBids(data),
+                        action: updateProductTickets(JSON.parse(sessionStorage.getItem('cartItems'))[index]),
+                    }
+                }
+              });
+            } else {
+              cartItems = sessionStorage.getItem('cartItems');
+              cartItems[index]['ticketsString'] = data['ticketsString'];
+              sessionStorage.setItem('cartItems', cartItems);
+            }
+        });
+    });
+
+    displayStripe(cartItems);
+  }
 }
 
 function displayStripe(){

@@ -490,89 +490,149 @@ function purchaseButtonSelected(){
           window.location.href = "https://copordrop.co.uk/login.html";
         }
       });
-      // $.confirm({
-      //   title: 'Please Note:',
-      //   content: 'You must be signed in to participate.',
-      //   typeAnimated: true,
-      //   boxWidth: '50%',
-      //   useBootstrap: false,
-      //   offsetBottom: 50,
-      //   escapeKey: true,
-      //   buttons: {
-      //       Ok: {
-      //           text: 'Sign In'
-      //       }
-      //   }
-      // });
   } else if (sessionStorage.getItem('ticketsChosen') && (sessionStorage.getItem('ticketsChosen').length > 2)) {
     // length greater than 2 as otherwise just empty brackets.
 
     // calculate price
     var product = JSON.parse(sessionStorage.getItem('productInfo'));
     var ticketsArr = JSON.parse(sessionStorage.getItem('ticketsChosen'));
-    var ticketLimit = 15;
-    if (ticketsArr.length > ticketLimit){
-      $.alert({
-        title: 'Please Note:',
-        content: 'Each user is limited to 15 entries per item.',
-        boxWidth: '50%',
-        useBootstrap: false,
-        offsetBottom: 70
-      });
-      return;
-    }
-    var tickets = ticketsArr.filter(function(elem, index, self) {
-      return index === self.indexOf(elem);
-    });
-    var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
-    var timestamp = new Date().toLocaleString();
-    var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
-    var ticketsString = tickets.join(",");
+    var product = JSON.parse(sessionStorage.getItem('productInfo'));
+    if (product['price'] == 0){
+      var ticketLimit = 1;
 
-    var itemInCart = false;
-    for (var i = 0; i < Object.keys(cartJson).length; i ++){
-      if (cartJson[i]['name'] == product['name']){
-        itemInCart = true;
-        if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > ticketLimit){
-          $.alert({
+      if (ticketsArr.length > ticketLimit){
+        $.alert({
+          title: 'Please Note:',
+          content: 'For Promotional items, each user is limited to 1 entry per item.',
+          boxWidth: '50%',
+          useBootstrap: false,
+          offsetBottom: 70
+        });
+        return;
+      }
+      var timestamp = new Date().toLocaleString();
+      var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+
+      var itemInCart = false;
+      for (var i = 0; i < Object.keys(cartJson).length; i ++){
+        if (cartJson[i]['name'] == product['name']){
+          itemInCart = true;
+
+          $.confirm({
             title: 'Please Note:',
-            content: 'Each user is limited to 15 entries per item.',
+            content: 'Entries to this competition are limited to 1 per person - an entry is already present in your cart.',
+            typeAnimated: true,
             boxWidth: '50%',
             useBootstrap: false,
-            offsetBottom: 70
+            offsetBottom: 50,
+            escapeKey: true,
+            buttons: {
+                Ok: {
+                    text: 'Go to Cart',
+                    btnClass: 'btn-default',
+                    action: function() {
+                       window.location.href = 'https://www.copordrop.co.uk/checkout.html'
+                    }
+                },
+                cancel: {
+                  text:'cancel',
+                  btnClass: 'btn-default'
+                }
+            }
           });
-          return;
-        } else {
-          // split ticketsString
-          cartJson[i]['ticketNumbers'] += "," + ticketsString;
         }
       }
-      // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
-    }
-    if (itemInCart == false){
-      // push new item to cart
-      var jdata = {
-        "name": product['name'],
-        "userName": getCookieValue("email"),
-        "timestamp": timestamp,
-        "ticketNumbers": tickets.join(","),
-        "id": product['id'],
-        "answer": sessionStorage.getItem('questionSelected'),
-        "url": window.location.href
-      };
-      // cartJson.push(jdata);
-      // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
-    }
-    loadCart();
-    blockTickets();
-    document.getElementById("submitButton").text = `
-    <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
-    `
-    sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken') + ',' + ticketsString);
+      if (itemInCart == false){
+        // push new item to cart
+        var jdata = {
+          "name": product['name'],
+          "userName": getCookieValue("email"),
+          "timestamp": timestamp,
+          "ticketNumbers": ticketsArr[0],
+          "id": product['id'],
+          "answer": sessionStorage.getItem('questionSelected'),
+          "url": window.location.href
+        };
+        cartJson.push(jdata);
+        sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
+        loadCart();
+        blockTickets();
+        document.getElementById("submitButton").text = `
+        <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
+        `
+        sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken') + ',' + ticketsString);
 
-    var ticketsChosen = [];
-    sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+        var ticketsChosen = [];
+        sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+      }
 
+
+    } else {
+      // not a promotional item - i.e. price is not set to zero.
+      var ticketLimit = 15;
+      if (ticketsArr.length > ticketLimit){
+        $.alert({
+          title: 'Please Note:',
+          content: 'Each user is limited to 15 entries per item.',
+          boxWidth: '50%',
+          useBootstrap: false,
+          offsetBottom: 70
+        });
+        return;
+      }
+      var tickets = ticketsArr.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+      });
+      var price = tickets.length * (Number(product['price']) / Number(product['numberAllowedTickets']));
+      var timestamp = new Date().toLocaleString();
+      var cartJson = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+      var ticketsString = tickets.join(",");
+
+      var itemInCart = false;
+      for (var i = 0; i < Object.keys(cartJson).length; i ++){
+        if (cartJson[i]['name'] == product['name']){
+          itemInCart = true;
+          if ((cartJson[i]['ticketNumbers'].split(',').length + sessionStorage.getItem('ticketsChosen').split(',').length)  > ticketLimit){
+            $.alert({
+              title: 'Please Note:',
+              content: 'Each user is limited to 15 entries per item.',
+              boxWidth: '50%',
+              useBootstrap: false,
+              offsetBottom: 70
+            });
+            return;
+          } else {
+            // split ticketsString
+            cartJson[i]['ticketNumbers'] += "," + ticketsString;
+          }
+        }
+        // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
+      }
+      if (itemInCart == false){
+        // push new item to cart
+        var jdata = {
+          "name": product['name'],
+          "userName": getCookieValue("email"),
+          "timestamp": timestamp,
+          "ticketNumbers": tickets.join(","),
+          "id": product['id'],
+          "answer": sessionStorage.getItem('questionSelected'),
+          "url": window.location.href
+        };
+        // cartJson.push(jdata);
+        // sessionStorage.setItem('cartItems', JSON.stringify(cartJson));
+      }
+      loadCart();
+      blockTickets();
+      document.getElementById("submitButton").text = `
+      <a href="#" onclick=purchaseButtonSelected(); class="button purchase w-button">ADDED TO CART!</a></div>
+      `
+      sessionStorage.setItem('ticketsTaken', sessionStorage.getItem('ticketsTaken') + ',' + ticketsString);
+
+      var ticketsChosen = [];
+      sessionStorage.setItem('ticketsChosen',JSON.stringify(ticketsChosen));
+
+    }
   // no bids selected
   } else {
     $.alert({
