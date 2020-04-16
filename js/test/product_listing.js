@@ -242,12 +242,20 @@ function buttonSelected(ticketNumber){
 
 function displayInformation(productResponse){
   var price = (productResponse['price']/productResponse['numberAllowedTickets']).toFixed(2);
-  document.getElementById("information").innerHTML =`
-  <div style='color:red;text-decoration:line-through' class="product-price-old">Ticket Price: &pound;`+String((parseFloat(price) + 1).toFixed(2))+`</div>
-  <div class="product-price">Ticket Price: &pound;`+price+`<br><br></div>
-  <div class="product-worth">TOTAL RRP: &pound;`+productResponse['rrp']+`</div>
-  <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
-  `;
+  if (productResponse['promotion'] && productResponse['promotion'] == 1){
+    document.getElementById("information").innerHTML =`
+    <div class="product-price">Ticket Price: &pound;`+price+`<br><br></div><br>
+    <div class="product-worth">TOTAL RRP: &pound;`+productResponse['rrp']+`</div>
+    <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
+    `;
+  } else {
+    document.getElementById("information").innerHTML =`
+    <div style='color:red;text-decoration:line-through' class="product-price-old">Ticket Price: &pound;`+String((parseFloat(price) + 1).toFixed(2))+`</div>
+    <div class="product-price">Ticket Price: &pound;`+price+`<br><br></div>
+    <div class="product-worth">TOTAL RRP: &pound;`+productResponse['rrp']+`</div>
+    <div class="product-description-long"><p id="timer"></p><br>`+productResponse['description'].replace(/\n/g, "<br>")+`<br></div>
+    `;
+  }
   setTimer(productResponse);
 }
 

@@ -408,6 +408,7 @@ function displayStripe(){
     }
 
     getTotalPrice(cartJson, function(priceResponse){
+      if (priceResponse['price'] != 0){
        // configure stripe handler
        var handler = StripeCheckout.configure({
          key: 'pk_live_OBqjV17Ab5zMLF7AJ8osoMVh00MloX18QK',
@@ -480,5 +481,36 @@ function displayStripe(){
           }
 
 
-       });
+       } else {
+           $.ajax({
+             url: 'https://api.copordrop.co.uk/postNewPayment',
+             type: 'POST',
+             data: {
+               stripeToken: "freePromotion",
+               stripePrice: "0",
+               products: cartJson,
+               email: getCookieValue("email"),
+               name: getCookieValue("name")
+             }
+           }).done(function(stripeCustomer) {
+             var clearStorage = [];
+             sessionStorage.setItem('cartItems', JSON.stringify(clearStorage));
+             sessionStorage.setItem('productInfo', JSON.stringify(clearStorage));
+             document.getElementById("shopping-cart").innerHTML = `
+             <!-- Title -->
+             <div class="title-cart">
+             Thankyou, your submission has been received, you will receive a confirmation email shortly.
+             </div>
+             `
+             var pricebox = document.getElementById("total-price-box");
+             pricebox.parentNode.removeChild(pricebox);
+
+             document.getElementById("submitButton").innerHTML = `
+             `
+             document.getElementById("termsconditions").innerHTML = `
+             `
+             loadCart();
+         });
+       }
+     });
 }
