@@ -94,7 +94,7 @@ function confirmEmail(email){
 function successfulLogin(response){
   // document.getElementById("signupinputs").innerHTML = `
   // <div class="successful-signup">You are now successfully logged in!<br></div>
-  // <div class="terms-title">Click <a href="/products.html">here</a> to view our competitions.</div>`
+  // <div class="terms-title">Click <a href="/competitions.html">here</a> to view our competitions.</div>`
   document.location.href="/";
   writeCookie(response);
 }

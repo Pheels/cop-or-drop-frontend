@@ -110,7 +110,7 @@ function editItem(name){
   var cartJson = JSON.parse(sessionStorage.getItem('cartItems'));
   var ticketsChosen = [];
   var newCartJson = [];
-  var newUrl = 'https://copordrop.co.uk/product-listing.html?name='
+  var newUrl = 'https://copordrop.co.uk/competition-listing.html?name='
   for(var i = 0; i < Object.keys(cartJson).length; i++) {
     // check that the name matches
     if (cartJson[i]['name'].replace(/_/g, " ") == name){

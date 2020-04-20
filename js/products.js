@@ -43,5 +43,5 @@ function displayProducts(jsonResponse){
 
 function toProductListing(id, name){
    event.preventDefault()
-   location.href = "product-listing.html?name="+name+"&id="+id;
+   location.href = "competition-listing.html?name="+name+"&id="+id;
 }
